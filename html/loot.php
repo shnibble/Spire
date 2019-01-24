@@ -204,6 +204,7 @@
 											<td>
 												<form method="POST" action="/src/php/delete_loot.php" onsubmit="return confirm('Are you sure you want to delete this loot?');">
 													<input type="hidden" name="loot_id" value="<?php echo $l['id']; ?>"></input>
+													<input type="button" class="standard-button edit-loot-btn" value="EDIT" data-id="<?php echo $l['id']; ?>" data-date="<?php echo $l_date->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d H:i'); ?>" data-character="<?php echo $l['character_id']; ?>" data-item="<?php echo $l['item_id']; ?>" data-type="<?php echo $l['type']; ?>"></input>
 													<input type="submit" class="standard-button" value="DELETE"></input>
 												</form>
 											</td>
@@ -284,7 +285,7 @@
 					<tr>
 						<td colspan="2">						
 							<input type="submit" class="standard-button" form="add-loot-form" value="SUBMIT"></input>
-							<input type="button" class="standard-button" id="close-overlay-btn" value="CANCEL"></input>
+							<input type="button" class="standard-button close-overlay-btn" value="CANCEL"></input>
 						</td>
 					</tr>
 				</table>
@@ -295,14 +296,14 @@
 		<div class="full-overlay" id="overlay-edit-loot">
 			<div class="scrolling-table-container">
 				<h2>Edit Loot</h2>
-				<form method="POST" id="edit-character-form" action="/src/php/edit_loot.php"></form>
-				<input type="hidden" form="edit-loot-form" id="edit-loot-id" name="loot_id"></input>
+				<form method="POST" id="edit-loot-form" action="/src/php/edit_loot.php"></form>
+				<input type="hidden" id="edit-loot-id" name="loot_id" form="edit-loot-form"></input>
 				<table>
 					<tr>
 						<td><b>Date</b>:</td>
 						<td>
 							<div class="table-cell">
-								<input type="text" form="edit-loot-form"  class="standard-input" id="edit-loot-date"  name="loot_date" required></input>
+								<input type="text" class="standard-input" id="edit-loot-date"  name="loot_date" disabled></input>
 							</div>
 						</td>
 					</tr>
@@ -318,13 +319,21 @@
 									} ?>
 								</select>
 							</div>
+								
+							</div>
 						</td>
 					</tr>
 					<tr>
 						<td><b>Item</b>:</td>
 						<td>
 							<div class="table-cell">
-								<input type="text" class="standard-input" id="edit-loot-itme" readonly></input>
+								<select class="standard-select" id="edit-loot-item" name="loot_item" form="edit-loot-form" required>
+									<?php 
+									mysqli_data_seek($items, 0);
+									while ($i = mysqli_fetch_array($items)) { 
+									echo "<option value='" . $i['id'] . "'>" . $i['name'] . "</option>";
+									} ?>
+								</select>
 							</div>
 						</td>
 					</tr>
@@ -332,7 +341,7 @@
 						<td><b>Type</b>:</td>
 						<td>
 							<div class="table-cell">
-								<select class="standard-select" id="edit-loot-type" form="edit-loot-form" name="loot_type" required>
+								<select class="standard-select" id="edit-loot-type" name="loot_type" form="edit-loot-form" required>
 									<?php 
 									mysqli_data_seek($loot_types, 0);
 									while ($lt = mysqli_fetch_array($loot_types)) {
@@ -345,7 +354,7 @@
 					<tr>
 						<td colspan="2">
 							<input type="submit" class="standard-button" form="edit-loot-form" value="SUBMIT"></input>
-							<input type="button" class="standard-button" id="close-edit-loot-overlay-btn" value="CANCEL"></input>
+							<input type="button" class="standard-button close-overlay-btn" value="CANCEL"></input>
 						</td>
 					</tr>
 				</table>
@@ -362,12 +371,29 @@
 				dateFormat: 'Y-m-d H:i:S'
 			});
 			
-			// toggle overlay
+			// toggle overlays
 			$('#add-loot-btn').click(function(){
 				$('#overlay-add-loot').slideDown(250);
 			});
-			$('#close-overlay-btn').click(function(){
+			$('.close-overlay-btn').click(function(){
 				$('.full-overlay').slideUp(250);
+			});
+			
+			// open edit overlay
+			$('.edit-loot-btn').click(function(){
+				let editID = $(this).data('id');
+				let editDate = $(this).data('date');
+				let editCharacter = $(this).data('character');
+				let editItem = $(this).data('item');
+				let editType = $(this).data('type');
+				
+				$('#edit-loot-id').val(editID);
+				$('#edit-loot-date').val(editDate);
+				$('#edit-loot-character').val(editCharacter);
+				$('#edit-loot-item').val(editItem);
+				$('#edit-loot-type').val(editType);
+				
+				$('#overlay-edit-loot').slideDown(250);
 			});
 		</script>	
 	</body>
