@@ -1,0 +1,76 @@
+html, body {
+	padding: 0;
+	margin: 0;
+	background: #f2f2f2;
+}
+#header, #footer {
+	background: #e6e6e6;
+	padding: 5px;
+}
+#header input {
+	width: 140px;
+	text-align: center;
+}
+#content {
+	padding: 10px;
+	margin: auto;
+}
+#add-row-btn {
+	display: block;
+	padding: 5px 15px;
+	margin: auto;
+}
+h1, h2, h3 {
+	margin: 2px;
+}
+
+#items-table {
+	border-collapse: collapse;
+}
+#items-table tr.editing .status {
+	background: red;
+}
+#items-table tr.submitted .status {
+	background: yellow;
+}
+#items-table tr.saved .status {
+	background: #c2f0c2;
+}
+#items-table td:nth-child(4) {
+	width: 40px;
+}
+#items-table td:nth-child(6), #items-table td:nth-child(7) {
+	width: 200px;
+}
+.status {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	border-radius: 5px;
+	margin: 5px;
+	transition: background-color .5s;
+}
+.priority, .comment {
+	display: block;
+	font-size: 10px;
+	text-align: center;
+	padding: 2px;
+}
+
+#footer {
+	text-align: center;
+}
+#footer-table {
+	margin: auto;
+}
+#footer-table td {
+	width: 240px;
+}
+#footer-table span {
+	font-size: 12px;
+	text-align: center;
+}
+#footer input {
+	width: 220px;
+	text-align: center;
+}

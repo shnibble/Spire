@@ -1,0 +1,49 @@
+<?php
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/shared.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/db_connect.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/stmt_init.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/server_config.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/verify_user_token.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/security_2.php";
+	
+	$error = false;
+	
+	// get POST variables
+	if (!isset($_POST['loot_id'])) {
+		// ERROR: missing variable
+		$error = true;
+		$error_id = 110;
+	}
+	
+	// update loot
+	if (!$error) {
+		$stmt->prepare("UPDATE `loot` SET `turned_in` = NOW() WHERE `id` = ?");
+		if (!$stmt->bind_param("i", $_POST['loot_id'])) {
+			// ERROR: failed to bind parameters
+			$error = true;
+			$error_id = 109;
+		} else if (!$stmt->execute()) {
+			// ERROR: failed to execute
+			$error = true;
+			$error_id = 109;
+		}
+	}
+	
+	// log event
+	if(!$error) {
+		$logDescription = "turned in a buff item (ID " . $_POST['loot_id'] . ").";
+		$stmt->prepare("INSERT INTO `log` (`user_id`, `description`, `security_level`) VALUES (?, ?, 1)");
+		$stmt->bind_param("is", $_SESSION['user_id'], $logDescription);
+		$stmt->execute();
+	}
+	
+	$stmt->close();
+	$conn->close();
+	
+	if (!$error) {
+		header("Location: /buffs.php");
+	} else {
+		header("Location: /error.php?id=" . $error_id);
+	}
+?>
