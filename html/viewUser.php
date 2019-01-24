@@ -85,10 +85,23 @@
 										</td>
 									</tr>
 									<tr>
-										<td><b>Raid Score</b>:</td>
+										<td><b>Scores</b>:</td>
 										<td>
 											<div class="table-cell">
-												<span title="Attendance / LootCost (Score)"><?php echo $player_scores['attendanceScore'] . "/" . $player_scores['lootScore'] . " (" . $player_scores['totalScore'] . ")"; ?><span>
+												<table class="user-scores-table">
+													<tr>
+														<th>Loot Cost</th>
+														<th>Attendance</th>
+														<th title="Attendance - Loot">Spread</th>
+														<th title="Attendance at primary raids over the past 30 days.">30DAR</th>
+													</tr>
+													<tr>
+														<td><?php echo "-" . $player_scores['loot_cost']; ?></td>
+														<td><?php echo "+" . $player_scores['attendance_score']; ?></td>
+														<td><?php echo ($player_scores['spread'] >= 0)?"+":"" . $player_scores['spread']; ?></td>
+														<td><?php echo round((float)$player_scores['30_day_attendance_rate'] * 100 ) . '%'; ?></td>
+													</tr>
+												</table>
 											</div>
 										</td>
 									</tr>
@@ -126,7 +139,7 @@
 					<article>
 						<div class="header">
 							<h4><?php echo $player['username']; ?>'s Loot</h4>
-							<span>Total Cost: <?php echo $player_scores['lootScore']; ?></span>
+							<span>Total Cost: <?php echo $player_scores['loot_cost']; ?></span>
 						</div>
 						<div class="body">
 							<div class="scrolling-table-container">
@@ -160,7 +173,7 @@
 					<article>
 						<div class="header">
 							<h4><?php echo $player['username']; ?>'s Attendance</h4>
-							<span>Total: <?php echo $player_scores['attendanceScore']; ?></span>
+							<span>Total: <?php echo $player_scores['attendance_score']; ?></span>
 						</div>
 						<div class="body">
 							<div class="scrolling-table-container">

@@ -1042,6 +1042,20 @@ article .occasions-container table tr.past td {
 	padding: 5px;
 	color: red;
 }
+.user-scores-table {
+	border-collapse: collapse;
+	width: 100%;
+}
+.user-scores-table th {
+	font-size: 10px;
+	text-align: center;
+}
+.user-scores-table td {
+	text-align: center !important;
+}
+.user-scores-table span {
+	font-size: 14px;
+}
 .table-cell {
 	border: 2px solid #404040;
 	border-radius: 5px;

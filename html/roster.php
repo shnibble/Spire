@@ -42,8 +42,9 @@
 											<th>Badges</th>
 											<th data-sort="string" class="sortable-table-header">Main Character</th>
 											<th data-sort="string" class="sortable-table-header">Rank</th>
-											<th data-sort="float" class="sortable-table-header">Attendance</th>
 											<th data-sort="float" class="sortable-table-header">Loot</th>
+											<th data-sort="float" class="sortable-table-header">Attendance</th>
+											<th data-sort="float" class="sortable-table-header" title="Attendance at primary raids over the past 30 days.">30DAR</th>
 											<th>Joined</th>
 											<?php if ($user['security'] >= 2) { ?>
 											<th>Last Login</th>
@@ -73,8 +74,9 @@
 											</td>
 											<td><?php echo $u['characterName']; ?></td>
 											<td><?php echo $u['rankName']; ?></td>
-											<td><?php echo $u['attendanceScore']; ?></td>
-											<td><a href="/loot.php?user=<?php echo $u['id']; ?>"><?php echo $u['lootScore']; ?></a></td>
+											<td><a href="/loot.php?user=<?php echo $u['id']; ?>"><?php echo "-" . $u['loot_cost']; ?></a></td>
+											<td><?php echo "+" . $u['attendance_score']; ?></td>
+											<td><?php echo round((float)$u['30_day_attendance_rate'] * 100 ) . '%'; ?></td>
 											<td><?php echo $u_joined->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d'); ?></td>
 											<?php if ($user['security'] >= 2) { ?>
 											<td><?php 
