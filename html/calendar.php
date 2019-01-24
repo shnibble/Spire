@@ -123,20 +123,23 @@
 									<div class="event-signup-action-container signup">
 										<form method="POST" action="/src/php/signup.php">
 											<input type="hidden" name="event_id" value="<?php echo $le['id'];?>"></input>
-											<select class="signup-action-input" name="character_id" required>
-												<?php mysqli_data_seek($user_characters, 0); while ($character = mysqli_fetch_array($user_characters)) {
-													echo "<option value='" . $character['id'] . "' data-role='" . $character['role'] . "'>" . $character['name'] . "</option>";
-												} ?>
+											<select class="signup-action-input signup-character" name="character_id" required>
+												<?php 
+												mysqli_data_seek($user_characters, 0); 
+												while ($character = mysqli_fetch_array($user_characters)) { ?>
+													<option value="<?php echo $character['id']; ?>" data-role="<?php echo $character['role']; ?>" <?php echo ($character['main'])?"selected":""; ?> ><?php echo $character['name']; ?></option>
+												<?php } ?>
 											</select>
-											<select class="signup-action-input" name="character_role" required>
-												<option value=""></option>
-												<?php mysqli_data_seek($roles, 0); while ($role = mysqli_fetch_array($roles)) { 
+											<select class="signup-action-input signup-role" name="character_role" required>
+												<?php 
+												mysqli_data_seek($roles, 0); 
+												while ($role = mysqli_fetch_array($roles)) { 
 													echo "<option value='" . $role['id'] . "'>" . $role['name'] . "</option>";
 												} ?>
 											</select>
 											<input type="text" class="signup-action-input" name="note" placeholder="Note" value="<?php echo htmlspecialchars($le['note']); ?>"></input>
 											<br>
-											<button type="submit" class="signup-action-button submit">SIGN UP</button>
+											<button type="submit" class="signup-action-button submit submit-signup">SIGN UP</button>
 											<button type="button" class="signup-action-button cancel">CANCEL</button>
 										</form>
 									</div>
@@ -145,7 +148,7 @@
 											<input type="hidden" name="event_id" value="<?php echo $le['id'];?>"></input>
 											<input type="text" class="signup-action-input" name="note" placeholder="Note" value="<?php echo htmlspecialchars($le['note']); ?>"></input>
 											<br>
-											<button type="submit" class="signup-action-button submit">CALL OUT</button>
+											<button type="submit" class="signup-action-button submit submit-callout">CALL OUT</button>
 											<button type="button" class="signup-action-button cancel">CANCEL</button>
 										</form>
 									</div>
@@ -154,7 +157,7 @@
 											<input type="hidden" name="event_id" value="<?php echo $le['id'];?>"></input>
 											<input type="text" class="signup-action-input" name="note" placeholder="Note" value="<?php echo htmlspecialchars($le['note']); ?>"></input>
 											<br>
-											<button type="submit" class="signup-action-button submit">UPDATE</button>
+											<button type="submit" class="signup-action-button submit submit-note">UPDATE</button>
 											<button type="button" class="signup-action-button cancel">CANCEL</button>
 										</form>
 									</div>
@@ -312,28 +315,101 @@
 				}
 			});
 			
+			// change role based on character's default role
+			let defaultRole = $('.signup-character').children('option:selected').data('role');
+			$('.signup-role').val(defaultRole);
+			$('.signup-character').change(function(){
+				let role = $(this).children('option:selected').data('role');
+				console.log(role);
+				$(this).siblings('.signup-role').val(role);
+			});
+			
 			// toggle event-signup-action-containers
-			$('.event-btn.signup').click(function(){
-				$(this).siblings('.event-btn').removeClass('active');
-				$(this).addClass('active');
+			$('.event-btn').click(function(){
 				$(this).siblings('.event-signup-action-container').slideUp(250);
-				$(this).siblings('.event-signup-action-container.signup').toggle(250);
-			});
-			$('.event-btn.callout').click(function(){
-				$(this).siblings('.event-btn').removeClass('active');
-				$(this).addClass('active');
-				$(this).siblings('.event-signup-action-container').slideUp(250);
-				$(this).siblings('.event-signup-action-container.callout').toggle(250);
-			});
-			$('.event-btn.note').click(function(){
-				$(this).siblings('.event-btn').removeClass('active');
-				$(this).addClass('active');
-				$(this).siblings('.event-signup-action-container').slideUp(250);
-				$(this).siblings('.event-signup-action-container.note').toggle(250);
+				if ($(this).hasClass('active')) {
+					$(this).removeClass('active');
+				} else {
+					$(this).siblings('.event-btn').removeClass('active');
+					$(this).addClass('active');
+					
+					if ($(this).hasClass('signup')) {
+						$(this).siblings('.event-signup-action-container.signup').slideDown(250);
+					}
+					if ($(this).hasClass('callout')) {
+						$(this).siblings('.event-signup-action-container.callout').slideDown(250);						
+					}
+					if ($(this).hasClass('note')) {
+						$(this).siblings('.event-signup-action-container.note').slideDown(250);						
+					}
+				}
 			});
 			$('.signup-action-button.cancel').click(function(){
 				$(this).parent().parent().toggle(250);
 				$(this).parent().parent().siblings('.event-btn').removeClass('active');
+			});
+			
+			// event signups 
+			$('.signup-action-button.submit').click(function(e){
+				e.preventDefault();
+				let formData = $(this).parent('form').serialize();
+				let par = $(this).parent().parent().parent();
+				let newNote = $(this).siblings('input[name="note"]').val();
+				
+				if ($(this).hasClass('submit-signup')) {
+					$.ajax({
+						url: "/src/php/signup.php",
+						type: "POST",
+						data: formData,
+						success: function(d) {
+							if (d == 0) {
+								par.children('.event-signup-action-container').children('form').children('input[name="note"]').val(newNote);
+								par.children('.event-btn.signup').prop("disabled", true);
+								par.children('.event-btn.callout').prop("disabled", false);
+								par.children('.event-btn.note').prop("disabled", false);
+								$('.event-btn.active').removeClass('active');
+								$('.event-signup-action-container').slideUp(250);
+							} else {
+								alert("Oops! Something went wrong. Error code: " + d);
+							}
+						}
+					});
+				}
+				if ($(this).hasClass('submit-callout')) {
+					$.ajax({
+						url: "/src/php/callout.php",
+						type: "POST",
+						data: formData,
+						success: function(d) {
+							if (d == 0) {
+								par.children('.event-signup-action-container').children('form').children('input[name="note"]').val(newNote);
+								par.children('.event-btn.signup').prop("disabled", false);
+								par.children('.event-btn.callout').prop("disabled", true);
+								par.children('.event-btn.note').prop("disabled", false);
+								$('.event-btn.active').removeClass('active');
+								$('.event-signup-action-container').slideUp(250);
+							} else {
+								alert("Oops! Something went wrong. Error code: " + d);
+							}
+						}
+					});
+				}
+				if ($(this).hasClass('submit-note')) {
+					$.ajax({
+						url: "/src/php/note.php",
+						type: "POST",
+						data: formData,
+						success: function(d) {
+							if (d == 0) {
+								par.children('.event-signup-action-container').children('form').children('input[name="note"]').val(newNote);
+								$('.event-btn.active').removeClass('active');
+								$('.event-signup-action-container').slideUp(250);
+							} else {
+								alert("Oops! Something went wrong. Error code: " + d);
+							}
+						}
+					});
+				}
 			});
 		</script>
 	</body>

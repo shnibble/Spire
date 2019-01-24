@@ -5,7 +5,6 @@
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/server_config.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/rank_2.php";
-	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/timezones.php";
 	
 	$error = false;
 	
@@ -92,9 +91,8 @@
 	$conn->close();
 	
 	if (!$error) {
-		
-		header("Location: /calendar.php");
+		echo 0;
 	} else {
-		header("Location: /error.php?id=" . $error_id);
+		echo $error_id;
 	}
 ?>

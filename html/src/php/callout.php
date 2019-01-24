@@ -2,6 +2,8 @@
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/shared.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/db_connect.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/stmt_init.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/rank_2.php";
 	
 	$error = false;
 	
@@ -86,8 +88,8 @@
 	$conn->close();
 	
 	if (!$error) {
-		header("Location: /calendar.php");
+		echo 0;
 	} else {
-		header("Location: /error.php?id=" . $error_id);
+		echo $error_id;
 	}
 ?>

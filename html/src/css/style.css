@@ -1754,7 +1754,6 @@ article .occasions-container table tr.past td {
 .event-btn.active {
 	background: #4d4d4d;
 	color: #f2f2f2;
-	pointer-events: none;
 }
 .signup-action-input {
     background: #404040;
