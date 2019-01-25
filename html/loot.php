@@ -202,11 +202,8 @@
 											<td><?php echo $l['note']; ?></td>
 											<?php if ($user['security'] >= 2) { ?>
 											<td>
-												<form method="POST" action="/src/php/delete_loot.php" onsubmit="return confirm('Are you sure you want to delete this loot?');">
-													<input type="hidden" name="loot_id" value="<?php echo $l['id']; ?>"></input>
-													<input type="button" class="standard-button edit-loot-btn" value="EDIT" data-id="<?php echo $l['id']; ?>" data-date="<?php echo $l_date->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d H:i'); ?>" data-character="<?php echo $l['character_id']; ?>" data-item="<?php echo $l['item_id']; ?>" data-type="<?php echo $l['type']; ?>"></input>
-													<input type="submit" class="standard-button" value="DELETE"></input>
-												</form>
+												<input type="button" class="standard-button edit-loot-btn" value="EDIT" data-id="<?php echo $l['id']; ?>" data-date="<?php echo $l_date->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d H:i'); ?>" data-character="<?php echo $l['character_id']; ?>" data-item="<?php echo $l['item_id']; ?>" data-type="<?php echo $l['type']; ?>"></input>
+												<input type="button" class="standard-button delete-loot-btn" value="DELETE" data-id="<?php echo $l['id']; ?>"></input>
 											</td>
 											<?php } ?>
 										</tr>
@@ -394,6 +391,28 @@
 				$('#edit-loot-type').val(editType);
 				
 				$('#overlay-edit-loot').slideDown(250);
+			});
+			
+			// delete loot
+			$('.delete-loot-btn').click(function(){
+				if (confirm("Are you sure you want to delete this loot?")) {
+					
+					let lootID = $(this).data('id');
+					let par = $(this).parent().parent();;
+					let rowData = { 'loot_id': lootID };
+					$.ajax({
+						url: "/src/php/delete_loot.php",
+						type: "POST",
+						data: rowData,
+						success: function(d) {
+							if (d == 0) {
+								par.remove();
+							} else {
+								alert("Oops! Something went wrong. Error code: " + d);
+							}
+						}
+					});
+				}
 			});
 		</script>	
 	</body>

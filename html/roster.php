@@ -39,12 +39,12 @@
 									<thead>
 										<tr>
 											<th data-sort="string" class="sortable-table-header">Username</th>
-											<th>Badges</th>
 											<th data-sort="string" class="sortable-table-header">Main Character</th>
 											<th data-sort="string" class="sortable-table-header">Rank</th>
-											<th data-sort="float" class="sortable-table-header">Loot</th>
-											<th data-sort="float" class="sortable-table-header">Attendance</th>
-											<th data-sort="float" class="sortable-table-header" title="Attendance at primary raids over the past 30 days.">30DAR</th>
+											<th>Badges</th>
+											<th data-sort="float" class="sortable-table-header" title="Total loot cost over all time.">Loot</th>
+											<th data-sort="float" class="sortable-table-header" title="Total attendance points over all time.">Attnd</th>
+											<th data-sort="float" class="sortable-table-header" title="Rate of attendance at primary raids over the past 30 days.">30DAR</th>
 											<th>Joined</th>
 											<?php if ($user['security'] >= 2) { ?>
 											<th>Last Login</th>
@@ -62,6 +62,8 @@
 										?>
 										<tr>
 											<td><a href="/viewUser?id=<?php echo $u['id']; ?>"><?php echo $u['username']; ?></a></td>
+											<td><?php echo $u['characterName']; ?></td>
+											<td><?php echo $u['rankName']; ?></td>
 											<td>
 												<div class="user-badges-container">
 													<?php if ($u['badges']) {
@@ -72,9 +74,7 @@
 													} ?>
 												</div>
 											</td>
-											<td><?php echo $u['characterName']; ?></td>
-											<td><?php echo $u['rankName']; ?></td>
-											<td><a href="/loot.php?user=<?php echo $u['id']; ?>"><?php echo "-" . $u['loot_cost']; ?></a></td>
+											<td><a href="/loot.php?user=<?php echo $u['id']; ?>"><?php echo ($u['loot_cost'])?"-" . $u['loot_cost']:"0"; ?></a></td>
 											<td><?php echo "+" . $u['attendance_score']; ?></td>
 											<td><?php echo round((float)$u['30_day_attendance_rate'] * 100 ) . '%'; ?></td>
 											<td><?php echo $u_joined->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d'); ?></td>

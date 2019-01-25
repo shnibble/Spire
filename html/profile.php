@@ -100,7 +100,7 @@
 													<tr>
 														<td><span><?php echo "-" . $user_scores['loot_cost']; ?></span></td>
 														<td><span><?php echo "+" . $user_scores['attendance_score']; ?></span></td>
-														<td><span><?php echo ($user_scores['spread'] >= 0)?"+":"" . $user_scores['spread']; ?></span></td>
+														<td><span><?php echo ($user_scores['spread'] >= 0)?"+" . $user_scores['spread']:"" . $user_scores['spread']; ?></span></td>
 														<td><span><?php echo round((float)$user_scores['30_day_attendance_rate'] * 100 ) . '%'; ?></span></td>
 													</tr>
 												</table>

@@ -38,8 +38,8 @@
 	$conn->close();
 	
 	if (!$error) {
-		header("Location: /loot.php");
+		echo 0;
 	} else {
-		header("Location: /error.php?id=" . $error_id);
+		echo $error_id;
 	}
 ?>

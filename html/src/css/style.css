@@ -14,7 +14,7 @@ html, body {
 	max-width: 1200px;
 	min-width: 300px;
 	background: #1a1a1a;
-	min-height: 1100px;
+	min-height: 1200px;
 }
 /* header and articles must have the same padding and articles have the same margin */
 #header, article {
@@ -287,6 +287,92 @@ article {
 	top: 19px;
 	left: 4px;
 	width: 18px;
+	height: 3px;
+}
+/* charter */
+.nav-icon.charter div:nth-child(1) {
+	background: #1a1a1a;
+	border-radius: 2px;
+	top: 1px;
+	right: 1px;
+	bottom: 2px;
+	left: 2px;
+}
+.nav-icon.charter div:nth-child(2) {
+	top: 4px;
+	left: 4px;
+	width: 2px;
+	height: 2px;
+}
+.nav-icon.charter div:nth-child(3) {
+	top: 4px;
+	left: 8px;
+	width: 14px;
+	height: 2px;
+}
+.nav-icon.charter div:nth-child(4) {
+	top: 8px;
+	left: 8px;
+	width: 2px;
+	height: 2px;
+}
+.nav-icon.charter div:nth-child(5) {
+	top: 8px;
+	left: 12px;
+	width: 10px;
+	height: 2px;
+}
+.nav-icon.charter div:nth-child(6) {
+	top: 12px;
+	left: 8px;
+	width: 2px;
+	height: 2px;
+}
+.nav-icon.charter div:nth-child(7) {
+	top: 12px;
+	left: 12px;
+	width: 10px;
+	height: 2px;
+}
+.nav-icon.charter div:nth-child(8) {
+	top: 18px;
+	left: 4px;
+	width: 2px;
+	height: 2px;
+}
+.nav-icon.charter div:nth-child(9) {
+	top: 18px;
+	left: 8px;
+	width: 14px;
+	height: 2px;
+}
+/* coc */
+.nav-icon.coc div:nth-child(1) {
+	background: #1a1a1a;
+	border-radius: 2px;
+	top: 2px;
+	right: 2px;
+	bottom: 2px;
+	left: 2px;
+}
+.nav-icon.coc div:nth-child(2) {
+	top: 6px;
+	left: 8px;
+	width: 12px;
+	height: 5px;
+	transform: rotate(35deg);
+}
+.nav-icon.coc div:nth-child(3) {
+	top: 14px;
+	left: 4px;
+	width: 10px;
+	height: 3px;
+	transform: rotate(-55deg);
+}
+.nav-icon.coc div:nth-child(4) {
+	top: 20px;
+	left: 13px;
+	width: 9px;
 	height: 3px;
 }
 /* calendar */
@@ -1762,4 +1848,48 @@ article .occasions-container table tr.past td {
 }
 .signup-action-button {
 	margin: 5px;
+}
+
+/* charter */
+.charter-title {
+	padding: 10px;
+	margin: 5px;
+	text-align: center;
+	font-size: 24px;
+}
+.charter-row {
+	margin-right: 5px;
+	padding: 5px;
+}
+.charter-row.level-1 {
+	margin-top: 10px;
+	margin-left: 5px;
+	font-weight: bold;
+}
+.charter-row.level-2 {
+	margin-left: 20px;
+}
+.charter-row.level-3 {
+	margin-left: 35px;
+}
+.charter-row.level-4 {
+	margin-left: 50px;
+}
+.charter-section {
+	padding-right: 10px;
+}
+
+/* code of conduct */
+.coc-title {
+	padding: 10px;
+	margin: 5px;
+	text-align: center;
+	font-size: 24px;
+}
+.coc-row {
+	margin: 5px;
+	padding: 5px;
+}
+.coc-section {
+	padding-right: 10px;
 }

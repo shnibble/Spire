@@ -98,7 +98,7 @@
 													<tr>
 														<td><?php echo "-" . $player_scores['loot_cost']; ?></td>
 														<td><?php echo "+" . $player_scores['attendance_score']; ?></td>
-														<td><?php echo ($player_scores['spread'] >= 0)?"+":"" . $player_scores['spread']; ?></td>
+														<td><?php echo ($player_scores['spread'] >= 0)?"+" . $player_scores['spread']:"" . $player_scores['spread']; ?></td>
 														<td><?php echo round((float)$player_scores['30_day_attendance_rate'] * 100 ) . '%'; ?></td>
 													</tr>
 												</table>
