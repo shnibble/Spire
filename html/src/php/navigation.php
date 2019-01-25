@@ -72,6 +72,16 @@
 		</div>
 		<div class="nav-carrot"></div>
 	</a>
+	<a class="item <?php echo($pageName=='items')?'active':''; ?>" href="/items">
+		<div class="nav-icon items">
+			<div></div><div></div><div></div><div></div><div></div><div></div>
+		</div>
+		<div class="nav-text">
+			<span class="nav-title">ITEMS</span>
+			<span class="nav-description">Items database and loot priority</span>
+		</div>
+		<div class="nav-carrot"></div>
+	</a>
 	<a class="item <?php echo($pageName=='buffs')?'active':''; ?>" href="/buffs">
 		<div class="nav-icon buffs">
 			<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>

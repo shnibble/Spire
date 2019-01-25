@@ -287,8 +287,7 @@
 					</tr>
 				</table>
 			</div>
-		</div>
-		<?php } ?>		
+		</div>	
 		
 		<div class="full-overlay" id="overlay-edit-loot">
 			<div class="scrolling-table-container">
@@ -315,8 +314,6 @@
 									echo "<option value='" . $c['id'] . "'>" . $c['name'] . "</option>";
 									} ?>
 								</select>
-							</div>
-								
 							</div>
 						</td>
 					</tr>
@@ -357,6 +354,7 @@
 				</table>
 			</div>
 		</div>
+		<?php } ?>	
 		<script>
 			
 			// datetime selector

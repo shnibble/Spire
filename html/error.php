@@ -22,6 +22,7 @@
 		case 119:	$error_text = "Invalid event ID. The event you tried to access either never existed or was deleted."; break;
 		case 120:	$error_text = "You cannot delete your main character. Try switching your main first and then deleting."; break;
 		case 121:	$error_text = "Text entered exceeds the maximum length allowed."; break;
+		case 122:	$error_text = "Duplicate item ID. An item with that ID already exists in the database. If you can't see it then it may be disabled and needs to be re-enabled instead."; break;
 	}
 ?>
 <!DOCTYPE html>
