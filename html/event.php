@@ -4,6 +4,9 @@
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/stmt_init.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/server_config.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user_event_signup.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user_characters.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/roles.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/verify_user_token.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/rank_2.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/timezones.php";
@@ -25,6 +28,8 @@
 	$late_signup = New DateTime($event['start']);
 	$tosub = new DateInterval('PT24H');
 	$late_signup->sub($tosub);
+	
+	$now = new DateTime();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -158,31 +163,82 @@
 									Warriors: <b><?php echo $signup_details['totalWarriors']; ?></b>
 								</div>
 							</div>
-							<br>
+							<?php if ($event_start > $now) { ?>
+							<div class="event-signups-container">
+								<input type="button" class="event-btn signup" <?php if ($user_event_signup['type'] == 1) echo "disabled"; ?> value="SIGN UP"></input>
+								<input type="button" class="event-btn callout" <?php if ($user_event_signup['type'] == 2) echo "disabled"; ?> value="CALL OUT"></input>
+								<input type="button" class="event-btn note" <?php if (!$user_event_signup['type']) echo "disabled"; ?> value="NOTE"></input>
+								<div class="event-signup-action-container signup">
+									<form method="POST" action="/src/php/signup.php">
+										<input type="hidden" name="event_id" value="<?php echo $event['id'];?>"></input>
+										<select class="signup-action-input signup-character" name="character_id" required>
+											<?php 
+											mysqli_data_seek($user_characters, 0); 
+											while ($character = mysqli_fetch_array($user_characters)) { ?>
+												<option value="<?php echo $character['id']; ?>" data-role="<?php echo $character['role']; ?>" <?php echo ($character['main'])?"selected":""; ?> ><?php echo $character['name']; ?></option>
+											<?php } ?>
+										</select>
+										<select class="signup-action-input signup-role" name="character_role" required>
+											<?php 
+											mysqli_data_seek($roles, 0); 
+											while ($role = mysqli_fetch_array($roles)) { 
+												echo "<option value='" . $role['id'] . "'>" . $role['name'] . "</option>";
+											} ?>
+										</select>
+										<input type="text" class="signup-action-input" name="note" placeholder="Note" value="<?php echo htmlspecialchars($user_event_signup['note']); ?>"></input>
+										<br>
+										<button type="submit" class="signup-action-button submit submit-signup">SIGN UP</button>
+										<button type="button" class="signup-action-button cancel">CANCEL</button>
+									</form>
+								</div>
+								<div class="event-signup-action-container callout">
+									<form method="POST" action="/src/php/callout.php">
+										<input type="hidden" name="event_id" value="<?php echo $event['id'];?>"></input>
+										<input type="text" class="signup-action-input" name="note" placeholder="Note" value="<?php echo htmlspecialchars($user_event_signup['note']); ?>"></input>
+										<br>
+										<button type="submit" class="signup-action-button submit submit-callout">CALL OUT</button>
+										<button type="button" class="signup-action-button cancel">CANCEL</button>
+									</form>
+								</div>
+								<div class="event-signup-action-container note">
+									<form method="POST" action="/src/php/note.php">
+										<input type="hidden" name="event_id" value="<?php echo $event['id'];?>"></input>
+										<input type="text" class="signup-action-input" name="note" placeholder="Note" value="<?php echo htmlspecialchars($user_event_signup['note']); ?>"></input>
+										<br>
+										<button type="submit" class="signup-action-button submit submit-note">UPDATE</button>
+										<button type="button" class="signup-action-button cancel">CANCEL</button>
+									</form>
+								</div>
+							</div>
+							<?php } ?>
 							<div class="scrolling-table-container">
 								<table class="event-signup-table">
-									<tr>
-										<th>Time</th>
-										<th>User</th>
-										<th>Rank</th>
-										<th>Character</th>
-										<th>Role</th>
-										<th title="Number of times this player has been benched">Bench Count</th>
-										<th>Note</th>
-									</tr>
-									<?php while ($s = mysqli_fetch_array($signups)) { 
-										$signup_timestamp = New DateTime($s['timestamp']);
-									?>
-									<tr>
-										<td <?php if ($signup_timestamp > $late_signup) { echo 'class="late" title="Late"'; } ?>><?php echo $signup_timestamp->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d D H:i'); ?></td>
-										<td><a href="/viewUser?id=<?php echo $s['user_id']; ?>" <?php if ($s['user_id'] == $_SESSION['user_id']) echo 'style="color: #ffcd55"'; ?>><?php echo $s['username']; ?></a></td>
-										<td class="rank-<?php echo $s['rank']; ?>"><?php echo $s['rankName']; ?></td>
-										<td class="class-<?php echo $s['class']; ?>"><?php echo $s['characterName']; ?></td>
-										<td><?php echo $s['roleName']; ?></td>
-										<td><?php echo $s['benchedCount']; ?></td>
-										<td><?php echo $s['note']; ?></td>
-									</tr>
-									<?php  } ?>
+									<thead>
+										<tr>
+											<th>Time</th>
+											<th>User</th>
+											<th>Rank</th>
+											<th>Character</th>
+											<th>Role</th>
+											<th title="Number of times this player has been benched">Bench Count</th>
+											<th>Note</th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php while ($s = mysqli_fetch_array($signups)) { 
+											$signup_timestamp = New DateTime($s['timestamp']);
+										?>
+										<tr>
+											<td <?php if ($signup_timestamp > $late_signup) { echo 'class="late" title="Late"'; } ?>><?php echo $signup_timestamp->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d D H:i'); ?></td>
+											<td><a href="/viewUser?id=<?php echo $s['user_id']; ?>" <?php if ($s['user_id'] == $_SESSION['user_id']) echo 'style="color: #ffcd55"'; ?>><?php echo $s['username']; ?></a></td>
+											<td class="rank-<?php echo $s['rank']; ?>"><?php echo $s['rankName']; ?></td>
+											<td class="class-<?php echo $s['class']; ?>"><?php echo $s['characterName']; ?></td>
+											<td><?php echo $s['roleName']; ?></td>
+											<td><?php echo $s['benchedCount']; ?></td>
+											<td><?php echo $s['note']; ?></td>
+										</tr>
+										<?php  } ?>
+									</tbody>
 								</table>
 							</div>
 						</div>
@@ -194,22 +250,26 @@
 						<div class="body">
 							<div class="scrolling-table-container">
 								<table class="event-signup-table">
-									<tr>
-										<th>Time</th>
-										<th>User</th>
-										<th>Rank</th>
-										<th>Note</th>
-									</tr>
-									<?php while ($c = mysqli_fetch_array($callouts)) { 
-										$callout_timestamp = New DateTime($c['timestamp']);
-									?>
-									<tr>
-										<td <?php if ($callout_timestamp > $late_signup) { echo 'class="late" title="Late"'; } ?>><?php echo $callout_timestamp->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d D H:i');; ?></td>
-										<td><a href="/viewUser?id=<?php echo $c['user_id']; ?>" <?php if ($c['user_id'] == $_SESSION['user_id']) echo 'style="color: #ffcd55"'; ?>><?php echo $c['username']; ?></a></td>
-										<td class="rank-<?php echo $c['rank']; ?>"><?php echo $c['rankName']; ?></td>
-										<td><?php echo $c['note']; ?></td>
-									</tr>
-									<?php  } ?>
+									<thead>
+										<tr>
+											<th>Time</th>
+											<th>User</th>
+											<th>Rank</th>
+											<th>Note</th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php while ($c = mysqli_fetch_array($callouts)) { 
+											$callout_timestamp = New DateTime($c['timestamp']);
+										?>
+										<tr>
+											<td <?php if ($callout_timestamp > $late_signup) { echo 'class="late" title="Late"'; } ?>><?php echo $callout_timestamp->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d D H:i');; ?></td>
+											<td><a href="/viewUser?id=<?php echo $c['user_id']; ?>" <?php if ($c['user_id'] == $_SESSION['user_id']) echo 'style="color: #ffcd55"'; ?>><?php echo $c['username']; ?></a></td>
+											<td class="rank-<?php echo $c['rank']; ?>"><?php echo $c['rankName']; ?></td>
+											<td><?php echo $c['note']; ?></td>
+										</tr>
+										<?php  } ?>
+									</tbody>
 								</table>
 							</div>
 						</div>
@@ -363,6 +423,91 @@
 				$('.full-overlay').slideUp(250);
 			});
 			
+			
+			// change role based on character's default role
+			let defaultRole = $('.signup-character').children('option:selected').data('role');
+			$('.signup-role').val(defaultRole);
+			$('.signup-character').change(function(){
+				let role = $(this).children('option:selected').data('role');
+				console.log(role);
+				$(this).siblings('.signup-role').val(role);
+			});
+			
+			// toggle event-signup-action-containers
+			$('.event-btn').click(function(){
+				$(this).siblings('.event-signup-action-container').slideUp(250);
+				if ($(this).hasClass('active')) {
+					$(this).removeClass('active');
+				} else {
+					$(this).siblings('.event-btn').removeClass('active');
+					$(this).addClass('active');
+					
+					if ($(this).hasClass('signup')) {
+						$(this).siblings('.event-signup-action-container.signup').slideDown(250);
+					}
+					if ($(this).hasClass('callout')) {
+						$(this).siblings('.event-signup-action-container.callout').slideDown(250);						
+					}
+					if ($(this).hasClass('note')) {
+						$(this).siblings('.event-signup-action-container.note').slideDown(250);						
+					}
+				}
+			});
+			$('.signup-action-button.cancel').click(function(){
+				$(this).parent().parent().toggle(250);
+				$(this).parent().parent().siblings('.event-btn').removeClass('active');
+			});
+			
+			// event signups 
+			$('.signup-action-button.submit').click(function(e){
+				e.preventDefault();
+				let formData = $(this).parent('form').serialize();
+				let par = $(this).parent().parent().parent();
+				let newNote = $(this).siblings('input[name="note"]').val();
+				
+				if ($(this).hasClass('submit-signup')) {
+					$.ajax({
+						url: "/src/php/signup.php",
+						type: "POST",
+						data: formData,
+						success: function(d) {
+							if (d == 0) {
+								window.location="";
+							} else {
+								alert("Oops! Something went wrong. Error code: " + d);
+							}
+						}
+					});
+				}
+				if ($(this).hasClass('submit-callout')) {
+					$.ajax({
+						url: "/src/php/callout.php",
+						type: "POST",
+						data: formData,
+						success: function(d) {
+							if (d == 0) {
+								window.location="";
+							} else {
+								alert("Oops! Something went wrong. Error code: " + d);
+							}
+						}
+					});
+				}
+				if ($(this).hasClass('submit-note')) {
+					$.ajax({
+						url: "/src/php/note.php",
+						type: "POST",
+						data: formData,
+						success: function(d) {
+							if (d == 0) {
+								window.location="";
+							} else {
+								alert("Oops! Something went wrong. Error code: " + d);
+							}
+						}
+					});
+				}
+			});
 		</script>
 	</body>
 </html>
