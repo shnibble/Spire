@@ -13,32 +13,11 @@
 			<div></div><div></div><div></div><div></div><div></div><div></div>
 		</div>
 		<div class="nav-text">
-			<span class="nav-title">WHAT'S NEW?</span>
-			<span class="nav-description">News and Announcements</span>
+			<span class="nav-title">HOME</span>
+			<span class="nav-description">Announcements and Information</span>
 		</div>
 		<div class="nav-carrot"></div>
 	</a>
-	<a class="item <?php echo($pageName=='charter')?'active':''; ?>" href="/charter">
-		<div class="nav-icon charter">
-			<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
-		</div>
-		<div class="nav-text">
-			<span class="nav-title">CHARTER</span>
-			<span class="nav-description">The guild's charter</span>
-		</div>
-		<div class="nav-carrot"></div>
-	</a>
-	<a class="item <?php echo($pageName=='codeOfConduct')?'active':''; ?>" href="/codeOfConduct">
-		<div class="nav-icon coc">
-			<div></div><div></div><div></div><div></div>
-		</div>
-		<div class="nav-text">
-			<span class="nav-title">CODE OF CONDUCT</span>
-			<span class="nav-description">The guild's Code of Conduct</span>
-		</div>
-		<div class="nav-carrot"></div>
-	</a>
-	
 	<?php 
 	// guild member pages
 	if ($user['rank'] >= 2) { ?>

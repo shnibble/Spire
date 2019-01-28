@@ -11,9 +11,6 @@
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/announcements.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/stmt_close.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/db_close.php";
-	
-	// default view expanded articles
-	$max_expanded = 1;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +28,16 @@
 			<div id="inner-wrapper">
 				<?php require $_SERVER['DOCUMENT_ROOT'] . "/src/php/navigation.php"; ?>
 				<div id="content">
-				
+					<article>
+						<div class="header">
+							<h3>Information</h3>
+						</div>
+						<div class="body">
+							<a class="information-link" href="/charter">Charter</a>
+							<a class="information-link" href="/codeOfConduct">Code of Conduct</a>
+							<a class="information-link" href="/progression">Raid Progression</a>
+						</div>
+					</article>
 					<div class="pre-article-container">
 						<div class="left">
 							<?php if ($user['security'] >= 2) { ?>
@@ -42,79 +48,86 @@
 							<a href="/announcementHistory.php" class="pre-article-link" id="history-link">Announcement History</a>
 						</div>
 					</div>
-					<?php 
-					$today = new DateTime();
-					$today->setTimeZone($LOCAL_TIMEZONE);
-					$yesterday = new DateTime();
-					$yesterday->modify('-1 days');
-					$yesterday->setTimeZone($LOCAL_TIMEZONE);
-					$lastWeek = new DateTime();
-					$lastWeek->modify('-6 days');
-					$lastWeek->setTimeZone($LOCAL_TIMEZONE);
-					$article_count = 0;
-					
-					while ($row = mysqli_fetch_array($announcements)) { 
-						$article_count++;
-						
-						// process posted date
-						$date = new DateTime($row['timestamp'], $SERVER_TIMEZONE);
-						$date->setTimeZone($LOCAL_TIMEZONE);
-						
-							// today
-							if($today->format('d-m-Y') == $date->format('d-m-Y')) {
-								$date_formatted = "Today at " . $date->format('g:i A');
-							}					
-							// yesterday
-							else if($yesterday->format('d-m-Y') == $date->format('d-m-Y')) {
-								$date_formatted = "Yesterday at " . $date->format('g:i A');
-							}					
-							// within 6 days
-							else if($lastWeek < $date) {
-								$date_formatted = $date->format('l') . " at " . $date->format('g:i A');
-							}
-							// older than 7 days
-							else {
-								$date_formatted = $date->format('m/d/Y') . " at " . $date->format('g:i A');
-							}
-						
-						// format content using Discord markdown
-						$content = $row['content'];
-						// replace angle braces
-						$content = preg_replace('#\<{1}(.*?)\>{1}#', '&lt$1&gt', $content);
-						// *** = strong
-						$content = preg_replace('#\*{3}(.*?)\*{3}#', '<b><i>$1</i></b>', $content);
-						// ** = bold
-						$content = preg_replace('#\*{2}(.*?)\*{2}#', '<b>$1</b>', $content);
-						// * = italic
-						$content = preg_replace('#\*{1}(.*?)\*{1}#', '<i>$1</i>', $content);
-						// __ = underline
-						$content = preg_replace('#\_{2}(.*?)\_{2}#', '<u>$1</u>', $content);
-						// ` = code
-						$content = preg_replace('#\`{1}(.*?)\`{1}#', '<code>$1</code>', $content);
-						
-					?>
-					<div class="announcement">
+					<article>
 						<div class="header">
-							<span class="announcement-name rank-<?php echo $user['rank']; ?>"><?php echo $row['username']; ?></span>
-							<div class="user-badges-container">
-								<?php if ($user['badges']) {
-								$_user_badges = explode(",", $user['badges']);
-								foreach ($_user_badges as $b) { ?>
-								<div class="user-badge" style="background-image: url('/src/img/badge_<?php echo $b; ?>.png');" title="<?php echo htmlspecialchars($badges_array[$b]['name']) . "\n" . htmlspecialchars($badges_array[$b]['description']); ?>"></div>
-								<?php }
-								} ?>
+							<h3>Announcements</h3>
+						</div>
+						<div class="body">
+							<?php 
+							$today = new DateTime();
+							$today->setTimeZone($LOCAL_TIMEZONE);
+							$yesterday = new DateTime();
+							$yesterday->modify('-1 days');
+							$yesterday->setTimeZone($LOCAL_TIMEZONE);
+							$lastWeek = new DateTime();
+							$lastWeek->modify('-6 days');
+							$lastWeek->setTimeZone($LOCAL_TIMEZONE);
+							$article_count = 0;
+							
+							while ($row = mysqli_fetch_array($announcements)) { 
+								$article_count++;
+								
+								// process posted date
+								$date = new DateTime($row['timestamp'], $SERVER_TIMEZONE);
+								$date->setTimeZone($LOCAL_TIMEZONE);
+								
+									// today
+									if($today->format('d-m-Y') == $date->format('d-m-Y')) {
+										$date_formatted = "Today at " . $date->format('g:i A');
+									}					
+									// yesterday
+									else if($yesterday->format('d-m-Y') == $date->format('d-m-Y')) {
+										$date_formatted = "Yesterday at " . $date->format('g:i A');
+									}					
+									// within 6 days
+									else if($lastWeek < $date) {
+										$date_formatted = $date->format('l') . " at " . $date->format('g:i A');
+									}
+									// older than 7 days
+									else {
+										$date_formatted = $date->format('m/d/Y') . " at " . $date->format('g:i A');
+									}
+								
+								// format content using Discord markdown
+								$content = $row['content'];
+								// replace angle braces
+								$content = preg_replace('#\<{1}(.*?)\>{1}#', '&lt$1&gt', $content);
+								// *** = strong
+								$content = preg_replace('#\*{3}(.*?)\*{3}#', '<b><i>$1</i></b>', $content);
+								// ** = bold
+								$content = preg_replace('#\*{2}(.*?)\*{2}#', '<b>$1</b>', $content);
+								// * = italic
+								$content = preg_replace('#\*{1}(.*?)\*{1}#', '<i>$1</i>', $content);
+								// __ = underline
+								$content = preg_replace('#\_{2}(.*?)\_{2}#', '<u>$1</u>', $content);
+								// ` = code
+								$content = preg_replace('#\`{1}(.*?)\`{1}#', '<code>$1</code>', $content);
+								
+							?>
+							<div class="announcement">
+								<div class="announcement-header">
+									<span class="announcement-name rank-<?php echo $user['rank']; ?>"><?php echo $row['username']; ?></span>
+									<div class="user-badges-container">
+										<?php if ($user['badges']) {
+										$_user_badges = explode(",", $user['badges']);
+										foreach ($_user_badges as $b) { ?>
+										<div class="user-badge" style="background-image: url('/src/img/badge_<?php echo $b; ?>.png');" title="<?php echo htmlspecialchars($badges_array[$b]['name']) . "\n" . htmlspecialchars($badges_array[$b]['description']); ?>"></div>
+										<?php }
+										} ?>
+									</div>
+									<span class="announcement-date"><?php echo $date_formatted; ?></span>
+								</div>
+								<div class="content">
+									<h3><?php echo htmlspecialchars($row['title']);?></h3>
+									<?php echo nl2br($content); ?>
+								</div>
+								<?php if ($user['security'] >= 2) {?>
+								<input type="button" class="article-footer-button delete-announcement-btn" data-id="<?php echo $row['id']; ?>" value="DELETE"></input>
+								<?php } ?>
 							</div>
-							<span class="announcement-date"><?php echo $date_formatted; ?></span>
+							<?php } ?>
 						</div>
-						<div class="content">
-							<h3><?php echo htmlspecialchars($row['title']);?></h3>
-							<?php echo nl2br($content); ?>
-						</div>
-						<?php if ($user['security'] >= 2) {?>
-						<input type="button" class="article-footer-button delete-announcement-btn" data-id="<?php echo $row['id']; ?>" value="DELETE"></input>
-						<?php } ?>
-					</div>
-					<?php } ?>
+					</article>
 				</div>
 			</div>
 		</div>

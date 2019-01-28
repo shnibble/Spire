@@ -52,6 +52,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 		<link rel="stylesheet" href="/src/css/style.css"></link>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="/src/js/stupidtable.min.js"></script>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 		<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
@@ -179,11 +180,11 @@
 								<table id="loot-log-table">
 									<thead>
 										<tr>
-											<th>Date</th>
-											<th>User</th>
-											<th>Character</th>
-											<th>Item</th>
-											<th>Type</th>
+											<th data-sort="string" class="sortable-table-header">Date</th>
+											<th data-sort="string" class="sortable-table-header">User</th>
+											<th data-sort="string" class="sortable-table-header">Character</th>
+											<th data-sort="string" class="sortable-table-header">Item</th>
+											<th data-sort="string" class="sortable-table-header">Type</th>
 											<th>Cost</th>
 											<th>Note</th>
 										</tr>
@@ -356,6 +357,8 @@
 		</div>
 		<?php } ?>	
 		<script>
+			// sortable table
+			$('#loot-log-table').stupidtable();
 			
 			// datetime selector
 			$('#loot-date').flatpickr({

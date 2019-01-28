@@ -1,6 +1,6 @@
 <?php
 	// number of announcements to retrieve
-	$announcements_count = 10;
+	$announcements_count = 3;
 	
 	// configure how many articles are expanded by default
 	$article_max_expanded = 1; 

@@ -47,7 +47,7 @@ article {
 	width: 200px;
 	left: 100px;
 	bottom: -30px;
-	z-index: 1;
+	z-index: 5;
 }
 #inner-wrapper {
 	position: relative;
@@ -58,7 +58,7 @@ article {
 	top: 0;
 	left: 0;
 	bottom: 0;
-	z-index: 1;
+	z-index: 4;
 }
 .nav-guest-msg {
 	color: #00b33c;
@@ -78,7 +78,7 @@ article {
 #navigation {
 	vertical-align: top;
 	background: #1a1a1a;
-	padding: 0 2px;
+	padding: 25px 2px 0 2px;
 	transition: left .25s ease-in-out;
 }
 #nav-open {
@@ -1057,17 +1057,33 @@ article.expandable .body {
 	color: #ffcd55;
 }
 
+/* information */
+.information-link {
+	display: inline-block;
+	padding: 10px;
+	margin: 5px;
+	width: 150px;
+	text-decoration: none;
+	font-weight: bold;
+	color: #ffe099;
+	transition: color .25s;
+}
+.information-link:hover {
+	color: #ffcd55;
+}
+
 /* announcements */
 .announcement {
 	border-top: 1px solid #666666;
 	margin: 10px;
 	padding: 10px 0;
+	text-align: left;
 	transition: background-color .25s ease-in-out;
 }
 .announcement:hover {
-	background: #262626;
+	background: #333333;
 }
-.announcement .header {
+.announcement .announcement-header {
 	padding: 5px;
 }
 .announcement-name {
@@ -1085,6 +1101,69 @@ article.expandable .body {
 }
 .announcement .content, .announcement .content * {
 	font-size: 14px;
+}
+
+/* progression */
+.raid {
+	display: block;
+	margin: 5px;
+	border-top: 1px solid #666666;
+	padding: 15px;transition: background-color .25s ease-in-out;
+}
+.raid:hover {
+	background: #262626;
+}
+.raid-percent-complete {
+	font-size: 12px;
+	font-weight: normal;
+}
+.raid .boss {
+	display: inline-block;
+	position: relative;
+	margin-right: -3px;
+	width: 85px;
+	height: 70px;
+}
+.raid .boss .boss-gauge {
+	position: absolute;
+	left: 0;
+	right: 13px;
+	top: 11px;
+	height: 4px;
+	background: #333333;
+	z-index: 1;
+}
+.raid .boss .boss-gauge-end {
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	top: 5px;
+	right: -2px;
+	border-radius: 10px;
+	background: #333333;
+	z-index: 2;
+}
+.raid .boss .boss-name {
+	display: block;
+	position: absolute;
+	top: 24px;
+	right: 0;
+	width: 80px;
+	font-size: 10px;
+	white-space: normal;
+	text-align: right;
+	color: #595959;
+	font-weight: bold;
+}
+.boss-date {
+	font-size: 10px;
+	font-weight: normal;
+}
+.raid .boss.completed .boss-gauge, .raid .boss.completed .boss-gauge-end {
+	background: #196619;
+}
+.raid .boss.completed .boss-name {
+	color: #f2f2f2;
 }
 
 /* occasions */
@@ -1536,7 +1615,7 @@ article .occasions-container table tr.past td {
 	left: 0;
 	padding: 20px;
 	background: rgba(0,0,0,0.9);
-	z-index: 3;
+	z-index: 6;
 	text-align: center;
 	overflow-y: auto;
 }
