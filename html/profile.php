@@ -128,13 +128,16 @@
 										<td><b>Your Local Timezone</b>:</td>
 										<td>
 											<div class="table-cell">
-												<form method="POST" action="/src/php/update_user_timezone.php">
-													<select class="standard-select" name="timezone_id">
+												<div class="table-cell-notification" id="notification-timezone">
+													<span class="notification-message"></span>
+												</div>
+												<form method="POST" id="change-timezone-form" action="/src/php/update_user_timezone.php">
+													<select class="standard-select enable-form" name="timezone_id">
 													<?php while ($tz = mysqli_fetch_array($timezones)) { ?> 
 														<option value="<?php echo $tz['id']; ?>" <?php if ($tz['id'] == $user['timezone_id']) { echo "selected"; } ?>><?php echo $tz['name']; ?></option>
 													<?php } ?>
 													</select>
-													<input type="submit" class="standard-button" value="CHANGE TIMEZONE"></input>
+													<input type="submit" class="standard-button" id="change-timezone-btn" value="CHANGE TIMEZONE" disabled></input>
 												</form>
 											</div>
 										</td>
@@ -143,7 +146,11 @@
 										<td><b>Password</b>:</td>
 										<td>
 											<div class="table-cell">
+												<div class="table-cell-notification" id="notification-password">
+													<span class="notification-message"></span>
+												</div>
 												<form method="POST" action="/src/php/update_user_password.php">
+													<input type="password" class="standard-input" id="user-pass-old" name="old_pass" placeholder="Current Password" required></input>
 													<input type="password" class="standard-input" id="user-pass-1" name="new_pass_1" placeholder="New Password" required></input>
 													<input type="password" class="standard-input" id="user-pass-2" name="new_pass_2" placeholder="Repeat New Password" required></input>
 													<span id="user-pass-alert"></span>
@@ -431,17 +438,86 @@
 			});
 			
 			// password matching
-			$('#user-pass-1, #user-pass-2').on("input", function(){
-				if ($('#user-pass-1').val() == "" && $('#user-pass-2').val() == "") {
-					$('#user-pass-alert').text("");
-					$('#change-pass-btn').prop("disabled", true);
-				} else if ($('#user-pass-1').val() !== $('#user-pass-2').val()) {
-					$('#user-pass-alert').text("Passwords do not match.");
+			$('#user-pass-old, #user-pass-1, #user-pass-2').on("input", function(){
+				if ($('#user-pass-old').val() == "") {
+					$('#user-pass-alert').text("Please enter your current password.");
 					$('#change-pass-btn').prop("disabled", true);
 				} else {
-					$('#user-pass-alert').text("");
-					$('#change-pass-btn').prop("disabled", false);
+					if ($('#user-pass-1').val() == "" && $('#user-pass-2').val() == "") {
+						$('#user-pass-alert').text("");
+						$('#change-pass-btn').prop("disabled", true);
+					} else if ($('#user-pass-1').val() !== $('#user-pass-2').val()) {
+						$('#user-pass-alert').text("Passwords do not match.");
+						$('#change-pass-btn').prop("disabled", true);
+					} else {
+						$('#user-pass-alert').text("");
+						$('#change-pass-btn').prop("disabled", false);
+					}
 				}
+			});
+			
+			// notifications
+			function notify(type, msg) {
+				let el = $('#notification-' + type);
+				el.children('.notification-message').text(msg);
+				el.fadeIn(125);
+				setTimeout(function(){
+					el.fadeOut(500);
+				}, 2500);
+			}
+			
+			// change timezone
+			$('#change-timezone-btn').click(function(e){
+				e.preventDefault();
+				let formData = $(this).parent('form').serialize();
+				$('#change-timezone-btn').prop('disabled', true);
+				
+				$.ajax({
+					url: "/src/php/update_user_timezone.php",
+					type: "POST",
+					data: formData,
+					success: function(d) {
+						if (d == 0) {
+							notify('timezone', "Timezone changed successfuly!");
+						} else {
+							notify('timezone', "Oops! Something went wrong, timezone not changed. Error code: " + d);
+						}
+					}
+				});
+			});
+			
+			
+			// change password
+			$('#change-pass-btn').click(function(e){
+				e.preventDefault();
+				let formData = $(this).parent('form').serialize();
+				$('#user-pass-old').val("");
+				$('#user-pass-1').val("");
+				$('#user-pass-2').val("");
+				$('#change-pass-btn').prop('disabled', true);
+				
+				$.ajax({
+					url: "/src/php/update_user_password.php",
+					type: "POST",
+					data: formData,
+					success: function(d) {
+						if (d == 0) {
+							notify('password', "Password changed successfuly!");
+						} else if (d == 123) {
+							notify('password', "Your current password was not entered correctly. Please try again.");
+							$('#change-pass-btn').prop("disabled", true);
+						} else {
+							notify('password', "Oops! Something went wrong, password not changed. Error code: " + d);
+							$('#change-pass-btn').prop("disabled", true);
+						}
+					}
+				});
+			});
+			
+			// enable submit butons
+			$('.enable-form').on('change', function(){
+				console.log("changed");
+				$(this).siblings('input[type=submit]').prop('disabled', false);
 			});
 		</script>
 	</body>

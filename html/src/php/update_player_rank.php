@@ -15,7 +15,33 @@
 		$error_id = 110;
 	}
 	
-	// update user rank
+	// get current player info
+	if (!$error) {
+		$stmt->prepare("SELECT `username`, `rank` FROM `users` WHERE `id` = ?");
+		$stmt->bind_param("i", $_POST['player_id']);
+		if(!($stmt->execute())) {
+			// ERROR: failed to execute
+			$error = true;
+			$error_id = 109;
+		} else {
+			$_player = mysqli_fetch_array($stmt->get_result());
+		}
+	}
+	
+	// get new rank info
+	if (!$error) {
+		$stmt->prepare("SELECT `name` FROM `ranks` WHERE `id` = ?");
+		$stmt->bind_param("i", $_POST['rank_id']);
+		if(!($stmt->execute())) {
+			// ERROR: failed to execute
+			$error = true;
+			$error_id = 109;
+		} else {
+			$_rank = mysqli_fetch_array($stmt->get_result());
+		}
+	}
+	
+	// update player rank
 	if (!$error) {
 		$stmt->prepare("UPDATE `users` SET `rank` = ? WHERE `id` = ?");
 		$stmt->bind_param("ii", $_POST['rank_id'], $_POST['player_id']);
@@ -28,7 +54,11 @@
 	
 	// log event
 	if(!$error) {
-		$logDescription = "changed an account rank (ID " . $_POST['player_id'] . ").";
+		if ($_player['rank'] < $_POST['rank_id']) {
+			$logDescription = "promoted " . $_player['username'] . " to " . $_rank['name'] . ".";
+		} else {
+			$logDescription = "demoted " . $_player['username'] . " to " . $_rank['name'] . ".";			
+		}
 		$stmt->prepare("INSERT INTO `log` (`user_id`, `description`, `security_level`) VALUES (?, ?, 2)");
 		$stmt->bind_param("is", $_SESSION['user_id'], $logDescription);
 		$stmt->execute();
@@ -38,8 +68,8 @@
 	$conn->close();
 	
 	if (!$error) {
-		header("Location: /admin/viewUser.php?id=" . $_POST['player_id']);
+		echo 0;
 	} else {
-		header("Location: /error.php?id=" . $error_id);
+		echo $error_id;
 	}
 ?>

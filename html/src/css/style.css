@@ -1264,12 +1264,6 @@ article .occasions-container table tr.past td {
 .user-scores-table span {
 	font-size: 14px;
 }
-.table-cell {
-	border: 2px solid #404040;
-	border-radius: 5px;
-	background: #1a1a1a;
-	padding: 5px;
-}
 .security-1 {
 	color: #2eb82e;
 }
@@ -2051,4 +2045,27 @@ article .occasions-container table tr.past td {
 	height: 30px;
 	padding: 5px;
 	width: 60px;
+}
+
+/* standard table cell */
+.table-cell {
+	position: relative;
+	border: 2px solid #404040;
+	border-radius: 5px;
+	background: #1a1a1a;
+	padding: 5px;
+}
+
+/* notifications */
+.table-cell-notification {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	padding: 15px 5px;
+	background: #332900;
+	border: 2px solid #e6b800;
+	border-radius: 5px;
+	text-align: center;
 }

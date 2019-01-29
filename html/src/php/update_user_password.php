@@ -8,10 +8,31 @@
 	$error = false;
 	
 	// get POST variables
-	if (!isset($_POST['new_pass_1']) || !isset($_POST['new_pass_2'])) {
+	if (!isset($_POST['old_pass']) || !isset($_POST['new_pass_1']) || !isset($_POST['new_pass_2'])) {
 		// ERROR: missing variable
 		$error = true;
 		$error_id = 110;
+	}
+	
+	// verify existing password
+	if (!$error) {
+		$stmt->prepare("SELECT `password` FROM `users` WHERE `id` = ?");
+		$stmt->bind_param("s", $_SESSION['user_id']);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		if (mysqli_num_rows($result) == 0) {
+			// ERROR: username not found
+			$error = true;
+			$error_id = 107;
+		} else {
+			$result = mysqli_fetch_array($result);
+			$old_pass = $result['password'];
+			if (!password_verify($_POST['old_pass'], $old_pass)) {
+				// ERROR: incorrect password
+				$error = true;
+				$error_id = 123;
+			}
+		}
 	}
 	
 	// check if passwords match
@@ -49,8 +70,8 @@
 	$conn->close();
 	
 	if (!$error) {
-		header("Location: /profile.php?s=2");
+		echo 0;
 	} else {
-		header("Location: /error.php?id=" . $error_id);
+		echo $error_id;
 	}
 ?>

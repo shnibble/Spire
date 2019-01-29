@@ -23,6 +23,8 @@
 		case 120:	$error_text = "You cannot delete your main character. Try switching your main first and then deleting."; break;
 		case 121:	$error_text = "Text entered exceeds the maximum length allowed."; break;
 		case 122:	$error_text = "Duplicate item ID. An item with that ID already exists in the database. If you can't see it then it may be disabled and needs to be re-enabled instead."; break;
+		case 123:	$error_text = "Invalid password. We couldn't update this password because you didn't enter your current password correctly!"; break;
+		case 124:	$error_text = "You cannot change the password for an account with an equal or higher security level."; break;
 	}
 ?>
 <!DOCTYPE html>
