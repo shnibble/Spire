@@ -82,7 +82,7 @@
 						<td><b>Item ID</b>:</td>
 						<td>
 							<div class="table-cell">
-								<input type="number" class="standard-input" id="item-id" form="add-item-form" name="item_id" required></input>
+								<input type="number" class="standard-input" id="item-id" form="add-item-form" name="item_id" max="999999" required></input>
 								<span>Be sure to use the proper item code ID used in the game (refer to a database website).</span>
 							</div>
 						</td>

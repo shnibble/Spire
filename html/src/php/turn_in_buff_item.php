@@ -16,6 +16,32 @@
 		$error_id = 110;
 	}
 	
+	// get character info
+	if (!$error) {
+		$stmt->prepare("SELECT `name` FROM `characters` WHERE `id` = (SELECT `character_id` FROM `loot` WHERE `id` = ?)");
+		$stmt->bind_param("i", $_POST['loot_id']);
+		if(!($stmt->execute())) {
+			// ERROR: failed to execute
+			$error = true;
+			$error_id = 109;
+		} else {
+			$_character = mysqli_fetch_array($stmt->get_result());
+		}
+	}
+	
+	// get item info
+	if (!$error) {
+		$stmt->prepare("SELECT `id`, `name`, `quality` FROM `items` WHERE `id` = (SELECT `item_id` FROM `loot` WHERE `id` = ?)");
+		$stmt->bind_param("i", $_POST['loot_id']);
+		if(!($stmt->execute())) {
+			// ERROR: failed to execute
+			$error = true;
+			$error_id = 109;
+		} else {
+			$_item = mysqli_fetch_array($stmt->get_result());
+		}
+	}
+	
 	// update loot
 	if (!$error) {
 		$stmt->prepare("UPDATE `loot` SET `turned_in` = NOW() WHERE `id` = ?");
@@ -32,7 +58,7 @@
 	
 	// log event
 	if(!$error) {
-		$logDescription = "turned in a buff item (ID " . $_POST['loot_id'] . ").";
+		$logDescription = "turned in " . $_character['name'] . "'s <a href='https://classicdb.ch/?item=" . $_item['id'] . "' target='_BLANK' class='quality-" . $_item['quality'] . "'>" . $_item['name'] . "</a>.";
 		$stmt->prepare("INSERT INTO `log` (`user_id`, `description`, `security_level`) VALUES (?, ?, 1)");
 		$stmt->bind_param("is", $_SESSION['user_id'], $logDescription);
 		$stmt->execute();

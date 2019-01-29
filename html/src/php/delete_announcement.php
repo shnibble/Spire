@@ -15,6 +15,19 @@
 		$error_id = 110;
 	}
 	
+	// get announcement info
+	if (!$error) {
+		$stmt->prepare("SELECT `title` FROM `announcements` WHERE `id` = ?");
+		$stmt->bind_param("i", $_POST['announcement_id']);
+		if(!($stmt->execute())) {
+			// ERROR: failed to execute
+			$error = true;
+			$error_id = 109;
+		} else {
+			$_announcement = mysqli_fetch_array($stmt->get_result());
+		}
+	}
+	
 	// delete announcement
 	if (!$error) {
 		$stmt->prepare("UPDATE `announcements` SET `enabled` = FALSE WHERE `id` = ?");
@@ -31,7 +44,7 @@
 	
 	// log event
 	if(!$error) {
-		$logDescription = "deleted an announcement (ID " . $_POST['announcement_id'] . ").";
+		$logDescription = "deleted an announcement: " . $_announcement['title'] . " (ID " . $_POST['announcement_id'] . ").";
 		$stmt->prepare("INSERT INTO `log` (`user_id`, `description`, `security_level`) VALUES (?, ?, 2)");
 		$stmt->bind_param("is", $_SESSION['user_id'], $logDescription);
 		$stmt->execute();

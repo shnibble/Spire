@@ -17,6 +17,19 @@
 		$error_id = 110;
 	}
 	
+	// get occasion info
+	if (!$error) {
+		$stmt->prepare("SELECT `name` FROM `occasion_types` WHERE `id` = ?");
+		$stmt->bind_param("i", $_POST['occasion_type']);
+		if(!($stmt->execute())) {
+			// ERROR: failed to execute
+			$error = true;
+			$error_id = 109;
+		} else {
+			$_occasion= mysqli_fetch_array($stmt->get_result());
+		}
+	}
+	
 	// convert time
 	$date = new DateTime($_POST['occasion_date'], $LOCAL_TIMEZONE);
 	$date->setTimezone($SERVER_TIMEZONE);
@@ -39,7 +52,7 @@
 	
 	// log event
 	if(!$error) {
-		$logDescription = "added a server occasion (ID " . $last_id . ").";
+		$logDescription = "added a server occasion: " . $_occasion['name'] . " (ID " . $last_id . ").";
 		$stmt->prepare("INSERT INTO `log` (`user_id`, `description`, `security_level`) VALUES (?, ?, 2)");
 		$stmt->bind_param("is", $_SESSION['user_id'], $logDescription);
 		$stmt->execute();

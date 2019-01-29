@@ -22,6 +22,32 @@
 		$_POST['loot_note'] = null;
 	}
 	
+	// get character info
+	if (!$error) {
+		$stmt->prepare("SELECT `name` FROM `characters` WHERE `id` = ?");
+		$stmt->bind_param("i", $_POST['loot_character']);
+		if(!($stmt->execute())) {
+			// ERROR: failed to execute
+			$error = true;
+			$error_id = 109;
+		} else {
+			$_character = mysqli_fetch_array($stmt->get_result());
+		}
+	}
+	
+	// get item info
+	if (!$error) {
+		$stmt->prepare("SELECT `name`, `quality` FROM `items` WHERE `id` = ?");
+		$stmt->bind_param("i", $_POST['loot_item']);
+		if(!($stmt->execute())) {
+			// ERROR: failed to execute
+			$error = true;
+			$error_id = 109;
+		} else {
+			$_item = mysqli_fetch_array($stmt->get_result());
+		}
+	}
+	
 	// convert time
 	$date = new DateTime($_POST['loot_date'], $LOCAL_TIMEZONE);
 	$date->setTimezone($SERVER_TIMEZONE);
@@ -44,7 +70,7 @@
 	
 	// log event
 	if(!$error) {
-		$logDescription = "added an item to the loot log (ID " . $last_id . ").";
+		$logDescription = "added an item to the loot log: <a href='https://classicdb.ch/?item=" . $_POST['loot_item'] . "' target='_BLANK' class='quality-" . $_item['quality'] . "'>" . $_item['name'] . "</a> to " . $_character['name'] . ".";
 		$stmt->prepare("INSERT INTO `log` (`user_id`, `description`, `security_level`) VALUES (?, ?, 1)");
 		$stmt->bind_param("is", $_SESSION['user_id'], $logDescription);
 		$stmt->execute();

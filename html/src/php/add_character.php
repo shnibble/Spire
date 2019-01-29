@@ -79,7 +79,7 @@
 	
 	// log event
 	if(!$error) {
-		$logDescription = "created a new character " . $_POST['character_name'] . " (ID " . $last_id . ").";
+		$logDescription = "created a new character " . $_POST['character_name'] . ".";
 		$stmt->prepare("INSERT INTO `log` (`user_id`, `description`, `security_level`) VALUES (?, ?, 2)");
 		$stmt->bind_param("is", $_SESSION['user_id'], $logDescription);
 		$stmt->execute();

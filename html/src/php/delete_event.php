@@ -17,6 +17,19 @@
 		$error_id = 110;
 	}
 	
+	// get event info
+	if (!$error) {
+		$stmt->prepare("SELECT `title` FROM `events` WHERE `id` = ?");
+		$stmt->bind_param("i", $_POST['event_id']);
+		if(!($stmt->execute())) {
+			// ERROR: failed to execute
+			$error = true;
+			$error_id = 109;
+		} else {
+			$_event= mysqli_fetch_array($stmt->get_result());
+		}
+	}
+	
 	// delete event
 	if (!$error) {
 		$stmt->prepare("UPDATE `events` SET `enabled` = FALSE WHERE `id` = ?");
@@ -33,7 +46,7 @@
 	
 	// log event
 	if(!$error) {
-		$logDescription = "deleted an event " . $_POST['event_title'] . " (ID " . $_POST['event_id'] . ").";
+		$logDescription = "deleted an event: " . $_event['title'] . " (ID " . $_POST['event_id'] . ").";
 		$stmt->prepare("INSERT INTO `log` (`user_id`, `description`, `security_level`) VALUES (?, ?, 2)");
 		$stmt->bind_param("is", $_SESSION['user_id'], $logDescription);
 		$stmt->execute();

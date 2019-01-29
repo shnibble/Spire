@@ -57,7 +57,7 @@
 	
 	// log event
 	if(!$error) {
-		$logDescription = "added an item to the items database (ID " . $_POST['item_id'] . ")</a>.";
+		$logDescription = "added an item to the database: <a href='https://classicdb.ch/?item=" . $_POST['item_id'] . "' target='_BLANK' class='quality-" . $_POST['item_quality'] . "'>" . $_POST['item_name'] . "</a>.";
 		$stmt->prepare("INSERT INTO `log` (`user_id`, `description`, `security_level`) VALUES (?, ?, 1)");
 		$stmt->bind_param("is", $_SESSION['user_id'], $logDescription);
 		$stmt->execute();
