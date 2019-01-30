@@ -2069,3 +2069,16 @@ article .occasions-container table tr.past td {
 	border-radius: 5px;
 	text-align: center;
 }
+
+/* ajax tables */
+.ajax-table-btn {
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	font-size: 20px;
+	padding: 5px;
+}
+.ajax-table-header {
+	text-decoration: underline;
+	cursor: pointer;
+}

@@ -6,9 +6,6 @@
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/verify_user_token.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/rank_2.php";
-	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/timezones.php";
-	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/users.php";
-	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/badges.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/stmt_close.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/db_close.php";
 ?>
@@ -35,62 +32,32 @@
 						</div>
 						<div class="body">
 							<div class="scrolling-table-container">
-								<table id="users-table">
+								<div class="ajax-table-pager">
+									<input type="button" class="standard-button ajax-table-btn page-back" value="<" disabled>
+									<span>Page <span class="ajax-table-pager-page">1</span> of <span class="ajax-table-pager-pages"></span></span>
+									<input type="button" class="standard-button ajax-table-btn page-forward" value=">" disabled>
+								</div>
+								<table id="users-table" class="ajax-table" data-src="/src/ajax-tables/users.php" data-limit="20" data-page="1" data-pages="1" data-sort="username" data-order="ASC">
 									<thead>
 										<tr>
-											<th data-sort="string" class="sortable-table-header">Username</th>
-											<th data-sort="string" class="sortable-table-header">Main Character</th>
-											<th data-sort="string" class="sortable-table-header">Rank</th>
+											<th class="ajax-table-header" data-sort="username">Username</th>
+											<th class="ajax-table-header" data-sort="character">Main</th>
+											<th class="ajax-table-header" data-sort="rank">Rank</th>
 											<th>Badges</th>
-											<th data-sort="float" class="sortable-table-header" title="Total loot cost over all time.">Loot</th>
-											<th data-sort="float" class="sortable-table-header" title="Total attendance points over all time.">Attnd</th>
-											<th data-sort="float" class="sortable-table-header" title="Rate of attendance at primary raids over the past 30 days.">30DAR</th>
-											<th>Joined</th>
+											<th class="ajax-table-header" data-sort="loot">Loot</th>
+											<th class="ajax-table-header" data-sort="attendance">Attnd</th>
+											<th class="ajax-table-header" data-sort="30dar">30DAR</th>
+											<th class="ajax-table-header" data-sort="joined">Joined</th>
 											<?php if ($user['security'] >= 2) { ?>
-											<th>Last Login</th>
-											<th>Security</th>
-											<th>Timezone</th>
+											
+											<th class="ajax-table-header" data-sort="lastlogin">Last Login</th>
+											<th class="ajax-table-header" data-sort="security">Security</th>
+											<th class="ajax-table-header" data-sort="timezone">Timezone</th>
+											
 											<?php } ?>
 										</tr>
 									</thead>
 									<tbody>
-										<?php while ($u = mysqli_fetch_array($users)) { 
-											$u_joined = new DateTime($u['joined']);
-											if ($u['last_login']) {
-												$u_lastLogin = new DateTime($u['last_login']);
-											}
-										?>
-										<tr>
-											<td><a href="/viewUser?id=<?php echo $u['id']; ?>"><?php echo $u['username']; ?></a></td>
-											<td><?php echo $u['characterName']; ?></td>
-											<td><?php echo $u['rankName']; ?></td>
-											<td>
-												<div class="user-badges-container">
-													<?php if ($u['badges']) {
-													$_user_badges = explode(",", $u['badges']);
-													foreach ($_user_badges as $b) { ?>
-													<div class="user-badge" style="background-image: url('/src/img/badge_<?php echo $b; ?>.png');" title="<?php echo htmlspecialchars($badges_array[$b]['name']) . "\n" . htmlspecialchars($badges_array[$b]['description']); ?>"></div>
-													<?php }
-													} ?>
-												</div>
-											</td>
-											<td><a href="/loot.php?user=<?php echo $u['id']; ?>"><?php echo ($u['loot_cost'])?"-" . $u['loot_cost']:"0"; ?></a></td>
-											<td><?php echo "+" . $u['attendance_score']; ?></td>
-											<td><?php echo round((float)$u['30_day_attendance_rate'] * 100 ) . '%'; ?></td>
-											<td><?php echo $u_joined->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d'); ?></td>
-											<?php if ($user['security'] >= 2) { ?>
-											<td><?php 
-												if ($u['last_login']) {
-													echo $u_lastLogin->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d'); 
-												} else {
-													echo "Never";
-												}
-											?></td>
-											<td><?php echo $u['security']; ?></td>
-											<td><?php echo $u['timezoneName']; ?></td>
-											<?php } ?>
-										</tr>
-										<?php } ?>
 									</tbody>
 								</table>
 							</div>
@@ -99,9 +66,6 @@
 				</div>
 			</div>
 		</div>
-		<script>
-			// sortable table
-			$('#users-table').stupidtable();
-		</script>
+		<script src="/src/js/ajaxTables.js"></script>
 	</body>
 </html>

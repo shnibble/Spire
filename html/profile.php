@@ -9,8 +9,6 @@
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user_characters.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/roles.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/classes.php";
-	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user_attendance.php";
-	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user_loot.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user_scores.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/all_timezones.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/timezones.php";
@@ -210,28 +208,22 @@
 						</div>
 						<div class="body">
 							<div class="scrolling-table-container">
-								<table class="profile-loot-table">
+								<div class="ajax-table-pager">
+									<input type="button" class="standard-button ajax-table-btn page-back" value="<" disabled>
+									<span>Page <span class="ajax-table-pager-page">1</span> of <span class="ajax-table-pager-pages"></span></span>
+									<input type="button" class="standard-button ajax-table-btn page-forward" value=">" disabled>
+								</div>
+								<table class="profile-loot-table ajax-table" data-src="/src/ajax-tables/user_loot.php" data-limit="20" data-page="1" data-pages="1" data-sort="date" data-order="DESC">
 									<thead>
 										<tr>
-											<th>Date</th>
-											<th>Character</th>
-											<th>Item</th>
-											<th>Type</th>
-											<th>Cost</th>
+											<th class="ajax-table-header" data-sort="date">Date</th>
+											<th class="ajax-table-header" data-sort="character">Character</th>
+											<th class="ajax-table-header" data-sort="item">Item</th>
+											<th class="ajax-table-header" data-sort="type">Type</th>
+											<th class="ajax-table-header" data-sort="cost">Cost</th>
 										</tr>
 									</thead>
 									<tbody>
-										<?php while ($l = mysqli_fetch_array($user_loot)) { 
-											$ld = new DateTime($l['timestamp']);
-										?>
-										<tr>
-											<td><?php echo $ld->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d H:i'); ?></td>
-											<td><?php echo $l['character_name']; ?></td>
-											<td><a href="https://classicdb.ch/?item=<?php echo $l['item_id']; ?>" class="quality-<?php echo $l['quality']; ?>" target="_BLANK"><?php echo $l['name']; ?></a></td>
-											<td><?php echo $l['type_name']; ?></td>
-											<td><?php echo $l['cost']; ?></td>
-										</tr>
-										<?php } ?>
 									</tbody>
 								</table>
 							</div>
@@ -244,28 +236,22 @@
 						</div>
 						<div class="body">
 							<div class="scrolling-table-container">
-								<table class="profile-attendance-table">
+								<div class="ajax-table-pager">
+									<input type="button" class="standard-button ajax-table-btn page-back" value="<" disabled>
+									<span>Page <span class="ajax-table-pager-page">1</span> of <span class="ajax-table-pager-pages"></span></span>
+									<input type="button" class="standard-button ajax-table-btn page-forward" value=">" disabled>
+								</div>
+								<table class="profile-attendance-table ajax-table" data-src="/src/ajax-tables/user_attendance.php" data-limit="20" data-page="1" data-pages="1" data-sort="date" data-order="DESC">
 									<thead>
 										<tr>
-											<th>Date</th>
-											<th>Event</th>
-											<th>Type</th>
-											<th>Attendance</th>
-											<th>Value</th>
+											<th class="ajax-table-header" data-sort="date">Date</th>
+											<th class="ajax-table-header" data-sort="event">Event</th>
+											<th class="ajax-table-header" data-sort="type">Type</th>
+											<th class="ajax-table-header" data-sort="attendance">Attendance</th>
+											<th class="ajax-table-header" data-sort="value">Value</th>
 										</tr>
 									</thead>
 									<tbody>
-										<?php while ($a = mysqli_fetch_array($user_attendance)) { 
-											$ad = new DateTime($a['date']);
-										?>
-										<tr>
-											<td><?php echo $ad->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d H:i'); ?></td>
-											<td><?php echo $a['title']; ?></td>
-											<td><?php echo $a['event_type']; ?></td>
-											<td><?php echo $a['attendance_name']; ?></td>
-											<td><?php if ($a['value'] > 0) echo "+"; else if ($a['value'] < 0) echo "-";  echo $a['value']; ?></td>
-										</tr>
-										<?php } ?>
 									</tbody>
 								</table>
 							</div>
@@ -383,18 +369,7 @@
 				</table>
 			</div>
 		</div>
-		<?php if (isset($_GET['s'])) {
-			if ($_GET['s'] == 1) { ?>
-				<script>
-					alert("Timezone changed.");
-				</script>
-			<?php } 
-			if ($_GET['s'] == 2) { ?>
-				<script>
-					alert("Password changed.");
-				</script>
-			<?php } 
-		} ?>
+		<script src="/src/js/ajaxTables.js"></script>
 		<script>
 			// toggle add-character-overlay
 			$('#add-character-btn').click(function(){
