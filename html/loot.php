@@ -7,40 +7,12 @@
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/verify_user_token.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/rank_2.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/timezones.php";
-	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/filtered_loot_count.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/loot_types.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/users.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/characters.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/classes.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/items.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user_loot_logs.php";
-	
-	// unset invalid character / user IDs
-	if (isset($_GET['user']) && $_GET['user'] <= 0) {
-		unset($_GET['user']);
-	}
-	if (isset($_GET['character']) && $_GET['character'] <= 0) {
-		unset($_GET['character']);
-	}
-	
-	// number of results per page
-	$results_per_page = 50;
-	
-	// calculate number of pages
-	$number_of_pages = ceil(mysqli_num_rows($loot_count) / $results_per_page);
-	
-	// current page
-	if (!isset($_GET['page']) || $_GET['page'] < 1) {
-		$current_page = 1;
-	} else if ($_GET['page'] > $number_of_pages) {
-		$current_page = $number_of_pages;
-	} else {
-		$current_page = $_GET['page'];
-	}
-	
-	// calculate offset
-	$offset = ($current_page - 1) * $results_per_page;
-	
-	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/filtered_loot.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/stmt_close.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/db_close.php";
 ?>
@@ -96,120 +68,74 @@
 					
 					<article>
 						<div class="header">
-							<h4>Filter</h4>
-						</div>
-						<div class="body">
-							<div class="scrolling-table-container">
-								<table id="filter-loot-table">
-									<tr>
-										<td><b>User:</b></td>
-										<td>
-											<form method="GET" action="">
-												<select name="user" class="standard-select" onchange="this.form.submit();">
-													<option value="0">ALL USERS</option>
-													<?php while ($u = mysqli_fetch_array($users)) { ?>
-													<option value="<?php echo $u['id']; ?>" <?php if (isset($_GET['user']) && $_GET['user'] == $u['id']) echo "selected"; ?>><?php echo $u['username']; ?></option>
-													<?php } ?>
-												</select>
-											</form>
-										</td>
-										<td><b>Character:</b></td>
-										<td>
-											<form method="GET" action="">
-												<input type="hidden" name="user" value="<?php if (isset($_GET['user'])) echo $_GET['user']; ?>"></input>
-												<select name="character" class="standard-select" onchange="this.form.submit();">
-													<option value="0">ALL CHARACTERS</option>
-													<?php 
-													mysqli_data_seek($characters, 0);
-													while ($c = mysqli_fetch_array($characters)) { 
-														if (isset($_GET['user']) && $_GET['user'] == $c['user_id']) {
-													?>
-													<option value="<?php echo $c['id']; ?>" <?php if (isset($_GET['character']) && $_GET['character'] == $c['id']) echo "selected"; ?>><?php echo $c['name']; ?></option>
-													<?php }
-													} ?>
-												</select>
-											</form>
-										</td>
-									</tr>
-								</table>
-							</div>
-						</div>
-					</article>
-					<article>
-						<div class="header">
 							<h4>Loot Log</h4>
 						</div>
-						<?php if ($number_of_pages > 1) { ?>
-						<div class="pager-container">
-							<?php if ($current_page > 1) { ?>
-							<form method="GET" action="" style="float: left;">
-								<?php if (isset($_GET['user'])) { ?>
-								<input type="hidden" name="user" value="<?php echo $_GET['user']; ?>"></input>
-								<?php } ?>
-								<?php if (isset($_GET['character'])) { ?>
-								<input type="hidden" name="character" value="<?php echo $_GET['character']; ?>"></input>
-								<?php } ?>
-								<input type="hidden" name="page" value="<?php echo $current_page - 1; ?>"></input>
-								<input type="submit" class="pager-button left" value="PREV"></input>
-							</form>
-							<?php } ?>
-							
-							
-							<?php if ($current_page < $number_of_pages) { ?>
-							<form method="GET" action="" style="float: right;">
-								<?php if (isset($_GET['user'])) { ?>
-								<input type="hidden" name="user" value="<?php echo $_GET['user']; ?>"></input>
-								<?php } ?>
-								<?php if (isset($_GET['character'])) { ?>
-								<input type="hidden" name="character" value="<?php echo $_GET['character']; ?>"></input>
-								<?php } ?>
-								<input type="hidden" name="page" value="<?php echo $current_page + 1; ?>"></input>
-								<input type="submit" class="pager-button right" value="NEXT"></input>
-							</form>
-							<?php } ?>
-							
-							<p class="pager-number-title">PAGES</p>
-							<?php for ($i = 1; $i <= $number_of_pages; $i++) { ?>
-							<span class="pager-page-number <?php if ($i == $current_page) echo "active"; ?>"><?php echo $i; ?></span>
-							<?php } ?>
-						</div>
-						<?php } ?>
 						<div class="body">
 							<div class="scrolling-table-container">
-								<table id="loot-log-table">
+								<div class="ajax-table-filter">
+									<h5>Filter</h5>
+									<select class="standard-select ajax-table-filter-select" data-filtertype="class">
+										<option value="0">CLASS</option>
+										<?php while ($cl = mysqli_fetch_array($classes)) { ?>
+										<option value="<?php echo $cl['id']; ?>"><?php echo $cl['name']; ?></option>
+										<?php } ?>
+									</select>
+									<select class="standard-select ajax-table-filter-select" data-filtertype="user">
+										<option value="0">USER</option>
+										<?php while ($u = mysqli_fetch_array($users)) { ?>
+										<option value="<?php echo $u['id']; ?>"><?php echo $u['username']; ?></option>
+										<?php } ?>
+									</select>
+									<select class="standard-select ajax-table-filter-select" data-filtertype="character">
+										<option value="0">CHARACTER</option>
+										<?php while ($c = mysqli_fetch_array($characters)) { ?>
+										<option value="<?php echo $c['id']; ?>"><?php echo $c['name']; ?></option>
+										<?php } ?>
+									</select>
+									<select class="standard-select ajax-table-filter-select" data-filtertype="item">
+										<option value="0">ITEM</option>
+										<?php while ($i = mysqli_fetch_array($items)) { ?>
+										<option value="<?php echo $i['id']; ?>"><?php echo $i['name']; ?></option>
+										<?php } ?>
+									</select>
+								</div>
+								<div class="ajax-table-pager">
+									<input type="button" class="standard-button ajax-table-btn page-beginning" value="<<" disabled>
+									<input type="button" class="standard-button ajax-table-btn page-back" value="<" disabled>
+									<span>Page <span class="ajax-table-pager-page">1</span> of <span class="ajax-table-pager-pages"></span></span>
+									<input type="button" class="standard-button ajax-table-btn page-forward" value=">" disabled>
+									<input type="button" class="standard-button ajax-table-btn page-end" value=">>" disabled>
+								</div>
+								<table id="loot-log-table" class="ajax-table"	data-src="/src/ajax-tables/loot.php" 
+																				data-limit="20" 
+																				data-page="1" 
+																				data-pages="1" 
+																				data-sort="date" 
+																				data-order="DESC" 
+																				data-filtertype="none" 
+																				data-filtervalue="0"
+																				data-validfilters="class user character item">
 									<thead>
 										<tr>
-											<th>Date</th>
-											<th>User</th>
-											<th>Character</th>
-											<th>Item</th>
-											<th>Type</th>
+											<th class="ajax-table-header" data-sort="date">Date<span></span></th>
+											<th class="ajax-table-header" data-sort="user">User<span></span></th>
+											<th class="ajax-table-header" data-sort="character">Character<span></span></th>
+											<th class="ajax-table-header" data-sort="item">Item<span></span></th>
+											<th class="ajax-table-header" data-sort="type">Type<span></span></th>
 											<th>Cost</th>
 											<th>Note</th>
 										</tr>
 									</thead>
 									<tbody>
-										<?php while ($l = mysqli_fetch_array($loot)) { 
-											$l_date = new DateTime($l['timestamp']);
-										?>
-										<tr>
-											<td><?php echo $l_date->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d'); ?></td>
-											<td><a href="/viewUser?id=<?php echo $l['user_id']; ?>"><?php echo $l['username']; ?></a></td>
-											<td><?php echo $l['characterName']; ?></td>
-											<td><a href="https://classicdb.ch/?item=<?php echo $l['item_id']; ?>" target="_BLANK" class="quality-<?php echo $l['quality']; ?>"><?php echo $l['itemName']; ?></a></td>
-											<td><?php echo $l['typeName']; ?></td>
-											<td><?php echo $l['cost']; ?></td>
-											<td><?php echo $l['note']; ?></td>
-											<?php if ($user['security'] >= 2) { ?>
-											<td>
-												<input type="button" class="standard-button edit-loot-btn" value="EDIT" data-id="<?php echo $l['id']; ?>" data-date="<?php echo $l_date->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d H:i'); ?>" data-character="<?php echo $l['character_id']; ?>" data-item="<?php echo $l['item_id']; ?>" data-type="<?php echo $l['type']; ?>"></input>
-												<input type="button" class="standard-button delete-loot-btn" value="DELETE" data-id="<?php echo $l['id']; ?>"></input>
-											</td>
-											<?php } ?>
-										</tr>
-										<?php } ?>
 									</tbody>
 								</table>
+								<div class="ajax-table-pager">
+									<input type="button" class="standard-button ajax-table-btn page-beginning" value="<<" disabled>
+									<input type="button" class="standard-button ajax-table-btn page-back" value="<" disabled>
+									<span>Page <span class="ajax-table-pager-page">1</span> of <span class="ajax-table-pager-pages"></span></span>
+									<input type="button" class="standard-button ajax-table-btn page-forward" value=">" disabled>
+									<input type="button" class="standard-button ajax-table-btn page-end" value=">>" disabled>
+								</div>
 							</div>
 						</div>
 					</article>
@@ -250,7 +176,9 @@
 						<td>
 							<div class="table-cell">
 								<select class="standard-select" id="loot-item" form="add-loot-form" name="loot_item" required>
-									<?php while ($i = mysqli_fetch_array($items)) {
+									<?php 
+									mysqli_data_seek($items, 0);
+									while ($i = mysqli_fetch_array($items)) {
 									echo "<option value='" . $i['id'] . "'>" . $i['name'] . "</option>";
 									} ?>
 								</select>
@@ -354,7 +282,8 @@
 				</table>
 			</div>
 		</div>
-		<?php } ?>	
+		<?php } ?>
+		<script src="/src/js/ajaxTables.js"></script>
 		<script>
 			// datetime selector
 			$('#loot-date').flatpickr({
@@ -374,7 +303,7 @@
 			});
 			
 			// open edit overlay
-			$('.edit-loot-btn').click(function(){
+			$('#loot-log-table').on('click', '.edit-loot-btn', function(){
 				let editID = $(this).data('id');
 				let editDate = $(this).data('date');
 				let editCharacter = $(this).data('character');
@@ -391,7 +320,7 @@
 			});
 			
 			// delete loot
-			$('.delete-loot-btn').click(function(){
+			$('#loot-log-table').on('click', '.delete-loot-btn', function(){
 				if (confirm("Are you sure you want to delete this loot?")) {
 					
 					let lootID = $(this).data('id');

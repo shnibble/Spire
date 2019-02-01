@@ -28,13 +28,16 @@
 	// configure filters
 	switch ($_POST['filtertype']) {
 		case "rank":
-			$filter = "AND t1.`rank` = " . $filterValue;
+			$filter = "t1.`rank` = " . $filterValue;
 			break;
 		case "class":
-			$filter = "AND t4.`class` = " . $filterValue;
+			$filter = "t4.`class` = " . $filterValue;
+			break;
+		case "security":
+			$filter = "t1.`security` = " . $filterValue;
 			break;
 		default:
-			$filter = "";
+			$filter = "1";
 			break;
 	}
 	
@@ -81,11 +84,12 @@
 							ON t3.`id` = t1.`timezone_id`
 						INNER JOIN `characters` t4
 							ON t4.`user_id` = t1.`id` AND t4.`main` = TRUE
-						INNER JOIN `user_scores` t5 
+						LEFT JOIN `user_scores` t5 
 							ON t5.`user_id` = t1.`id` 
-					WHERE `active` = TRUE AND `rank` > 1 " . $filter . "");
+					WHERE " . $filter . "");
 	if (!($stmt->execute())) {
 		$error = true;
+		$error_id = 1;
 	} else {
 		$result = mysqli_fetch_array($stmt->get_result());
 		$users_count = $result['count'];
@@ -101,13 +105,15 @@
 								ON t3.`id` = t1.`timezone_id`
 							INNER JOIN `characters` t4
 								ON t4.`user_id` = t1.`id` AND t4.`main` = TRUE
-							INNER JOIN `user_scores` t5 
+							LEFT JOIN `user_scores` t5 
 								ON t5.`user_id` = t1.`id` 
-						WHERE t1.`active` = TRUE AND t1.`rank` > 1 " . $filter . " ORDER BY " . $sort . " " . $order . " LIMIT ? OFFSET ?");
+						WHERE " . $filter . " ORDER BY " . $sort . " " . $order . " LIMIT ? OFFSET ?");
 		if (!($stmt->bind_param("ii", $_POST['limit'], $_POST['offset']))) {
 			$error = true;
+			$error_id = 2;
 		} else if (!($stmt->execute())) {
 			$error = true;
+			$error_id = 3;
 		} else {
 			$users = $stmt->get_result();
 		}
@@ -119,6 +125,7 @@
 	
 	if ($error) {
 		echo "error";
+		echo $error_id;
 	} else {
 		echo "{" . $users_count . "}";
 		while ($u = mysqli_fetch_array($users)) {
@@ -127,7 +134,7 @@
 				$u_lastLogin = new DateTime($u['last_login']);
 			}
 			echo "<tr>";
-			echo "<td><a href='/viewUser?id=" . $u['id'] . "'>" . $u['username'] . "</a></td>";
+			echo "<td><a href='/admin/viewUser?id=" . $u['id'] . "'>" . $u['username'] . "</a></td>";
 			echo "<td>" . $u['characterName'] . "</td>";
 			echo "<td>" . $u['rankName'] . "</td>";
 			echo "<td>";
@@ -153,17 +160,20 @@
 			echo "<td>+" . $u['attendance_score'] . "</td>";
 			echo "<td>" . round((float)$u['30_day_attendance_rate'] * 100 ) . '%' . "</td>";
 			echo "<td>" . $u_joined->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d') . "</td>";
+			echo "<td>";
+				if ($u['last_login']) {
+					echo $u_lastLogin->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d'); 
+				} else {
+					echo "Never";
+				}
+			echo "</td>";
+			echo "<td>" . $u['security'] . "</td>";
+			echo "<td>" . $u['timezoneName'] . "</td>";
 			
-			if ($user['security'] >= 2) {
-				echo "<td>";
-					if ($u['last_login']) {
-						echo $u_lastLogin->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d'); 
-					} else {
-						echo "Never";
-					}
-				echo "</td>";
-				echo "<td>" . $u['security'] . "</td>";
-				echo "<td>" . $u['timezoneName'] . "</td>";
+			if ($u['active']) {
+				echo "<td>Active</td>";
+			} else {
+				echo "<td>Deactivated</td>";
 			}
 			echo "</tr>";
 		}

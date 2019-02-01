@@ -209,18 +209,20 @@
 						<div class="body">
 							<div class="scrolling-table-container">
 								<div class="ajax-table-pager">
+									<input type="button" class="standard-button ajax-table-btn page-beginning" value="<<" disabled>
 									<input type="button" class="standard-button ajax-table-btn page-back" value="<" disabled>
 									<span>Page <span class="ajax-table-pager-page">1</span> of <span class="ajax-table-pager-pages"></span></span>
 									<input type="button" class="standard-button ajax-table-btn page-forward" value=">" disabled>
+									<input type="button" class="standard-button ajax-table-btn page-end" value=">>" disabled>
 								</div>
-								<table class="profile-loot-table ajax-table" data-src="/src/ajax-tables/user_loot.php" data-limit="20" data-page="1" data-pages="1" data-sort="date" data-order="DESC">
+								<table class="profile-loot-table ajax-table" data-src="/src/ajax-tables/user_loot.php" data-limit="20" data-page="1" data-pages="1" data-sort="date" data-order="DESC" data-filtertype="" data-filtervalue="">
 									<thead>
 										<tr>
-											<th class="ajax-table-header" data-sort="date">Date</th>
-											<th class="ajax-table-header" data-sort="character">Character</th>
-											<th class="ajax-table-header" data-sort="item">Item</th>
-											<th class="ajax-table-header" data-sort="type">Type</th>
-											<th class="ajax-table-header" data-sort="cost">Cost</th>
+											<th class="ajax-table-header" data-sort="date">Date<span></span></th>
+											<th class="ajax-table-header" data-sort="character">Character<span></span></th>
+											<th class="ajax-table-header" data-sort="item">Item<span></span></th>
+											<th class="ajax-table-header" data-sort="type">Type<span></span></th>
+											<th class="ajax-table-header" data-sort="cost">Cost<span></span></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -237,18 +239,20 @@
 						<div class="body">
 							<div class="scrolling-table-container">
 								<div class="ajax-table-pager">
+									<input type="button" class="standard-button ajax-table-btn page-beginning" value="<<" disabled>
 									<input type="button" class="standard-button ajax-table-btn page-back" value="<" disabled>
 									<span>Page <span class="ajax-table-pager-page">1</span> of <span class="ajax-table-pager-pages"></span></span>
 									<input type="button" class="standard-button ajax-table-btn page-forward" value=">" disabled>
+									<input type="button" class="standard-button ajax-table-btn page-end" value=">>" disabled>
 								</div>
-								<table class="profile-attendance-table ajax-table" data-src="/src/ajax-tables/user_attendance.php" data-limit="20" data-page="1" data-pages="1" data-sort="date" data-order="DESC">
+								<table class="profile-attendance-table ajax-table" data-src="/src/ajax-tables/user_attendance.php" data-limit="20" data-page="1" data-pages="1" data-sort="date" data-order="DESC" data-filtertype="" data-filtervalue="">
 									<thead>
 										<tr>
-											<th class="ajax-table-header" data-sort="date">Date</th>
-											<th class="ajax-table-header" data-sort="event">Event</th>
-											<th class="ajax-table-header" data-sort="type">Type</th>
-											<th class="ajax-table-header" data-sort="attendance">Attendance</th>
-											<th class="ajax-table-header" data-sort="value">Value</th>
+											<th class="ajax-table-header" data-sort="date">Date<span></span></th>
+											<th class="ajax-table-header" data-sort="event">Event<span></span></th>
+											<th class="ajax-table-header" data-sort="type">Type<span></span></th>
+											<th class="ajax-table-header" data-sort="attendance">Attendance<span></span></th>
+											<th class="ajax-table-header" data-sort="value">Value<span></span></th>
 										</tr>
 									</thead>
 									<tbody>

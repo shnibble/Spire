@@ -41,32 +41,32 @@
 							<h4>Raid Items</h4>
 						</div>
 						<div class="body">
-							<table id="raid-items-table">
+							<div class="ajax-table-pager">
+								<input type="button" class="standard-button ajax-table-btn page-beginning" value="<<" disabled>
+								<input type="button" class="standard-button ajax-table-btn page-back" value="<" disabled>
+								<span>Page <span class="ajax-table-pager-page">1</span> of <span class="ajax-table-pager-pages"></span></span>
+								<input type="button" class="standard-button ajax-table-btn page-forward" value=">" disabled>
+								<input type="button" class="standard-button ajax-table-btn page-end" value=">>" disabled>
+							</div>
+							<table id="raid-items-table" class="ajax-table" data-src="/src/ajax-tables/items.php" data-limit="50" data-page="1" data-pages="1" data-sort="item" data-order="ASC" data-filtertype="none" data-filtervalue="0">
 								<thead>
 									<tr>
-										<th>Name</th>
-										<th>Type</th>
+										<th class="ajax-table-header" data-sort="item">Name<span></span></th>
+										<th class="ajax-table-header" data-sort="type">Type<span></span></th>
 										<th>Priority</th>
 										<th>Comment</th>
 									</tr>
 								</thead>
 								<tbody>
-									<?php while ($row = mysqli_fetch_array($items)) { ?>
-									<tr>
-										<td><b><a href="https://classicdb.ch/?item=<?php echo $row['id']; ?>" class="quality-<?php echo $row['quality'];?>" target="_BLANK"><?php echo $row['name']; ?></a></b></td>
-										<td><?php echo $row['default_type_name']; ?></td>
-										<td><?php echo htmlspecialchars($row['loot_priority']); ?></td>
-										<td><?php echo htmlspecialchars($row['comment']); ?></td>
-										<?php if ($user['security'] >= 2) { ?>
-										<td>
-											<input type="button" class="standard-button edit-item-btn" value="EDIT" data-id="<?php echo $row['id']; ?>" data-name="<?php echo $row['name']; ?>" data-quality="<?php echo $row['quality']; ?>" data-type="<?php echo $row['default_type']; ?>" data-priority="<?php echo htmlspecialchars($row['loot_priority']); ?>" data-comment="<?php echo htmlspecialchars($row['comment']) ?>"></input>
-											<input type="button" class="standard-button delete-item-btn" value="DELETE" data-id="<?php echo $row['id']; ?>"></input>
-										</td>
-										<?php } ?>
-									</tr>
-									<?php } ?>
 								</tbody>
 							</table>
+							<div class="ajax-table-pager">
+								<input type="button" class="standard-button ajax-table-btn page-beginning" value="<<" disabled>
+								<input type="button" class="standard-button ajax-table-btn page-back" value="<" disabled>
+								<span>Page <span class="ajax-table-pager-page">1</span> of <span class="ajax-table-pager-pages"></span></span>
+								<input type="button" class="standard-button ajax-table-btn page-forward" value=">" disabled>
+								<input type="button" class="standard-button ajax-table-btn page-end" value=">>" disabled>
+							</div>
 						</div>
 					</article>
 				</div>
@@ -226,6 +226,7 @@
 			</div>
 		</div>
 		<?php } ?>
+		<script src="/src/js/ajaxTables.js"></script>
 		<script>
 			// toggle overlays
 			$('#add-item-btn').click(function(){

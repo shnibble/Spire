@@ -2082,3 +2082,7 @@ article .occasions-container table tr.past td {
 	text-decoration: underline;
 	cursor: pointer;
 }
+.ajax-table-filter-select {
+	display: inline-block;
+	max-width: 200px;
+}
