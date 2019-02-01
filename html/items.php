@@ -237,7 +237,7 @@
 			});
 			
 			// open edit overlay
-			$('.edit-item-btn').click(function(){
+			$('#raid-items-table').on('click', '.edit-item-btn', function(){
 				let editID = $(this).data('id');
 				let editName = $(this).data('name');
 				let editQuality = $(this).data('quality');
@@ -256,7 +256,7 @@
 			});
 			
 			// delete item
-			$('.delete-item-btn').click(function(){
+			$('#raid-items-table').on('click', '.delete-item-btn', function(){
 				if (confirm("Are you sure you want to delete this item?")) {
 					
 					let itemID = $(this).data('id');

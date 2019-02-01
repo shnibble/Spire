@@ -189,6 +189,8 @@
 										<br>
 										<button type="submit" class="signup-action-button submit submit-signup">SIGN UP</button>
 										<button type="button" class="signup-action-button cancel">CANCEL</button>
+										<br>
+										<p style="color: #b30000;">Please use "CALL OUT" if you are tentative, otherwise your attendance may be recorded as a no-show.</p>
 									</form>
 								</div>
 								<div class="event-signup-action-container callout">
