@@ -33,6 +33,58 @@
 		case "class":
 			$filter = "AND t4.`class` = " . $filterValue;
 			break;
+		case "role": {
+			switch($filterValue) {
+				// Caster
+				case 1:
+					$filter = "AND ((t4.`class` IN (3, 8)) OR (t4.`class` = 5 AND t4.`role` = 1))";
+					break;
+				// Cloth
+				case 2:
+					$filter = "AND t4.`class` IN (3, 5, 8)";
+					break;
+				// DPS
+				case 3:
+					$filter = "AND t4.`role` = 1";
+					break;
+				// Fighter
+				case 4:
+					$filter = "AND ((t4.`class` IN (2, 6, 9)) OR (t4.`class` = 7 AND t4.`role` = 1))";
+					break;
+				// Healer
+				case 5:
+					$filter = "AND t4.`role` = 2";
+					break;
+				// Leather
+				case 6:
+					$filter = "AND t4.`class` IN (1, 6)";
+					break;
+				// Mail
+				case 7:
+					$filter = "AND t4.`class` IN (2, 7)";
+					break;
+				// Melee
+				case 8:
+					$filter = "AND ((t4.`class` IN (6, 9)) OR (t4.`class` = 7 AND t4.`role` = 1))";
+					break;
+				// Plate
+				case 9:
+					$filter = "AND t4.`class` = 9";
+					break;
+				// Range
+				case 10:
+					$filter = "AND ((t4.`class` IN (2, 3, 8)) OR (t4.`class` = 5 AND t4.`role` = 1))";
+					break;
+				// Tank
+				case 11:
+					$filter = "AND t4.`role` = 3";
+					break;
+				default:
+					$filter = "";
+					break;
+			}
+			break;
+		}
 		default:
 			$filter = "";
 			break;
@@ -93,7 +145,9 @@
 	
 	// get users
 	if (!$error) {
-		$stmt->prepare("SELECT t1.`id`, t1.`active`, t1.`username`, t1.`joined`, t1.`last_login`, t1.`rank`, t2.`name` as rankName, t1.`security`, t1.`timezone_id`, t3.`name` as timezoneName, t4.`name` as characterName, (SELECT GROUP_CONCAT(`badge_id` ORDER BY `badge_id`) FROM `user_badges` WHERE `user_id` = t1.`id`) badges, t5.`loot_cost`, t5.`attendance_score`, (t5.`attendance_score` - t5.`loot_cost`) spread, t5.`30_day_attendance_rate` 
+		$stmt->prepare("SELECT t1.`id`, t1.`active`, t1.`username`, t1.`joined`, t1.`last_login`, t1.`rank`, t2.`name` as rankName, t1.`security`, t1.`timezone_id`, t3.`name` as timezoneName, t4.`name` as characterName, t4.`class` as characterClass, 
+						(SELECT GROUP_CONCAT(`badge_id` ORDER BY `badge_id`) FROM `user_badges` WHERE `user_id` = t1.`id`) badges, 
+						t5.`loot_cost`, t5.`attendance_score`, (t5.`attendance_score` - t5.`loot_cost`) spread, t5.`30_day_attendance_rate` 
 						FROM `users` t1
 							INNER JOIN `ranks` t2
 								ON t2.`id` = t1.`rank`
@@ -102,7 +156,7 @@
 							INNER JOIN `characters` t4
 								ON t4.`user_id` = t1.`id` AND t4.`main` = TRUE
 							INNER JOIN `user_scores` t5 
-								ON t5.`user_id` = t1.`id` 
+								ON t5.`user_id` = t1.`id`
 						WHERE t1.`active` = TRUE AND t1.`rank` > 1 " . $filter . " ORDER BY " . $sort . " " . $order . " LIMIT ? OFFSET ?");
 		if (!($stmt->bind_param("ii", $_POST['limit'], $_POST['offset']))) {
 			$error = true;
@@ -128,8 +182,8 @@
 			}
 			echo "<tr>";
 			echo "<td><a href='/viewUser?id=" . $u['id'] . "'>" . $u['username'] . "</a></td>";
-			echo "<td>" . $u['characterName'] . "</td>";
-			echo "<td>" . $u['rankName'] . "</td>";
+			echo "<td class='class-" . $u['characterClass'] . "'>" . $u['characterName'] . "</td>";
+			echo "<td class='rank-" . $u['rank'] . "'>" . $u['rankName'] . "</td>";
 			echo "<td>";
 			echo "<div class='user-badges-container'>";
 			

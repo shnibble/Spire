@@ -82,7 +82,7 @@
 	
 	// get loot
 	if (!$error) {
-		$stmt->prepare("SELECT t1.`id`, t1.`timestamp`, t1.`character_id`, t2.`name` as characterName, t2.`user_id`, t3.`username`, t1.`item_id`, t4.`name` as itemName, t4.`quality`, t1.`type`, t5.`name` as typeName, t5.`cost`, t1.`note`
+		$stmt->prepare("SELECT t1.`id`, t1.`timestamp`, t1.`character_id`, t2.`name` as characterName, t2.`class` as characterClass, t2.`user_id`, t3.`username`, t1.`item_id`, t4.`name` as itemName, t4.`quality`, t1.`type`, t5.`name` as typeName, t5.`cost`, t1.`note`
 						FROM `loot` t1
 							INNER JOIN `characters` t2
 								ON t2.`id` = t1.`character_id`
@@ -111,7 +111,7 @@
 			echo "<tr>";
 			echo "<td>" . $l_date->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d') . "</td>";
 			echo "<td><a href='/viewUser?id=" . $l['user_id'] ."'>" . $l['username'] . "</a></td>";
-			echo "<td>" . $l['characterName'] . "</td>";
+			echo "<td class='class-" . $l['characterClass'] . "'>" . $l['characterName'] . "</td>";
 			echo "<td><a href='https://classicdb.ch/?item=" . $l['item_id'] . "' target='_BLANK' class='quality-" . $l['quality'] . "'>" . $l['itemName'] . "</a></td>";
 			echo "<td>" . $l['typeName'] . "</td>";
 			echo "<td>" . $l['cost'] . "</td>";

@@ -25,7 +25,14 @@
 	}
 	
 	// configure filters
-	$filter = "";
+	switch ($_POST['filtertype']) {
+		case "location":
+			$filter = "AND t1.`location_id` = " . $filterValue;
+			break;
+		default:
+			$filter = "";
+			break;
+	}
 	
 	// configure sorting
 	switch ($_POST['sort']) {

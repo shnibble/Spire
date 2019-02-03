@@ -47,6 +47,20 @@
 										<option value="<?php echo $c['id']; ?>"><?php echo $c['name']; ?></option>
 										<?php } ?>
 									</select>
+									<select class="standard-select ajax-table-filter-select" data-filtertype="role">
+										<option value="0">ROLE</option>
+										<option value="1">Caster</option>
+										<option value="2">Cloth</option>
+										<option value="3">DPS</option>
+										<option value="4">Fighter</option>
+										<option value="5">Healer</option>
+										<option value="6">Leather</option>
+										<option value="7">Mail</option>
+										<option value="8">Melee</option>
+										<option value="9">Plate</option>
+										<option value="10">Range</option>
+										<option value="11">Tank</option>
+									</select>
 								</div>
 								<div class="ajax-table-pager">
 									<input type="button" class="standard-button ajax-table-btn page-beginning" value="<<" disabled>
@@ -63,7 +77,7 @@
 																			data-order="ASC" 
 																			data-filtertype="" 
 																			data-filtervalue=""
-																			data-validfilters="rank class">
+																			data-validfilters="rank class role">
 									<thead>
 										<tr>
 											<th class="ajax-table-header" data-sort="username">Username<span></span></th>

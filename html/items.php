@@ -7,6 +7,7 @@
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/verify_user_token.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/items.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/loot_types.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/locations.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/stmt_close.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/db_close.php";
 ?>
@@ -41,6 +42,15 @@
 							<h4>Raid Items</h4>
 						</div>
 						<div class="body">
+							<div class="ajax-table-filter">
+								<h5>Filter</h5>
+								<select class="standard-select ajax-table-filter-select" data-filtertype="location">
+									<option value="0">LOCATION</option>
+									<?php while ($l = mysqli_fetch_array($locations)) { ?>
+									<option value="<?php echo $l['id']; ?>"><?php echo $l['name']; ?></option>
+									<?php } ?>
+								</select>
+							</div>
 							<div class="ajax-table-pager">
 								<input type="button" class="standard-button ajax-table-btn page-beginning" value="<<" disabled>
 								<input type="button" class="standard-button ajax-table-btn page-back" value="<" disabled>
@@ -48,7 +58,15 @@
 								<input type="button" class="standard-button ajax-table-btn page-forward" value=">" disabled>
 								<input type="button" class="standard-button ajax-table-btn page-end" value=">>" disabled>
 							</div>
-							<table id="raid-items-table" class="ajax-table" data-src="/src/ajax-tables/items.php" data-limit="50" data-page="1" data-pages="1" data-sort="item" data-order="ASC" data-filtertype="none" data-filtervalue="0">
+							<table id="raid-items-table" class="ajax-table" 	data-src="/src/ajax-tables/items.php" 
+																				data-limit="50" 
+																				data-page="1" 
+																				data-pages="1" 
+																				data-sort="item" 
+																				data-order="ASC" 
+																				data-filtertype="none" 
+																				data-filtervalue="0"
+																				data-validfilters="location">
 								<thead>
 									<tr>
 										<th class="ajax-table-header" data-sort="item">Name<span></span></th>
