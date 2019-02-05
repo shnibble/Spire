@@ -1227,8 +1227,17 @@ article .occasions-container table tr.past td {
 #users-table tr:nth-child(even) {
 	background: #333333;
 }
-#users-table thead tr:nth-child(1) {
+#users-table thead tr:nth-child(1), #users-table thead tr:nth-child(2) {
 	background: none;
+}
+#users-table thead tr:nth-child(2) th {
+	font-size: 10px;
+	font-weight: normal;
+	padding: 2px;
+	min-width: 45px;
+}
+#users-table tbody tr.inactive * {
+	text-decoration: line-through;
 }
 #profile-account-table {
 	border-collapse: collapse;

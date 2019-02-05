@@ -143,28 +143,27 @@
 						</div>
 						<div class="body">
 							<div class="scrolling-table-container">
-								<table class="profile-loot-table">
+								<div class="ajax-table-results">
+									<span><span class="results-count">0</span> results found</span>
+								</div>
+								<div class="ajax-table-pager">
+									<input type="button" class="standard-button ajax-table-btn page-beginning" value="<<" disabled>
+									<input type="button" class="standard-button ajax-table-btn page-back" value="<" disabled>
+									<span>Page <span class="ajax-table-pager-page">1</span> of <span class="ajax-table-pager-pages"></span></span>
+									<input type="button" class="standard-button ajax-table-btn page-forward" value=">" disabled>
+									<input type="button" class="standard-button ajax-table-btn page-end" value=">>" disabled>
+								</div>
+								<table class="profile-loot-table ajax-table" data-src="/src/ajax-tables/player_loot.php" data-limit="20" data-page="1" data-pages="1" data-sort="date" data-order="DESC" data-filtertype="" data-filtervalue="" data-id="<?php echo $_GET['id']; ?>">
 									<thead>
 										<tr>
-											<th>Date</th>
-											<th>Character</th>
-											<th>Item</th>
-											<th>Type</th>
-											<th>Cost</th>
+											<th class="ajax-table-header" data-sort="date">Date<span></span></th>
+											<th class="ajax-table-header" data-sort="character">Character<span></span></th>
+											<th class="ajax-table-header" data-sort="item">Item<span></span></th>
+											<th class="ajax-table-header" data-sort="type">Type<span></span></th>
+											<th class="ajax-table-header" data-sort="cost">Cost<span></span></th>
 										</tr>
-									<thead>
+									</thead>
 									<tbody>
-										<?php while ($l = mysqli_fetch_array($player_loot)) { 
-											$ld = new DateTime($l['timestamp']);
-										?>
-										<tr>
-											<td><?php echo $ld->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d H:i'); ?></td>
-											<td><?php echo $l['characterName']; ?></td>
-											<td><a href="https://classicdb.ch/?item=<?php echo $l['item_id']; ?>" class="quality-<?php echo $l['quality']; ?>" target="_BLANK"><?php echo $l['name']; ?></a></td>
-											<td><?php echo $l['typeName']; ?></td>
-											<td><?php echo $l['cost']; ?></td>
-										</tr>
-										<?php } ?>
 									</tbody>
 								</table>
 							</div>
@@ -177,28 +176,27 @@
 						</div>
 						<div class="body">
 							<div class="scrolling-table-container">
-								<table class="profile-attendance-table">
+								<div class="ajax-table-results">
+									<span><span class="results-count">0</span> results found</span>
+								</div>
+								<div class="ajax-table-pager">
+									<input type="button" class="standard-button ajax-table-btn page-beginning" value="<<" disabled>
+									<input type="button" class="standard-button ajax-table-btn page-back" value="<" disabled>
+									<span>Page <span class="ajax-table-pager-page">1</span> of <span class="ajax-table-pager-pages"></span></span>
+									<input type="button" class="standard-button ajax-table-btn page-forward" value=">" disabled>
+									<input type="button" class="standard-button ajax-table-btn page-end" value=">>" disabled>
+								</div>
+								<table class="profile-attendance-table ajax-table" data-src="/src/ajax-tables/player_attendance.php" data-limit="20" data-page="1" data-pages="1" data-sort="date" data-order="DESC" data-filtertype="" data-filtervalue="" data-id="<?php echo $_GET['id']; ?>">
 									<thead>
 										<tr>
-											<th>Date</th>
-											<th>Event</th>
-											<th>Type</th>
-											<th>Attendance</th>
-											<th>Value</th>
+											<th class="ajax-table-header" data-sort="date">Date<span></span></th>
+											<th class="ajax-table-header" data-sort="event">Event<span></span></th>
+											<th class="ajax-table-header" data-sort="type">Type<span></span></th>
+											<th class="ajax-table-header" data-sort="attendance">Attendance<span></span></th>
+											<th class="ajax-table-header" data-sort="value">Value<span></span></th>
 										</tr>
 									</thead>
 									<tbody>
-										<?php while ($a = mysqli_fetch_array($player_attendance)) { 
-											$ad = new DateTime($a['date']);
-										?>
-										<tr>
-											<td><?php echo $ad->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d H:i'); ?></td>
-											<td><?php echo $a['title']; ?></td>
-											<td><?php echo $a['eventType']; ?></td>
-											<td><?php echo $a['attendanceName']; ?></td>
-											<td><?php if ($a['value'] > 0) echo "+"; else if ($a['value'] < 0) echo "-";  echo $a['value']; ?></td>
-										</tr>
-										<?php } ?>
 									</tbody>
 								</table>
 							</div>
@@ -207,5 +205,6 @@
 				</div>
 			</div>
 		</div>
+		<script src="/src/js/ajaxTables.js"></script>
 	</body>
 </html>

@@ -55,7 +55,7 @@
 	
 	// get items
 	if (!$error) {
-		$stmt->prepare("SELECT t1.`id`, t1.`name`, t1.`quality`, t1.`default_type`, t2.`name` default_type_name, t1.`loot_priority`, t1.`comment` 
+		$stmt->prepare("SELECT t1.`id`, t1.`name`, t1.`quality`, t1.`location_id`, t1.`default_type`, t2.`name` default_type_name, t1.`loot_priority`, t1.`comment` 
 					FROM `items` t1 
 						INNER JOIN `loot_types` t2 
 							ON t2.`id` = t1.`default_type` 
@@ -81,7 +81,7 @@
 			echo "<td>" . htmlspecialchars($i['comment']) . "</td>";
 			if ($user['security'] >= 2) {
 				echo "<td>";
-				echo "<input type='button' class='standard-button edit-item-btn' value='EDIT' data-id='" . $i['id'] . "' data-name='" . $i['name'] . "' data-quality='" . $i['quality'] . "' data-type='" . $i['default_type'] . "' data-priority='" . htmlspecialchars($i['loot_priority']) . "' data-comment='" . htmlspecialchars($i['comment']) . "'></input>";
+				echo "<input type='button' class='standard-button edit-item-btn' value='EDIT' data-id='" . $i['id'] . "' data-name='" . $i['name'] . "' data-quality='" . $i['quality'] . "' data-location='" . $i['location_id'] . "' data-type='" . $i['default_type'] . "' data-priority='" . htmlspecialchars($i['loot_priority']) . "' data-comment='" . htmlspecialchars($i['comment']) . "'></input>";
 				echo "<input type='button' class='standard-button delete-item-btn' value='DELETE' data-id='" . $i['id'] . "'></input>";
 				echo "</td>";
 				}

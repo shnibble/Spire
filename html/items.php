@@ -51,6 +51,9 @@
 									<?php } ?>
 								</select>
 							</div>
+							<div class="ajax-table-results">
+								<span><span class="results-count">0</span> results found</span>
+							</div>
 							<div class="ajax-table-pager">
 								<input type="button" class="standard-button ajax-table-btn page-beginning" value="<<" disabled>
 								<input type="button" class="standard-button ajax-table-btn page-back" value="<" disabled>
@@ -124,6 +127,20 @@
 									<option value="4">Rare</option>
 									<option value="5">Epic</option>
 									<option value="6">Legendary</option>
+								</select>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><b>Location</b>:</td>
+						<td>
+							<div class="table-cell">
+								<select class="standard-select" id="item-location" form="add-item-form" name="item_location" required>
+									<?php 
+									mysqli_data_seek($locations, 0);
+									while ($lc = mysqli_fetch_array($locations)) {
+									echo "<option value='" . $lc['id'] . "'>" . $lc['name'] . "</option>";
+									} ?>
 								</select>
 							</div>
 						</td>
@@ -205,6 +222,20 @@
 						</td>
 					</tr>
 					<tr>
+						<td><b>Location</b>:</td>
+						<td>
+							<div class="table-cell">
+								<select class="standard-select" id="edit-item-location" form="edit-item-form" name="item_location" required>
+									<?php 
+									mysqli_data_seek($locations, 0);
+									while ($lc = mysqli_fetch_array($locations)) {
+									echo "<option value='" . $lc['id'] . "'>" . $lc['name'] . "</option>";
+									} ?>
+								</select>
+							</div>
+						</td>
+					</tr>
+					<tr>
 						<td><b>Default Type</b>:</td>
 						<td>
 							<div class="table-cell">
@@ -259,6 +290,7 @@
 				let editID = $(this).data('id');
 				let editName = $(this).data('name');
 				let editQuality = $(this).data('quality');
+				let editLocation = $(this).data('location');
 				let editType = $(this).data('type');
 				let editPriority = $(this).data('priority');
 				let editComment = $(this).data('comment');
@@ -266,6 +298,7 @@
 				$('#edit-item-id').val(editID);
 				$('#edit-item-name').val(editName);
 				$('#edit-item-quality').val(editQuality);
+				$('#edit-item-location').val(editLocation);
 				$('#edit-item-type').val(editType);
 				$('#edit-item-priority').val(editPriority);
 				$('#edit-item-comment').val(editComment);

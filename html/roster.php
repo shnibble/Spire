@@ -62,6 +62,9 @@
 										<option value="11">Tank</option>
 									</select>
 								</div>
+								<div class="ajax-table-results">
+									<span><span class="results-count">0</span> results found</span>
+								</div>
 								<div class="ajax-table-pager">
 									<input type="button" class="standard-button ajax-table-btn page-beginning" value="<<" disabled>
 									<input type="button" class="standard-button ajax-table-btn page-back" value="<" disabled>
@@ -80,21 +83,25 @@
 																			data-validfilters="rank class role">
 									<thead>
 										<tr>
-											<th class="ajax-table-header" data-sort="username">Username<span></span></th>
-											<th class="ajax-table-header" data-sort="character">Main<span></span></th>
-											<th class="ajax-table-header" data-sort="rank">Rank<span></span></th>
-											<th>Badges</th>
-											<th class="ajax-table-header" data-sort="loot">Loot<span></span></th>
-											<th class="ajax-table-header" data-sort="attendance">Attnd<span></span></th>
-											<th class="ajax-table-header" data-sort="30dar">30DAR<span></span></th>
-											<th class="ajax-table-header" data-sort="joined">Joined<span></span></th>
+											<th rowspan="2" class="ajax-table-header" data-sort="username">Username<span></span></th>
+											<th rowspan="2" class="ajax-table-header" data-sort="character">Main<span></span></th>
+											<th rowspan="2" class="ajax-table-header" data-sort="rank">Rank<span></span></th>
+											<th rowspan="2">Badges</th>
+											<th rowspan="1" colspan="2">Loot</th>
+											<th rowspan="1" colspan="2">Attendance</th>
+											<th rowspan="2" class="ajax-table-header" data-sort="30dar">30DAR<span></span></th>
+											<th rowspan="2"  class="ajax-table-header" data-sort="joined">Joined<span></span></th>
 											<?php if ($user['security'] >= 2) { ?>
-											
-											<th class="ajax-table-header" data-sort="lastlogin">Last Login<span></span></th>
-											<th class="ajax-table-header" data-sort="security">Security<span></span></th>
-											<th class="ajax-table-header" data-sort="timezone">Timezone<span></span></th>
-											
+											<th rowspan="2" class="ajax-table-header" data-sort="lastlogin">Last Login<span></span></th>
+											<th rowspan="2" class="ajax-table-header" data-sort="security">Security<span></span></th>
+											<th rowspan="2" class="ajax-table-header" data-sort="timezone">Timezone<span></span></th>
 											<?php } ?>
+										</tr>
+										<tr>
+											<th class="ajax-table-header" data-sort="loot">All<span></span></th>
+											<th class="ajax-table-header" data-sort="30d_loot">30 Days<span></span></th>
+											<th class="ajax-table-header" data-sort="attendance">All<span></span></th>
+											<th class="ajax-table-header" data-sort="30d_attendance">30 Days<span></span></th>
 										</tr>
 									</thead>
 									<tbody>

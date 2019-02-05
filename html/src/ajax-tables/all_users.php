@@ -49,15 +49,6 @@
 		case "rank":
 			$sort = "t1.`rank`";
 			break;
-		case "loot":
-			$sort = "t5.`loot_cost`";
-			break;
-		case "attendance":
-			$sort = "t5.`attendance_score`";
-			break;
-		case "30dar":
-			$sort = "t5.`30_day_attendance_rate`";
-			break;
 		case "joined":
 			$sort = "t1.`joined`";
 			break;
@@ -97,7 +88,7 @@
 	
 	// get users
 	if (!$error) {
-		$stmt->prepare("SELECT t1.`id`, t1.`active`, t1.`username`, t1.`joined`, t1.`last_login`, t1.`rank`, t2.`name` as rankName, t1.`security`, t1.`timezone_id`, t3.`name` as timezoneName, t4.`name` as characterName, (SELECT GROUP_CONCAT(`badge_id` ORDER BY `badge_id`) FROM `user_badges` WHERE `user_id` = t1.`id`) badges, t5.`loot_cost`, t5.`attendance_score`, (t5.`attendance_score` - t5.`loot_cost`) spread, t5.`30_day_attendance_rate` 
+		$stmt->prepare("SELECT t1.`id`, t1.`active`, t1.`username`, t1.`joined`, t1.`last_login`, t1.`rank`, t2.`name` as rankName, t1.`security`, t1.`timezone_id`, t3.`name` as timezoneName, t4.`name` as characterName, t4.`class` as characterClass, (SELECT GROUP_CONCAT(`badge_id` ORDER BY `badge_id`) FROM `user_badges` WHERE `user_id` = t1.`id`) badges, t5.`loot_cost`, t5.`attendance_score`, (t5.`attendance_score` - t5.`loot_cost`) spread, t5.`30_day_attendance_rate` 
 						FROM `users` t1
 							INNER JOIN `ranks` t2
 								ON t2.`id` = t1.`rank`
@@ -133,10 +124,12 @@
 			if ($u['last_login']) {
 				$u_lastLogin = new DateTime($u['last_login']);
 			}
-			echo "<tr>";
+			echo "<tr ";
+			if (!$u['active']) echo "class='inactive'";
+			echo ">";
 			echo "<td><a href='/admin/viewUser?id=" . $u['id'] . "'>" . $u['username'] . "</a></td>";
-			echo "<td>" . $u['characterName'] . "</td>";
-			echo "<td>" . $u['rankName'] . "</td>";
+			echo "<td class='class-" . $u['characterClass'] . "'>" . $u['characterName'] . "</td>";
+			echo "<td class='rank-" . $u['rank'] . "'>" . $u['rankName'] . "</td>";
 			echo "<td>";
 			echo "<div class='user-badges-container'>";
 			
@@ -149,16 +142,6 @@
 			
 			echo "</div>";
 			echo "</td>";
-			echo "<td><a href='/loot.php?user=" . $u['id'] . "'>";
-			
-			if ($u['loot_cost']) {
-				echo "-" . $u['loot_cost'];
-			} else {
-				echo "0";
-			}
-			echo "</a></td>";
-			echo "<td>+" . $u['attendance_score'] . "</td>";
-			echo "<td>" . round((float)$u['30_day_attendance_rate'] * 100 ) . '%' . "</td>";
 			echo "<td>" . $u_joined->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d') . "</td>";
 			echo "<td>";
 				if ($u['last_login']) {

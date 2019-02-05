@@ -10,7 +10,7 @@
 	$error = false;
 	
 	// get POST variables
-	if (!isset($_POST['item_id']) || !isset($_POST['item_name']) || !isset($_POST['item_quality']) || !isset($_POST['item_type'])) {
+	if (!isset($_POST['item_id']) || !isset($_POST['item_name']) || !isset($_POST['item_quality']) || !isset($_POST['item_location']) || !isset($_POST['item_type'])) {
 		// ERROR: missing variable
 		$error = true;
 		$error_id = 110;
@@ -45,8 +45,8 @@
 	
 	// create item
 	if (!$error) {
-		$stmt->prepare("INSERT INTO `items` (`id`, `name`, `quality`, `default_type`, `loot_priority`, `comment`) VALUES (?, ?, ?, ?, ?, ?)");
-		$stmt->bind_param("isiiss", $_POST['item_id'], $_POST['item_name'], $_POST['item_quality'], $_POST['item_type'], $_POST['item_priority'], $_POST['item_comment']);
+		$stmt->prepare("INSERT INTO `items` (`id`, `name`, `quality`, `location_id`, `default_type`, `loot_priority`, `comment`) VALUES (?, ?, ?, ?, ?, ?, ?)");
+		$stmt->bind_param("isiiiss", $_POST['item_id'], $_POST['item_name'], $_POST['item_quality'], $_POST['item_location'], $_POST['item_type'], $_POST['item_priority'], $_POST['item_comment']);
 		if(!($stmt->execute())) {
 			// ERROR: failed to execute
 			$error = true;

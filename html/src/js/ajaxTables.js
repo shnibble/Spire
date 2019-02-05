@@ -32,7 +32,7 @@ function processAjaxTableFilters(table) {
 			table.siblings('.ajax-table-filter').children('select[data-filtertype="' + index + '"]').val(element);
 			
 			validFilterFound = true;
-			console.log("Valid filter found: " + index + " = " + element);
+			//console.log("Valid filter found: " + index + " = " + element);
 		}
 	});
 }
@@ -41,6 +41,7 @@ function processAjaxTableFilters(table) {
 $('.ajax-table').each(function(){
 	let table = $(this);
 	let pager = $(this).siblings('.ajax-table-pager');
+	let results = $(this).siblings('.ajax-table-results').children().children('.results-count');
 	let src = table.data('src');
 	let limit = table.data('limit');
 	let page = table.data('page');
@@ -56,8 +57,16 @@ $('.ajax-table').each(function(){
 	let filterValue = table.data('filtervalue');
 	let sort = table.data('sort');
 	let order = table.data('order');		
-	let offset = 0;		
-	let tableData = { "limit": limit, "offset": offset, "sort": sort, "order": order, "filtertype": filterType, "filtervalue": filterValue };
+	let offset = 0;
+	let id = table.data('id');
+	let tableData = {};
+	if (id) {
+		tableData = { "limit": limit, "offset": offset, "sort": sort, "order": order, "filtertype": filterType, "filtervalue": filterValue, "id": id };
+		
+	} else {
+		tableData = { "limit": limit, "offset": offset, "sort": sort, "order": order, "filtertype": filterType, "filtervalue": filterValue };
+	}
+	// console.log(tableData);
 	
 	$.ajax({
 		url: src,
@@ -68,6 +77,7 @@ $('.ajax-table').each(function(){
 				alert("An error occurred. Table not loaded.")
 			} else {
 				let count = d.match(/\{(.*)\}/);
+				results.text(count[1]);
 				let pages = Math.ceil(count[1] / limit);
 				table.data('pages', pages);
 				pager.children('span').children('.ajax-table-pager-pages').text(pages);
@@ -86,6 +96,7 @@ $('.ajax-table').each(function(){
 // load ajax table
 function loadAjaxTable(table){
 	let pager = table.siblings('.ajax-table-pager');
+	let results = table.siblings('.ajax-table-results').children().children('.results-count');
 	let src = table.data('src');
 	let limit = table.data('limit');
 	let pages = table.data('pages');
@@ -95,7 +106,15 @@ function loadAjaxTable(table){
 	let sort = table.data('sort');
 	let order = table.data('order');
 	let offset = (page - 1) * limit;
-	let tableData = { "limit": limit, "offset": offset, "sort": sort, "order": order, "filtertype": filterType, "filtervalue": filterValue };
+	let id = table.data('id');
+	let tableData = {};
+	if (id) {
+		tableData = { "limit": limit, "offset": offset, "sort": sort, "order": order, "filtertype": filterType, "filtervalue": filterValue, "id": id };
+		
+	} else {
+		tableData = { "limit": limit, "offset": offset, "sort": sort, "order": order, "filtertype": filterType, "filtervalue": filterValue };
+	}
+	// console.log(tableData);
 	
 	$.ajax({
 		url: src,
@@ -106,18 +125,28 @@ function loadAjaxTable(table){
 				alert("An error occurred. Table not loaded.");
 			} else {
 				let count = d.match(/\{(.*)\}/);
+				results.text(count[1]);
 				let pages = Math.ceil(count[1] / limit);
 				table.data('pages', pages);
 				pager.children('span').children('.ajax-table-pager-pages').text(pages);
-				if (pages > 1) {
+				table.children('tbody').children().remove();
+				table.append(d.replace("{" + count[1] + "}", ""));
+				
+				if (page < pages) {
 					pager.children('.ajax-table-btn.page-forward').prop('disabled', false);
 					pager.children('.ajax-table-btn.page-end').prop('disabled', false);
 				} else {
 					pager.children('.ajax-table-btn.page-forward').prop('disabled', true);
-					pager.children('.ajax-table-btn.page-end').prop('disabled', true);					
+					pager.children('.ajax-table-btn.page-end').prop('disabled', true);
 				}
-				table.children('tbody').children().remove();
-				table.append(d.replace("{" + count[1] + "}", ""));
+				
+				if (page > 1) {
+					pager.children('.ajax-table-btn.page-back').prop('disabled', false);
+					pager.children('.ajax-table-btn.page-beginning').prop('disabled', false);
+				} else {
+					pager.children('.ajax-table-btn.page-back').prop('disabled', true);
+					pager.children('.ajax-table-btn.page-beginning').prop('disabled', true);
+				}
 			}
 		}
 	});
@@ -147,7 +176,7 @@ $('.ajax-table-filter-select').on('change', function(){
 	table.data('filtertype', filterType);
 	table.data('filtervalue', filterValue);
 	
-	console.log("type: " + filterType + ", value: " + filterValue);
+	//console.log("type: " + filterType + ", value: " + filterValue);
 	
 	loadAjaxTable(table);
 });
@@ -169,23 +198,6 @@ function pageAjaxTable(table, direction) {
 	
 	table.data('page', page);
 	pager.children('span').children('.ajax-table-pager-page').text(page);
-	
-	if (page < pages) {
-		pager.children('.ajax-table-btn.page-forward').prop('disabled', false);
-		pager.children('.ajax-table-btn.page-end').prop('disabled', false);
-	} else {
-		pager.children('.ajax-table-btn.page-forward').prop('disabled', true);
-		pager.children('.ajax-table-btn.page-end').prop('disabled', true);
-	}
-	
-	if (page > 1) {
-		pager.children('.ajax-table-btn.page-back').prop('disabled', false);
-		pager.children('.ajax-table-btn.page-beginning').prop('disabled', false);
-	} else {
-		pager.children('.ajax-table-btn.page-back').prop('disabled', true);
-		pager.children('.ajax-table-btn.page-beginning').prop('disabled', true);
-	}
-	
 	loadAjaxTable(table);
 }
 
@@ -209,6 +221,7 @@ $('.ajax-table-header').click(function(){
 	}
 	
 	$(this).siblings().children('span').text("");
+	$(this).parent('tr').siblings('tr').children('th').children('span').text("");
 	if (order == "ASC") {
 		$(this).children('span').html("&circ;");
 	} else {

@@ -56,6 +56,9 @@
 										<?php } ?>
 									</select>
 								</div>
+								<div class="ajax-table-results">
+									<span><span class="results-count">0</span> results found</span>
+								</div>
 								<div class="ajax-table-pager">
 									<input type="button" class="standard-button ajax-table-btn page-beginning" value="<<" disabled>
 									<input type="button" class="standard-button ajax-table-btn page-back" value="<" disabled>
@@ -78,9 +81,6 @@
 											<th class="ajax-table-header" data-sort="character">Main<span></span></th>
 											<th class="ajax-table-header" data-sort="rank">Rank<span></span></th>
 											<th>Badges</th>
-											<th class="ajax-table-header" data-sort="loot">Loot<span></span></th>
-											<th class="ajax-table-header" data-sort="attendance">Attnd<span></span></th>
-											<th class="ajax-table-header" data-sort="30dar">30DAR<span></span></th>
 											<th class="ajax-table-header" data-sort="joined">Joined<span></span></th>
 											<th class="ajax-table-header" data-sort="lastlogin">Last Login<span></span></th>
 											<th class="ajax-table-header" data-sort="security">Security<span></span></th>

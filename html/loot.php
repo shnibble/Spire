@@ -99,6 +99,9 @@
 										<?php } ?>
 									</select>
 								</div>
+								<div class="ajax-table-results">
+									<span><span class="results-count">0</span> results found</span>
+								</div>
 								<div class="ajax-table-pager">
 									<input type="button" class="standard-button ajax-table-btn page-beginning" value="<<" disabled>
 									<input type="button" class="standard-button ajax-table-btn page-back" value="<" disabled>
