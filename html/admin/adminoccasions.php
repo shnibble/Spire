@@ -33,7 +33,7 @@
 					
 					<div class="pre-article-container">
 						<div class="left">
-							<input type="submit" class="pre-article-button" id="add-occasion-btn" value="ADD OCCASION"></input>
+							<input type="submit" class="pre-article-button" id="add-occasion-btn" value="ADD OCCASIONS"></input>
 						</div>
 						<div class="right">
 						
@@ -80,44 +80,36 @@
 		<?php if ($user['security'] >= 2) { ?>
 		<div class="full-overlay">
 			<div class="scrolling-table-container">
-				<h2>Add Occasion</h2>
-				<form method="POST" id="add-occasion-form" action="/src/php/add_occasion.php"></form>
-				<table>
-					<tr>
-						<td><b>Type</b>:</td>
-						<td>
-							<div class="table-cell">
-								<select class="standard-select" id="occasion-type" form="add-occasion-form" name="occasion_type" required>
-									<?php while ($ot = mysqli_fetch_array($occasion_types)) {
+				<h2>Add Occasions</h2>
+				<form method="POST" id="add-occasions-form" action="/src/php/add_occasions.php">
+					<table id="add-occasions-table">
+						<tr>
+							<td>
+								<input type="text" class="standard-input occasion-date" name="occasion_date[]"></input>
+							</td>
+							<td class="select-td">
+								<select class="standard-select occasion-type" name="occasion_type[]">
+									<option value=""></option>
+									<?php 
+									mysqli_data_seek($occasion_types, 0);
+									while ($ot = mysqli_fetch_array($occasion_types)) {
 									echo "<option value='" . $ot['id'] . "'>" . $ot['name'] . "</option>";
 									} ?>
 								</select>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td><b>Date</b>:</td>
-						<td>
-							<div class="table-cell">
-								<input type="text" class="standard-input" id="occasion-date" form="add-occasion-form" name="occasion_date" required></input>
-								<span>Enter using your local timezone: <b><?php echo $user['timezone_name']; ?></b>. Your local time can be changed from your Profile.</span>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="2">						
-							<input type="submit" class="standard-button" form="add-occasion-form" value="SUBMIT"></input>
-							<input type="button" class="standard-button" id="close-overlay-btn" value="CANCEL"></input>
-						</td>
-					</tr>
-				</table>
+							</td>
+						</tr>
+					</table>
+					<span>Enter dates using your local timezone: <b><?php echo $user['timezone_name']; ?></b>. Your local time can be changed from your Profile.</span>
+					<input type="submit" class="standard-button"value="SUBMIT"></input>
+					<input type="button" class="standard-button" id="close-overlay-btn" value="CANCEL"></input>
+				</form>
 			</div>
 		</div>
 		<?php } ?>		
 		<script>
 			
 			// datetime selector
-			$('#occasion-date').flatpickr({
+			$('.occasion-date').flatpickr({
 				enableTime: true,
 				time_24hr: true,
 				altInput: true,
@@ -131,6 +123,32 @@
 			});
 			$('#close-overlay-btn').click(function(){
 				$('.full-overlay').slideUp(250);
+			});
+			
+			$('#add-occasions-table').on('change', 'tr:last .occasion-date, tr:last .occasion-type', function(){
+				console.log("Trigger");
+				
+				let _this = $(this).val();
+				let _other = $(this).parent().siblings().children('input, select').val();
+				
+				console.log(_this + " | " + _other);
+				
+				if (_this != "" && _other != "") {
+					console.log("Both entered");
+					
+					let table = $('#add-occasions-table');
+					let clonedSelect =$('#add-occasions-table tr:first').children('.select-td').html();
+					let newHTML = '<tr><td><input type="text" class="standard-input occasion-date occasion-date-new" name="occasion_date[]"></input></td><td>' + clonedSelect + '</td></tr>';
+					table.append(newHTML);
+					$('.occasion-date-new').flatpickr({
+						enableTime: true,
+						time_24hr: true,
+						altInput: true,
+						altFormat: 'Y-m-d H:i',
+						dateFormat: 'Y-m-d H:i:S'
+					});
+					$('.occasion-date-new').removeClass('occasion-date-new');
+				}
 			});
 		</script>
 	</body>
