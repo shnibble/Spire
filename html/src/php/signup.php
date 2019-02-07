@@ -24,15 +24,17 @@
 			$note = "";
 		}
 	}
-	
-	// check if event is in the future
+	$now = null;
+	$evd = null;
+	// get event info
 	if (!$error) {
-		$stmt->prepare("SELECT `start` FROM `events` WHERE `id` = ?");
+		$stmt->prepare("SELECT `id`, `title`, `start`, `notify_late_signups` FROM `events` WHERE `id` = ?");
 		$stmt->bind_param("i", $event_id);
 		$stmt->execute();
 		$result = $stmt->get_result();
 		$event = mysqli_fetch_array($result);
 		
+		// check if event is in the future
 		$now = new DateTime();
 		$evd = new DateTime($event['start']);
 		
@@ -75,16 +77,33 @@
 	
 	// log event
 	if(!$error) {
-		$stmt->prepare("SELECT `id`, `title`, `start` FROM `events` WHERE `id` = ?");
-		$stmt->bind_param("i", $event_id);
-		$stmt->execute();
-		$result = $stmt->get_result();
-		$event_info = mysqli_fetch_array($result);
-		
-		$logDescription = "signed up for <a href='/event.php?id=" . $event_info['id'] . "'>" . $event_info['title'] . " (" . $event_info['id'] . ")</a>.";
+		$logDescription = "signed up for <a href='/event.php?id=" . $event['id'] . "'>" . $event['title'] . " (" . $event['id'] . ")</a>.";
 		$stmt->prepare("INSERT INTO `log` (`user_id`, `description`, `security_level`) VALUES (?, ?, 1)");
 		$stmt->bind_param("is", $user_id, $logDescription);
 		$stmt->execute();
+	}
+	
+	// notify discord
+	if (!$error && $event['notify_late_signups'] && ($now >= ($evd->modify('-24 hours')))) {
+		$stmt->prepare("SELECT t2.`username`, t1.`name`, t3.`name` AS roleName 
+						FROM `characters` t1 
+							INNER JOIN `users` t2 ON t2.`id` = t1.`user_id` 
+							INNER JOIN `roles` t3 ON t3.`id` = ?
+						WHERE t1.`id` = ?");
+		$stmt->bind_param("ii", $character_role, $character_id);
+		$stmt->execute();
+		$res = mysqli_fetch_array($stmt->get_result());
+		$username = $res['username'];
+		$characterName = $res['name'];
+		$characterRole = $res['roleName'];
+		$eventName = $event['title'];
+		
+		$curl = curl_init("https://discordapp.com/api/webhooks/542862212843438090/M2YDKq0CWCi840l8Oyi89Y7HDAcEuGUuoWcT-5IysztjIA62PKIlryKmCQ0SnTcHMota");
+		curl_setopt($curl, CURLOPT_POST, 1);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array("content" => "$username __signed up__ for $eventName ($event_id) with $characterName ($characterRole). Note: $note")));
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+		curl_exec($curl);
 	}
 	
 	$stmt->close();

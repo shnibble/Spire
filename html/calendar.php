@@ -212,6 +212,15 @@
 						</td>
 					</tr>
 					<tr>
+						<td><b>Notify Late Signups</b>:</td>
+						<td>
+							<div class="table-cell">
+								<input type="checkbox" class="standard-checkbox" form="add-event-form" name="event_notify"></input>
+								<span>Signups added or changed within 24 hours of the event will be posted in Discord.</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
 						<td><b>Raid Leader</b>:</td>
 						<td>
 							<div class="table-cell">

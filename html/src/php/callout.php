@@ -22,14 +22,17 @@
 		}
 	}
 	
-	// check if event is in the future
+	$now = null;
+	$evd = null;
+	// get event info
 	if (!$error) {
-		$stmt->prepare("SELECT `start` FROM `events` WHERE `id` = ?");
+		$stmt->prepare("SELECT `id`, `title`, `start`, `notify_late_signups` FROM `events` WHERE `id` = ?");
 		$stmt->bind_param("i", $event_id);
 		$stmt->execute();
 		$result = $stmt->get_result();
 		$event = mysqli_fetch_array($result);
 		
+		// check if event is in the future
 		$now = new DateTime();
 		$evd = new DateTime($event['start']);
 		
@@ -82,6 +85,23 @@
 		$stmt->prepare("INSERT INTO `log` (`user_id`, `description`, `security_level`) VALUES (?, ?, 1)");
 		$stmt->bind_param("is", $user_id, $logDescription);
 		$stmt->execute();
+	}
+	
+	// notify discord
+	if (!$error && $event['notify_late_signups'] && ($now >= ($evd->modify('-24 hours')))) {
+		$stmt->prepare("SELECT `username` FROM `users` WHERE `id` = ?");
+		$stmt->bind_param("i", $_SESSION['user_id']);
+		$stmt->execute();
+		$res = mysqli_fetch_array($stmt->get_result());
+		$username = $res['username'];
+		$eventName = $event['title'];
+		
+		$curl = curl_init("https://discordapp.com/api/webhooks/542862212843438090/M2YDKq0CWCi840l8Oyi89Y7HDAcEuGUuoWcT-5IysztjIA62PKIlryKmCQ0SnTcHMota");
+		curl_setopt($curl, CURLOPT_POST, 1);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array("content" => "$username __called out__ for $eventName ($event_id) Note: $note")));
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+		curl_exec($curl);
 	}
 	
 	$stmt->close();

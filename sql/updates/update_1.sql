@@ -1,0 +1,1 @@
+ALTER TABLE `events` ADD `notify_late_signups` BOOLEAN NOT NULL DEFAULT FALSE AFTER `type`;

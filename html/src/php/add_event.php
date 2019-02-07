@@ -17,6 +17,15 @@
 		$error_id = 110;
 	}
 	
+	// get notify late signups checkbox value
+	if (!$error) {
+		if (empty($_POST['event_notify'])) {
+			$event_notify = FALSE;
+		} else {
+			$event_notify = TRUE;
+		}
+	}
+	
 	// get optional variables
 	if (!isset($_POST['event_leader']) || $_POST['event_leader'] == "") {
 		$_POST['event_leader'] = null;
@@ -40,8 +49,8 @@
 	
 	// create event
 	if (!$error) {
-		$stmt->prepare("INSERT INTO `events` (`title`, `description`, `start`, `type`, `leader_id`, `looter_id`, `buff_instructions`, `meetup_instructions`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-		$stmt->bind_param("sssiiiss", $_POST['event_title'], $_POST['event_description'], $date->format('Y-m-d H:i:s'), $_POST['event_type'], $_POST['event_leader'], $_POST['event_looter'], $_POST['event_buff'], $_POST['event_meetup']);
+		$stmt->prepare("INSERT INTO `events` (`title`, `description`, `start`, `type`, `notify_late_signups`, `leader_id`, `looter_id`, `buff_instructions`, `meetup_instructions`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		$stmt->bind_param("sssiiiiss", $_POST['event_title'], $_POST['event_description'], $date->format('Y-m-d H:i:s'), $_POST['event_type'], $event_notify, $_POST['event_leader'], $_POST['event_looter'], $_POST['event_buff'], $_POST['event_meetup']);
 		if(!($stmt->execute())) {
 			// ERROR: failed to execute
 			$error = true;
@@ -50,7 +59,6 @@
 			$last_id = $conn->insert_id;
 		}
 	}
-	
 	
 	// log event
 	if(!$error) {
