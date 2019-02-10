@@ -8,7 +8,7 @@
 		case 105:	$error_text = "An error occurred while trying to add your new account to the database. You either broke through our data validation and the server rejected your trashy data or something went wrong on our end. Contact an Admin in Spire's Discord server if this issue persists"; break;
 		case 106:	$error_text = "An error occurred while trying to add your new account to the database. You either broke through our data validation and the server rejected your trashy data or something went wrong on our end. Contact an Admin in Spire's Discord server if this issue persists"; break;
 		case 107:	$error_text = "Incorrect username and/or password, we won't tell you which one because... reasons. Try logging in again and actually using your username and/or password that you registered with, duh!"; break;
-		case 108:	$error_text = "You tried to access a secure page without being properly logged in or maybe you tried to hijack a session and we caught you! Either way you will need to login again."; break;
+		case 108:	$error_text = "Your session has expired. Please login again."; break;
 		case 109:	$error_text = "Something failed when updating the database. This isn't right, you should let an Admin know what you did to break this poor function."; break;
 		case 110:	$error_text = "Missing variable! Either the code is wrong or you tried to access a page directly that requires some sort of information. It is probably you because I write perfect code..."; break;
 		case 111:	$error_text = "No signup record exists to add a note to! You need to first signup or call out for an event before you can add a personal note."; break;

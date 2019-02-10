@@ -69,7 +69,9 @@
 	
 	if (!$error) {
 		header("Location: /buffs.php");
+		exit;
 	} else {
 		header("Location: /error.php?id=" . $error_id);
+		exit;
 	}
 ?>

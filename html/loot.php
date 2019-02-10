@@ -24,6 +24,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 		<link rel="stylesheet" href="/src/css/style.css"></link>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="/src/js/timeout.js"></script>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 		<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
@@ -39,7 +40,7 @@
 						<div class="left">
 							<?php if ($user['security'] >= 2) { ?>
 							<input type="button" class="pre-article-button" id="add-loot-btn" value="ADD LOOT"></input>
-							<form method="POST" action="/newLootLog.php" target="_BLANK" onsubmit="return confirm('Are you sure you want to begin a new loot log?');" style="display: inline-block;">
+							<form method="POST" action="/newLootLog.php" onsubmit="return confirm('Are you sure you want to begin a new loot log?');" style="display: inline-block;">
 								<input type="submit" class="pre-article-button" id="start-loot-log-btn" value="START LOOT LOG"></input>
 							</form>
 							<?php } ?>
@@ -59,7 +60,7 @@
 								<?php while ($ull = mysqli_fetch_array($user_loot_logs)) { 
 								$ull_date = new DateTime($ull['started']);
 								?>
-								<a href="/lootLog.php?id=<?php echo $ull['id']; ?>" target="_BLANK">Started <?php echo $ull_date->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d H:i:s'); ?> (<?php echo $ull['itemsCount']; ?> items)</a>
+								<a href="/lootLog.php?id=<?php echo $ull['id']; ?>">Started <?php echo $ull_date->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d H:i:s'); ?> (<?php echo $ull['itemsCount']; ?> items)</a>
 								<?php } ?>
 							</div>
 						</div>

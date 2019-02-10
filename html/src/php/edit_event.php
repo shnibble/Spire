@@ -71,7 +71,9 @@
 	
 	if (!$error) {
 		header("Location: /event.php?id=" . $_POST['event_id']);
+		exit;
 	} else {
 		header("Location: /error.php?id=" . $error_id);
+		exit;
 	}
 ?>

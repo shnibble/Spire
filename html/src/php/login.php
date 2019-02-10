@@ -8,6 +8,7 @@
 		// ERROR: connection failed
 		$error_id = 100;
 		header("Location: /error.php?id=" . $error_id);
+		exit;
 		
 	} else {
 		// prepare statement
@@ -59,6 +60,7 @@
 				// ERROR: execute failed
 				$error_id = 109;
 				header("Location: /error.php?id=" . $error_id);
+				exit;
 			}
 		}
 		
@@ -79,8 +81,10 @@
 			$_SESSION['user_name'] = $user['username'];
 			$_SESSION['token'] = $token;
 			header("Location: /home");
+			exit;
 		} else {
 			header("Location: /error.php?id=" . $error_id);
+			exit;
 		}
 	}
 ?>

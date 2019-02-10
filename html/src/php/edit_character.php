@@ -66,7 +66,9 @@
 	
 	if (!$error) {
 		header("Location: /profile.php");
+		exit;
 	} else {
 		header("Location: /error.php?id=" . $error_id);
+		exit;
 	}
 ?>

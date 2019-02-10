@@ -73,7 +73,9 @@
 	
 	if (!$error) {
 		header("Location: /calendar.php");
+		exit;
 	} else {
 		header("Location: /error.php?id=" . $error_id);
+		exit;
 	}
 ?>

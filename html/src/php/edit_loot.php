@@ -41,7 +41,9 @@
 	
 	if (!$error) {
 		header("Location: /loot.php");
+		exit;
 	} else {
 		header("Location: /error.php?id=" . $error_id);
+		exit;
 	}
 ?>

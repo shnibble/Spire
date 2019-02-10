@@ -62,7 +62,9 @@
 	
 	if (!$error) {
 		header("Location: /items.php");
+		exit;
 	} else {
 		header("Location: /error.php?id=" . $error_id);
+		exit;
 	}
 ?>

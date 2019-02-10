@@ -1,6 +1,7 @@
 <?php
 	if (!isset($_GET['id']) || $_GET['id'] == "") { 
 		header("Location: /error.php?id=110");
+		exit;
 	}
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/shared.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/db_connect.php";
@@ -20,6 +21,7 @@
 	
 	if (!$valid_id) { 
 		header("Location: /error.php?id=110");
+		exit;
 	}
 	
 	$started_date = new DateTime($loot_log['started']);
@@ -32,12 +34,14 @@
 		<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 		<link rel="stylesheet" href="/src/css/style-lootlog.css"></link>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="/src/js/timeout.js"></script>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 		<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
 	</head>
 	<body>
 		<div id="header">
+			<a href="/loot">Back to Main Site</a>
 			<h1>Loot Log</h1>
 			<table>
 				<tr>

@@ -6,6 +6,6 @@
 		// ERROR: connection failed
 		$error_id = 100;
 		header("Location: /error.php?id=" . $error_id);
-		
+		exit;		
 	}
 ?>

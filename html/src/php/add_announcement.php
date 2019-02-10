@@ -74,7 +74,9 @@
 	
 	if (!$error) {
 		header("Location: /home.php");
+		exit;
 	} else {
 		header("Location: /error.php?id=" . $error_id);
+		exit;
 	}
 ?>

@@ -24,4 +24,5 @@
 	$conn->close();
 	
 	header("Location: /lootLog.php?id=" . $last_id);
+	exit;
 ?>

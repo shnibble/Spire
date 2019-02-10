@@ -77,7 +77,9 @@
 	
 	if (!$error) {
 		header("Location: /admin/adminoccasions.php");
+		exit;
 	} else {
 		header("Location: /error.php?id=" . $error_id);
+		exit;
 	}
 ?>

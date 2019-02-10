@@ -65,7 +65,9 @@
 	if (!$error) {
 		
 		header("Location: /admin/adminattendance.php");
+		exit;
 	} else {
 		header("Location: /error.php?id=" . $error_id);
+		exit;
 	}
 ?>
