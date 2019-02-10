@@ -253,7 +253,7 @@
 						data: rowData,
 						success: function(d) {
 							if (d == 0) {
-								window.close();
+								window.location = "/loot";
 							} else {
 								alert("Oops! Something went wrong. Error code: " + d);
 							}
