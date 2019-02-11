@@ -5,7 +5,7 @@
 	// start session
 	$lifetime = 3600; // set timout to 1 hour
 	session_start();
-	setcookie(session_name(), session_id(), time()+$lifetime);
+	setcookie(session_name(), session_id(), time()+$lifetime, "/");
 	
 	// verify session
 	if( (!isset($_SESSION['user_id']) || ($_SESSION['user_id'] == "")) || 
