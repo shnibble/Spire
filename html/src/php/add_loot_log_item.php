@@ -4,6 +4,7 @@
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/stmt_init.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/verify_user_token.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/security_1.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/characters.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/items.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/loot_types.php";

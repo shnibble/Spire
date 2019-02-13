@@ -40,7 +40,7 @@
 										<th>Received</th>
 										<th>Character</th>
 										<th>Item</th>
-										<?php if ($user['security'] >= 2) { ?>
+										<?php if ($user['security'] >= 1) { ?>
 										<th></th>
 										<?php } ?>
 									</tr>
@@ -53,7 +53,7 @@
 											<td><?php echo $bl_timestamp->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d H:i:s'); ?></td>
 											<td><?php echo $bl['character_name']; ?></td>
 											<td><a href="https://classicdb.ch/?item=<?php echo $bl['item_id']; ?>" target="_BLANK" class="quality-<?php echo $bl['quality']; ?>"><?php echo $bl['item_name']; ?></a></td>
-										<?php if ($user['security'] >= 2) { ?>
+										<?php if ($user['security'] >= 1) { ?>
 										<td>
 											<form method="POST" action="/src/php/turn_in_buff_item.php" onsubmit="return confirm('Are you sure you want to turn in this buff item?');">
 												<input type="hidden" name="loot_id" value="<?php echo $bl['id']; ?>"></input>

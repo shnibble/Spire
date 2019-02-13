@@ -42,7 +42,7 @@
 				
 					<div class="pre-article-container">
 						<div class="left">
-							<?php if ($user['security'] >= 2) { ?>
+							<?php if ($user['security'] >= 1) { ?>
 							<input type="submit" class="pre-article-button" id="add-event-btn" value="ADD EVENT"></input>
 							<?php } ?>
 						</div>
@@ -174,7 +174,7 @@
 				</div>
 			</div>
 		</div>
-		<?php if ($user['security'] >= 2) { ?>
+		<?php if ($user['security'] >= 1) { ?>
 		<div class="full-overlay">
 			<div class="scrolling-table-container">
 				<h2>Add Event</h2>

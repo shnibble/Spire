@@ -9,7 +9,7 @@
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/server_config.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/verify_user_token.php";
-	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/security_2.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/security_1.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/timezones.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/characters.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/items.php";

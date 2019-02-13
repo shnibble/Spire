@@ -137,6 +137,7 @@
 						<td>
 							<div class="table-cell">
 								<select class="standard-select" id="item-location" form="add-item-form" name="item_location" required>
+									<option>NONE</option>
 									<?php 
 									mysqli_data_seek($locations, 0);
 									while ($lc = mysqli_fetch_array($locations)) {
@@ -227,6 +228,7 @@
 						<td>
 							<div class="table-cell">
 								<select class="standard-select" id="edit-item-location" form="edit-item-form" name="item_location" required>
+									<option>NONE</option>
 									<?php 
 									mysqli_data_seek($locations, 0);
 									while ($lc = mysqli_fetch_array($locations)) {

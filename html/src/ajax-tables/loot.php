@@ -116,10 +116,12 @@
 			echo "<td>" . $l['typeName'] . "</td>";
 			echo "<td>" . $l['cost'] . "</td>";
 			echo "<td>" . $l['note'] . "</td>";
-			if ($user['security'] >= 2) {
+			if ($user['security'] >= 1) {
 				echo "<td>";
 				echo "<input type='button' class='standard-button edit-loot-btn' value='EDIT' data-id='" . $l['id'] . "' data-date='" . $l_date->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d H:i') . "' data-character='" . $l['character_id'] . "' data-item='" . $l['item_id'] . "' data-type='" . $l['type'] ."'></input>";
-				echo "<input type='button' class='standard-button delete-loot-btn' value='DELETE' data-id='" . $l['id'] . "'></input>";
+				if ($user['security'] >= 2) {
+					echo "<input type='button' class='standard-button delete-loot-btn' value='DELETE' data-id='" . $l['id'] . "'></input>";
+				}
 				echo "</td>";
 			}
 			echo "</tr>";

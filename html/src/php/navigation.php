@@ -46,8 +46,8 @@
 			<div></div><div></div><div></div>
 		</div>
 		<div class="nav-text">
-			<span class="nav-title">LOOT LOG</span>
-			<span class="nav-description">Log of all looted items</span>
+			<span class="nav-title">LOOT</span>
+			<span class="nav-description">Browse all looted items</span>
 		</div>
 		<div class="nav-carrot"></div>
 	</a>

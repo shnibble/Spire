@@ -5,7 +5,7 @@
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/server_config.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/verify_user_token.php";
-	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/security_2.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/security_1.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/timezones.php";
 	
 	$error = false;
@@ -71,7 +71,7 @@
 	// log event
 	if(!$error) {
 		$logDescription = "added an item to the loot log: <a href='https://classicdb.ch/?item=" . $_POST['loot_item'] . "' target='_BLANK' class='quality-" . $_item['quality'] . "'>" . $_item['name'] . "</a> to " . $_character['name'] . ".";
-		$stmt->prepare("INSERT INTO `log` (`user_id`, `description`, `security_level`) VALUES (?, ?, 1)");
+		$stmt->prepare("INSERT INTO `log` (`user_id`, `description`, `security_level`) VALUES (?, ?, 0)");
 		$stmt->bind_param("is", $_SESSION['user_id'], $logDescription);
 		$stmt->execute();
 	}

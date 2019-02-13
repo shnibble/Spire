@@ -11,13 +11,16 @@
 	$error = false;
 	
 	// get POST variables
-	if (!isset($_POST['item_id']) || !isset($_POST['item_quality'])  || !isset($_POST['item_location']) || !isset($_POST['item_type'])) {
+	if (!isset($_POST['item_id']) || !isset($_POST['item_quality']) || !isset($_POST['item_type'])) {
 		// ERROR: missing variable
 		$error = true;
 		$error_id = 110;
 	}
 	
 	// get optional variables
+	if (!isset($_POST['item_location']) || $_POST['item_location'] == "") {
+		$_POST['item_location'] = null;
+	}
 	if (!isset($_POST['item_priority']) || $_POST['item_priority'] == "") {
 		$_POST['item_priority'] = null;
 	}

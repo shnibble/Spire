@@ -51,10 +51,12 @@
 			<div id="inner-wrapper">
 				<?php require $_SERVER['DOCUMENT_ROOT'] . "/src/php/navigation.php"; ?>
 				<div id="content">
-					<?php if ($user['security'] >= 2) { ?>
+					<?php if ($user['security'] >= 1) { ?>
+					<input type="submit" class="pre-article-button" id="edit-event-btn" value="EDIT EVENT"></input>
+					<?php } 
+					if ($user['security'] >= 2) { ?>
 					<form method="POST" id="delete-event-form" action="/src/php/delete_event.php" onsubmit="return confirm('Are you sure you want to delete this event?');"></form>
 					<input type="hidden" form="delete-event-form" name="event_id" value="<?php echo $event['id']; ?>"></input>
-					<input type="submit" class="pre-article-button" id="edit-event-btn" value="EDIT EVENT"></input>
 					<input type="submit" class="pre-article-button" id="delete-event-btn" form="delete-event-form" value="DELETE EVENT"></input>
 					<?php } ?>
 					<article>
@@ -293,20 +295,24 @@
 						<div class="body">
 							<div class="scrolling-table-container">
 								<table class="attendance-table">
-									<tr>
-										<th>User</th>
-										<th>Rank</th>
-										<th>Attendance</th>
-										<th>Value</th>
-									</tr>
-									<?php while ($a = mysqli_fetch_array($attendance)) { ?>
-									<tr>
-										<td><a href="/viewUser?id=<?php echo $a['user_id']; ?>" <?php if ($a['user_id'] == $_SESSION['user_id']) echo 'style="color: #ffcd55"'; ?>><?php echo $a['username']; ?></a></td>
-										<td class="rank-<?php echo $a['rank']; ?>"><?php echo $a['rankName']; ?></td>
-										<td><?php echo $a['typeName']; ?></td>
-										<td><?php if ($a['value'] > 0) echo "+"; else if ($a['value'] < 0) echo "-";  echo $a['value']; ?></td>
-									</tr>
-									<?php  } ?>
+									<thead>
+										<tr>
+											<th>User</th>
+											<th>Rank</th>
+											<th>Attendance</th>
+											<th>Value</th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php while ($a = mysqli_fetch_array($attendance)) { ?>
+										<tr>
+											<td><a href="/viewUser?id=<?php echo $a['user_id']; ?>" <?php if ($a['user_id'] == $_SESSION['user_id']) echo 'style="color: #ffcd55"'; ?>><?php echo $a['username']; ?></a></td>
+											<td class="rank-<?php echo $a['rank']; ?>"><?php echo $a['rankName']; ?></td>
+											<td><?php echo $a['typeName']; ?></td>
+											<td><?php if ($a['value'] > 0) echo "+"; else if ($a['value'] < 0) echo "-";  echo $a['value']; ?></td>
+										</tr>
+										<?php  } ?>
+									</tbody>
 								</table>
 							</div>
 						</div>
@@ -314,7 +320,7 @@
 				</div>
 			</div>
 		</div>
-		<?php if ($user['security'] >= 2) { ?>
+		<?php if ($user['security'] >= 1) { ?>
 		<div class="full-overlay">
 			<div class="scrolling-table-container">
 				<h2>Edit Event</h2>

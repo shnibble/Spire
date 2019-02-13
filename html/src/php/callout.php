@@ -82,7 +82,7 @@
 		$event_info = mysqli_fetch_array($result);
 		
 		$logDescription = "called out for <a href='/event.php?id=" . $event_info['id'] . "'>" . $event_info['title'] . " (" . $event_info['id'] . ")</a>.";
-		$stmt->prepare("INSERT INTO `log` (`user_id`, `description`, `security_level`) VALUES (?, ?, 1)");
+		$stmt->prepare("INSERT INTO `log` (`user_id`, `description`, `security_level`) VALUES (?, ?, 0)");
 		$stmt->bind_param("is", $user_id, $logDescription);
 		$stmt->execute();
 	}

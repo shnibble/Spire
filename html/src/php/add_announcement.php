@@ -64,7 +64,7 @@
 	// log event
 	if(!$error) {
 		$logDescription = "posted an announcement: " . $_POST['announcement_title'] . ".";
-		$stmt->prepare("INSERT INTO `log` (`user_id`, `description`, `security_level`) VALUES (?, ?, 1)");
+		$stmt->prepare("INSERT INTO `log` (`user_id`, `description`, `security_level`) VALUES (?, ?, 0)");
 		$stmt->bind_param("is", $_SESSION['user_id'], $logDescription);
 		$stmt->execute();
 	}

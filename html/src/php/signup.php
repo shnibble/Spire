@@ -78,7 +78,7 @@
 	// log event
 	if(!$error) {
 		$logDescription = "signed up for <a href='/event.php?id=" . $event['id'] . "'>" . $event['title'] . " (" . $event['id'] . ")</a>.";
-		$stmt->prepare("INSERT INTO `log` (`user_id`, `description`, `security_level`) VALUES (?, ?, 1)");
+		$stmt->prepare("INSERT INTO `log` (`user_id`, `description`, `security_level`) VALUES (?, ?, 0)");
 		$stmt->bind_param("is", $user_id, $logDescription);
 		$stmt->execute();
 	}

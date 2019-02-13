@@ -38,7 +38,7 @@
 					
 					<div class="pre-article-container">
 						<div class="left">
-							<?php if ($user['security'] >= 2) { ?>
+							<?php if ($user['security'] >= 1) { ?>
 							<input type="button" class="pre-article-button" id="add-loot-btn" value="ADD LOOT"></input>
 							<form method="POST" action="/newLootLog.php" onsubmit="return confirm('Are you sure you want to begin a new loot log?');" style="display: inline-block;">
 								<input type="submit" class="pre-article-button" id="start-loot-log-btn" value="START LOOT LOG"></input>
@@ -50,7 +50,7 @@
 						</div>
 					</div>
 					
-					<?php if ($user['security'] >= 2 && mysqli_num_rows($user_loot_logs) > 0) { ?>
+					<?php if ($user['security'] >= 1 && mysqli_num_rows($user_loot_logs) > 0) { ?>
 					<article>
 						<div class="header">
 							<h4>Loot Logs</h4>
@@ -146,7 +146,7 @@
 				</div>
 			</div>
 		</div>	
-		<?php if ($user['security'] >= 2) { ?>
+		<?php if ($user['security'] >= 1) { ?>
 		<div class="full-overlay" id="overlay-add-loot">
 			<div class="scrolling-table-container">
 				<h2>Add Loot</h2>
