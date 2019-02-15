@@ -418,20 +418,20 @@
 						</td>
 					</tr>
 					<tr>
-						<td><b>Buff Instructions</b>:</td>
+						<td><b>Meetup Instructions</b>:</td>
 						<td>
 							<div class="table-cell">
-								<textarea class="standard-textarea" form="edit-event-form" name="event_buff" style="height: 50px;"><?php echo htmlspecialchars($event['buff_instructions']); ?></textarea>
-								<span>Optional instructions for raid buff requirements or runs prior to entering the instance.</span>
+								<textarea class="standard-textarea" form="edit-event-form" name="event_meetup" style="height: 50px;" maxlength="200"><?php echo htmlspecialchars($event['meetup_instructions']); ?></textarea>
+								<span>Optional but <b>recommended</b> instructions for when and where to meetup for this event.</span>
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<td><b>Meetup Instructions</b>:</td>
+						<td><b>Buff Instructions</b>:</td>
 						<td>
 							<div class="table-cell">
-								<textarea class="standard-textarea" form="edit-event-form" name="event_meetup" style="height: 50px;"><?php echo htmlspecialchars($event['meetup_instructions']); ?></textarea>
-								<span>Optional but <b>recommended</b> instructions for when and where to meetup for this event.</span>
+								<textarea class="standard-textarea" form="edit-event-form" name="event_buff" style="height: 50px;" maxlength="200"><?php echo htmlspecialchars($event['buff_instructions']); ?></textarea>
+								<span>Optional instructions for raid buff requirements or runs prior to entering the instance.</span>
 							</div>
 						</td>
 					</tr>
