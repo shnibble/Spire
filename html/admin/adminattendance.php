@@ -76,7 +76,7 @@
 													<?php 
 													mysqli_data_seek($event_types, 0);
 													while ($et = mysqli_fetch_array($event_types)) { ?>
-													<option value="<?php echo $et['id']; ?>" <?php if ($valid_event && $vEvent['type'] == $et['id']) { echo "selected"; } else if ($valid_event) { echo "disabled"; } ?>><?php echo $et['name']; ?></option>
+													<option value="<?php echo $et['id']; ?>" <?php if ($valid_event && $vEvent['type'] == $et['id']) { echo "selected"; } ?>><?php echo $et['name']; ?></option>
 													<?php } ?>
 												</select>
 											</div>
