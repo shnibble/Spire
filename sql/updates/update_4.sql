@@ -1,0 +1,2 @@
+INSERT INTO `event_types` (`id`, `enabled`, `name`) VALUES (NULL, '1', 'bonus');
+INSERT INTO `attendance_values`(`event_type_id`, `attendance_type_id`, `value`) VALUES (6, 1, "1.00"), (6, 2, "0.00"), (6, 3, "1.00"), (6, 4, "0.00"), (6, 5, "0.00"), (6, 6, "0.00"), (6, 7, "0.00");
