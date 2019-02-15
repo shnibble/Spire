@@ -6,7 +6,9 @@
 							ON t2.`id` = t1.`character_id`
 						INNER JOIN `items` t3
 							ON t3.`id` = t1.`item_id`
-					WHERE t1.`item_id` IN (SELECT `item_id` FROM `buff_items` WHERE `enabled` = TRUE) ORDER BY t1.`turned_in`, t1.`timestamp`");
+						INNER JOIN `users` t4 
+							ON t4.`id` = t2.`user_id` 
+					WHERE t4.`active` = TRUE AND t1.`item_id` IN (SELECT `item_id` FROM `buff_items` WHERE `enabled` = TRUE) ORDER BY t1.`turned_in`, t1.`timestamp`");
 	$stmt->execute();
 	$buff_loot = $stmt->get_result();
 ?>
