@@ -1842,6 +1842,7 @@ article .occasions-container table tr.past td {
 	background-size: 100% 100%;
 	width: 18px;
 	height: 18px;
+	margin: 0px 2px;
 }
 .badge-row {
 	background: #333333;

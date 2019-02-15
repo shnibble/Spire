@@ -222,6 +222,15 @@
 						</td>
 					</tr>
 					<tr>
+						<td><b>Log Attendance</b>:</td>
+						<td>
+							<div class="table-cell">
+								<input type="checkbox" class="standard-checkbox" form="add-event-form" name="event_log"></input>
+								<span>If checked then this event will be included in the admin attendance page and be able to be linked to an attendance log record.</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
 						<td><b>Raid Leader</b>:</td>
 						<td>
 							<div class="table-cell">

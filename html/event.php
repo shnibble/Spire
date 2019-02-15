@@ -52,12 +52,12 @@
 				<?php require $_SERVER['DOCUMENT_ROOT'] . "/src/php/navigation.php"; ?>
 				<div id="content">
 					<?php if ($user['security'] >= 1) { ?>
-					<input type="submit" class="pre-article-button" id="edit-event-btn" value="EDIT EVENT"></input>
-					<?php } 
-					if ($user['security'] >= 2) { ?>
 					<form method="POST" id="delete-event-form" action="/src/php/delete_event.php" onsubmit="return confirm('Are you sure you want to delete this event?');"></form>
 					<input type="hidden" form="delete-event-form" name="event_id" value="<?php echo $event['id']; ?>"></input>
+					<input type="submit" class="pre-article-button" id="edit-event-btn" value="EDIT EVENT"></input>
+					<?php if ($user['security'] >= 2) { ?>
 					<input type="submit" class="pre-article-button" id="delete-event-btn" form="delete-event-form" value="DELETE EVENT"></input>
+					<?php } ?>
 					<?php } ?>
 					<article>
 						<div class="header">
@@ -86,6 +86,14 @@
 									<td>
 										<div class="table-cell">
 											<span><?php echo ($event['notify_late_signups'])?"Yes":"No"; ?></span>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td><b>Log Attendance</b>:</td>
+									<td>
+										<div class="table-cell">
+											<span><?php echo ($event['log_attendance'])?"Yes":"No"; ?></span>
 										</div>
 									</td>
 								</tr>
@@ -365,6 +373,15 @@
 							<div class="table-cell">
 								<input type="checkbox" class="standard-checkbox" form="edit-event-form" name="event_notify" <?php if ($event['notify_late_signups']) echo "checked"; ?>></input>
 								<span>Signups added or changed within 24 hours of the event will be posted in Discord.</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><b>Log Attendance</b>:</td>
+						<td>
+							<div class="table-cell">
+								<input type="checkbox" class="standard-checkbox" form="edit-event-form" name="event_log" <?php if ($event['log_attendance']) echo "checked"; ?>></input>
+								<span>If checked then this event will be included in the admin attendance page and be able to be linked to an attendance log record.</span>
 							</div>
 						</td>
 					</tr>

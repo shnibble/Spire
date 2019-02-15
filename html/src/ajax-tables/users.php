@@ -98,17 +98,11 @@
 		case "rank":
 			$sort = "t1.`rank`";
 			break;
-		case "loot":
-			$sort = "t5.`loot_cost`";
+		case "all_raid_score":
+			$sort = "total_core";
 			break;
-		case "30d_loot":
-			$sort = "t5.`30day_loot_cost`";
-			break;
-		case "attendance":
-			$sort = "t5.`attendance_score`";
-			break;
-		case "30d_attendance":
-			$sort = "t5.`30day_attendance_score`";
+		case "30d_raid_score":
+			$sort = "30day_score";
 			break;
 		case "30dar":
 			$sort = "t5.`30_day_attendance_rate`";
@@ -153,7 +147,7 @@
 	if (!$error) {
 		$stmt->prepare("SELECT t1.`id`, t1.`active`, t1.`username`, t1.`joined`, t1.`last_login`, t1.`rank`, t2.`name` as rankName, t1.`security`, t1.`timezone_id`, t3.`name` as timezoneName, t4.`name` as characterName, t4.`class` as characterClass, 
 						(SELECT GROUP_CONCAT(`badge_id` ORDER BY `badge_id`) FROM `user_badges` WHERE `user_id` = t1.`id`) badges, 
-						t5.`loot_cost`, t5.`attendance_score`, (t5.`attendance_score` - t5.`loot_cost`) spread, t5.`30_day_attendance_rate`, t5.`30day_attendance_score`, t5.`30day_loot_cost` 
+						t5.`loot_cost`, t5.`attendance_score`, IFNULL(ROUND((t5.`attendance_score` - t5.`loot_cost`), 2), 0) spread, t5.`30_day_attendance_rate`, t5.`30day_attendance_score`, t5.`30day_loot_cost`, IFNULL(ROUND((t5.`attendance_score` / t5.`loot_cost`), 2), 0) as total_core, IFNULL(ROUND((t5.`30day_attendance_score` / t5.`30day_loot_cost`), 2), 0) as 30day_score 
 						FROM `users` t1
 							INNER JOIN `ranks` t2
 								ON t2.`id` = t1.`rank`
@@ -196,29 +190,14 @@
 			if ($u['badges']) {
 			$_user_badges = explode(",", $u['badges']);
 				foreach ($_user_badges as $b) {
-				echo "<div class='user-badge' style='background-image: url(/src/img/badge_" . $b . ".png);' title='" . htmlspecialchars($badges_array[$b]['name']) . "\n" . htmlspecialchars($badges_array[$b]['description']) . "'></div>";
+				echo "<div class='user-badge' style='background-image: url(/src/img/badge_" . $b . ".png);' title='" . htmlspecialchars($badges_array[$b]['name'], ENT_QUOTES) . "\n" . htmlspecialchars($badges_array[$b]['description'], ENT_QUOTES) . "'></div>";
 				}
 			} 
 			
 			echo "</div>";
-			echo "<td><a href='/loot.php?user=" . $u['id'] . "'>";
-			if ($u['loot_cost']) {
-				echo "-" . $u['loot_cost'];
-			} else {
-				echo "0";
-			}
-			echo "</a></td>";
 			echo "</td>";
-			echo "<td><a href='/loot.php?user=" . $u['id'] . "'>";
-			
-			if ($u['30day_loot_cost']) {
-				echo "-" . $u['30day_loot_cost'];
-			} else {
-				echo "0";
-			}
-			echo "</td>";
-			echo "<td>" . $u['attendance_score'] . "</td>";
-			echo "<td>" . $u['30day_attendance_score'] . "</td>";
+			echo "<td title='= (attendance &#247; loot)\n= (" . $u['attendance_score'] . " &#247; " . $u['loot_cost'] . ")'><a href='/loot.php?user=" . $u['id'] . "'>" . $u['total_core'] . "</a></td>";
+			echo "<td title='= (30 day attendance &#247; 30 day loot)\n= (" . $u['30day_attendance_score'] . " &#247; " . $u['30day_loot_cost'] . ")'>" . $u['30day_score'] . "</td>";
 			echo "<td>" . round((float)$u['30_day_attendance_rate'] * 100 ) . '%' . "</td>";
 			echo "<td>" . $u_joined->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d') . "</td>";
 			

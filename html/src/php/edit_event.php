@@ -17,12 +17,17 @@
 		$error_id = 110;
 	}
 	
-	// get notify late signups checkbox value
+	// get checkbox values
 	if (!$error) {
 		if (empty($_POST['event_notify'])) {
 			$event_notify = FALSE;
 		} else {
 			$event_notify = TRUE;
+		}
+		if (empty($_POST['event_log'])) {
+			$event_log = FALSE;
+		} else {
+			$event_log = TRUE;
 		}
 	}
 	
@@ -49,8 +54,8 @@
 	
 	// update event
 	if (!$error) {
-		$stmt->prepare("UPDATE `events` SET `title` = ?, `description` = ?, `start` = ?, `type` = ?, `notify_late_signups` = ?, `leader_id` = ?, `looter_id` = ?, `buff_instructions` = ?, `meetup_instructions` = ? WHERE `id` = ?");
-		$stmt->bind_param("sssiiiissi", $_POST['event_title'], $_POST['event_description'], $date->format('Y-m-d H:i:s'), $_POST['event_type'], $event_notify, $_POST['event_leader'], $_POST['event_looter'], $_POST['event_buff'], $_POST['event_meetup'], $_POST['event_id']);
+		$stmt->prepare("UPDATE `events` SET `title` = ?, `description` = ?, `start` = ?, `type` = ?, `notify_late_signups` = ?, `leader_id` = ?, `looter_id` = ?, `buff_instructions` = ?, `meetup_instructions` = ?, `log_attendance` = ? WHERE `id` = ?");
+		$stmt->bind_param("sssiiiissii", $_POST['event_title'], $_POST['event_description'], $date->format('Y-m-d H:i:s'), $_POST['event_type'], $event_notify, $_POST['event_leader'], $_POST['event_looter'], $_POST['event_buff'], $_POST['event_meetup'], $event_log, $_POST['event_id']);
 		if(!($stmt->execute())) {
 			// ERROR: failed to execute
 			$error = true;

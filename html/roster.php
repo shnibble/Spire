@@ -28,6 +28,13 @@
 			<div id="inner-wrapper">
 				<?php require $_SERVER['DOCUMENT_ROOT'] . "/src/php/navigation.php"; ?>
 				<div id="content">
+					<div class="pre-article-container">
+						<div class="left">
+						</div>
+						<div class="right">
+							<a href="/raidScore.html" class="pre-article-link" id="raidscore-link" target="_BLANK">Raid Score Details</a>
+						</div>
+					</div>
 					<article>
 						<div class="header">
 							<h4>Roster</h4>
@@ -88,9 +95,7 @@
 											<th rowspan="2" class="ajax-table-header" data-sort="character">Main<span></span></th>
 											<th rowspan="2" class="ajax-table-header" data-sort="rank">Rank<span></span></th>
 											<th rowspan="2">Badges</th>
-											<th rowspan="1" colspan="2">Loot</th>
-											<th rowspan="1" colspan="2">Attendance</th>
-											<th rowspan="2" class="ajax-table-header" data-sort="30dar">30DAR<span></span></th>
+											<th rowspan="1" colspan="3">Raid Score</th>
 											<th rowspan="2"  class="ajax-table-header" data-sort="joined">Joined<span></span></th>
 											<?php if ($user['security'] >= 2) { ?>
 											<th rowspan="2" class="ajax-table-header" data-sort="lastlogin">Last Login<span></span></th>
@@ -99,10 +104,9 @@
 											<?php } ?>
 										</tr>
 										<tr>
-											<th class="ajax-table-header" data-sort="loot">All<span></span></th>
-											<th class="ajax-table-header" data-sort="30d_loot">30 Days<span></span></th>
-											<th class="ajax-table-header" data-sort="attendance">All<span></span></th>
-											<th class="ajax-table-header" data-sort="30d_attendance">30 Days<span></span></th>
+											<th class="ajax-table-header" data-sort="all_raid_score">All Time<span></span></th>
+											<th class="ajax-table-header" data-sort="30d_raid_score">30 Days<span></span></th>
+											<th class="ajax-table-header" data-sort="30dar">30DAR<span></span></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -115,5 +119,13 @@
 			</div>
 		</div>
 		<script src="/src/js/ajaxTables.js"></script>
+		<script>
+		
+			// open raidScore window
+			$('#raidscore-link').click(function() {
+				window.open($(this).attr('href'),'title', 'width=940, height=700');
+				return false;
+			}); 
+		</script>
 	</body>
 </html>

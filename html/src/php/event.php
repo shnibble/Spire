@@ -1,6 +1,6 @@
 <?php
 	// get event
-	$stmt->prepare("SELECT t1.`id`, t1.`title`, t1.`description`, t1.`start`, t1.`type`, t1.`notify_late_signups`, t2.`name` as typeName, t1.`leader_id`, t3.`username` as leaderName, t1.`looter_id`, t4.`username` as looterName, t1.`buff_instructions`, t1.`meetup_instructions` 
+	$stmt->prepare("SELECT t1.`id`, t1.`title`, t1.`description`, t1.`start`, t1.`type`, t1.`notify_late_signups`, t2.`name` as typeName, t1.`leader_id`, t3.`username` as leaderName, t1.`looter_id`, t4.`username` as looterName, t1.`buff_instructions`, t1.`meetup_instructions`, t1.`log_attendance`, t1.`attendance_log_id` 
 					FROM `events` t1
 						INNER JOIN `event_types` t2
 						ON t2.`id` = t1.`type`
