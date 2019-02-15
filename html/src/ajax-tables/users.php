@@ -147,7 +147,12 @@
 	if (!$error) {
 		$stmt->prepare("SELECT t1.`id`, t1.`active`, t1.`username`, t1.`joined`, t1.`last_login`, t1.`rank`, t2.`name` as rankName, t1.`security`, t1.`timezone_id`, t3.`name` as timezoneName, t4.`name` as characterName, t4.`class` as characterClass, 
 						(SELECT GROUP_CONCAT(`badge_id` ORDER BY `badge_id`) FROM `user_badges` WHERE `user_id` = t1.`id`) badges, 
-						t5.`loot_cost`, t5.`attendance_score`, IFNULL(ROUND((t5.`attendance_score` - t5.`loot_cost`), 2), 0) spread, t5.`30_day_attendance_rate`, t5.`30day_attendance_score`, t5.`30day_loot_cost`, IFNULL(ROUND((t5.`attendance_score` / t5.`loot_cost`), 2), 0) as total_core, IFNULL(ROUND((t5.`30day_attendance_score` / t5.`30day_loot_cost`), 2), 0) as 30day_score 
+						t5.`loot_cost`, t5.`attendance_score`, IFNULL(ROUND((t5.`attendance_score` - t5.`loot_cost`), 2), 0) spread, t5.`30_day_attendance_rate`, t5.`30day_attendance_score`, t5.`30day_loot_cost`, 
+						
+						ROUND((t5.`attendance_score` / (CASE t5.`loot_cost` WHEN 0 THEN 1 ELSE t5.`loot_cost` END)), 2) as total_core, 
+						
+						ROUND((t5.`30day_attendance_score` / (CASE t5.`30day_loot_cost` WHEN 0 THEN 1 ELSE t5.`30day_loot_cost` END)), 2) as 30day_score 
+						
 						FROM `users` t1
 							INNER JOIN `ranks` t2
 								ON t2.`id` = t1.`rank`
