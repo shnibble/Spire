@@ -86,6 +86,7 @@
 							?>
 							<div class="event-container <?php if ($le_start < $now) echo "past"; ?> signup-<?php echo ($le['signupStatus'])? $le['signupStatus']:"0"; ?>">
 								<a href="#" class="event-details-toggle">+</a>
+								<span class="event-type"><?php echo $le['typeName']; ?></span>
 								<span class="event-date"><?php echo $le_start->setTimezone($LOCAL_TIMEZONE)->format('Y-m-d D G:i'); ?></span>
 								<a href="/event?id=<?php echo $le['id']; ?>" class="event-title" title="<?php echo htmlspecialchars($le['title']); ?>"><?php echo htmlspecialchars($le['title']); ?></a>
 								<div class="event-details">

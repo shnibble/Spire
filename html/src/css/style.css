@@ -1883,7 +1883,7 @@ article .occasions-container table tr.past td {
 .event-container.past {
 	background: #333333;
 }
-.event-container.past .event-date, .event-container.past .event-title {
+.event-container.past .event-date, .event-container.past .event-type, .event-container.past .event-title {
 	color: #737373;
 }
 .event-container:hover {
@@ -1893,6 +1893,15 @@ article .occasions-container table tr.past td {
 	display: inline-block;
 	vertical-align: top;
 	width: 160px;
+	padding: 5px;
+	font-family: "Courier New";
+	font-size: 12px;
+	line-height: 20px;
+}
+.event-type {
+	display: inline-block;
+	float: right;
+	vertical-align: top;
 	padding: 5px;
 	font-family: "Courier New";
 	font-size: 12px;
