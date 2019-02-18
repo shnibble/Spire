@@ -16,6 +16,8 @@
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/event_callouts.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/event_attendance.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/event_types.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/event_raid_templates.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/raid_templates.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/users.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/stmt_close.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/db_close.php";
@@ -38,7 +40,7 @@
 		<title>Spire</title>
 		<link href="https://fonts.googleapis.com/css?family=Karla" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-		<link rel="stylesheet" href="/src/css/style.css"></link>
+		<link rel="stylesheet" href="/src/css/style.css?v=51356zadf1"></link>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="/src/js/timeout.js"></script>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -140,6 +142,28 @@
 							</table>
 						</div>
 					</article>
+					<?php if ($user['security'] > 1 || $event['leader_id'] == $_SESSION['user_id']) { ?>
+					<article>
+						<div class="header">
+							<h3>Raid Templates</h3>
+						</div>
+						<div class="body">
+							<span><b>Add Template:</b></span>
+							<select class="standard-select" id="add-template-type" style="display: inline-block; max-width: 200px;">
+								<?php while ($rt = mysqli_fetch_array($raid_templates)) { ?>
+								<option value="<?php echo $rt['id']; ?>"><?php echo $rt['name']; ?></option>
+								<?php } ?>
+							</select>
+							<input type="button" id="add-template-btn" class="standard-button" data-eventid="<?php echo $_GET['id']; ?>" value="ADD" style="display: inline-block; width: 80px;"></input>
+							<br>
+							<br>
+							<span><b>Current Templates:</b></span>
+							<?php while ($ert = mysqli_fetch_array($event_raid_templates)) { ?>
+							<a href="/eventRaidTemplate.php?id=<?php echo $ert['id']; ?>"><?php echo $ert['template_name']; ?></a>
+							<?php } ?>
+						</div>
+					</article>
+					<?php } ?>
 					<article>
 						<div class="header">
 							<h3>Sign Ups</h3>
@@ -550,6 +574,15 @@
 							}
 						}
 					});
+				}
+			});
+			
+			// start new raid template
+			$('#add-template-btn').click(function(){
+				let template_id = $('#add-template-type').val();
+				let event_id = $(this).data('eventid');
+				if (confirm('Are you sure you want to start a new raid template?')) {
+					window.location = "/newRaidTemplate.php?template_id=" + template_id + "&event_id=" + event_id;
 				}
 			});
 		</script>

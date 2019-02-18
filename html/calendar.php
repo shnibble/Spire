@@ -26,7 +26,7 @@
 		<title>Spire</title>
 		<link href="https://fonts.googleapis.com/css?family=Karla" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-		<link rel="stylesheet" href="/src/css/style.css"></link>
+		<link rel="stylesheet" href="/src/css/style.css?v=51356zadf1"></link>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="/src/js/timeout.js"></script>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">

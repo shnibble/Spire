@@ -1,0 +1,215 @@
+* {
+	font-family: 'Karla', sans-serif;
+}
+html, body {
+	padding: 0;
+	margin: 0;
+	background: #0d0d0d;
+}
+#header, #footer {
+	background: #e6e6e6;
+	padding: 5px;
+}
+#header input {
+	width: 140px;
+	text-align: center;
+}
+#content {
+	padding: 10px;
+	margin: auto;
+}
+
+#character-bay-dump {
+	width: 408px;
+	height: 50px;
+	margin-bottom: 10px;
+	border: 2px solid #4d4d4d;
+	border-radius: 4px;
+	background: #800000;
+	text-align: center;
+}
+#character-bay-dump span {
+	color: #808080;
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 50px;
+}
+.player {
+	display: inline-block;
+	vertical-align: top;
+	width: 191px;
+	height: 16px;
+	background: #1a1a1a;
+	margin: 0;
+	border: 1px solid #4d4d4d;
+	border-radius: 4px;
+	z-index: 2;
+	font-size: 14px;
+	line-height: 15px;
+	cursor: grab;
+}
+.player:hover {
+	background: #262626;
+}
+.player .player-name {
+	display: inline-block;
+	vertical-align: top;
+	width: 118px;
+	padding-left: 5px;
+	text-align: left;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.player .player-class {
+	display: inline-block;
+	vertical-align: top;
+	width: 60px;
+	text-align: left;
+}
+
+.raid-template {
+	display: inline-block;
+	width: 408px;
+	height: 450px;
+	background: #333333;
+	text-align: center;
+	padding-top: 5px;
+	border: 2px solid #4d4d4d;
+	border-radius: 6px;
+	margin-bottom: 2px;
+}
+.raid-template .group {
+	display: inline-block;
+	position: relative;
+	width: 196px;
+	height: 94px;
+	margin-top: 12px;
+	border-top: 2px solid #4d4d4d;
+	border-bottom: 1px solid #4d4d4d;
+	border-radius: 4px;
+}
+.raid-template .group h2 {
+	position: absolute;
+	height: 14px;
+	top: -18px;
+	left: 0;
+	right: 0;
+	margin: 0;
+	font-size: 14px;
+	line-height: 14px;
+	font-weight: normal;
+	color: #ffc233;
+}
+.raid-template .group .slot {
+	display: block;
+	position: relative;
+	height: 18px;
+	margin: 1px 0px;
+	background: #000000;
+	border-left: 2px solid #4d4d4d;
+	border-right: 1px solid #4d4d4d;
+	border-radius: 4px;
+}
+.raid-template .group .slot .slot-description {
+	position: absolute;
+	top: 1px;
+	right: 1px;
+	bottom: 1px;
+	left: 1px;
+	color: #404040;
+	font-size: 12px;
+	line-height: 16px;
+	font-weight: bold;
+}
+.raid-template .group .slot .slot-dropper {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+
+.character-bays {
+	display: inline-block;
+	vertical-align: top;
+	width: 203px;
+}
+.character-bay-container {
+	display: inline-block;
+	vertical-align: top;
+	width: 201px;
+	background: #333333;
+	border: 2px solid #4d4d4d;
+	border-radius: 4px;
+	margin-bottom: 2px;
+}
+.character-bay-container h2 {
+	margin: 0;
+	padding: 2px;
+	font-size: 14px;
+	line-height: 14px;
+	font-weight: normal;
+	color: #ffc233;
+	text-align: center;
+}
+.character-bay {
+	display: inline-block;
+	vertical-align: top;
+	width: 190px;
+	height: 206px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	text-align: center;
+}
+.character-bay.signed-up {
+	height: 436px;
+}
+.character-bay .player {
+	width: 80px;
+}
+.character-bay .player .player-name {
+	width: 77px;
+	padding-left: 2px;
+}
+.character-bay .player .player-class {
+	display: none;
+}
+.character-bay .player-placeholder {
+	display: inline-block;
+	vertical-align: top;
+	width: 82px;
+	height: 0px;
+	background: red;
+}
+.character-bay.called-out .player {
+	color: #808080 !important;
+}
+.class-1 {
+	color: #FF7D0A;
+}
+.class-2 {
+	color: #ABD473;
+}
+.class-3 {
+	color: #69CCF0;
+}
+.class-4 {
+	color: #F58CBA;
+}
+.class-5 {
+	color: #FFFFFF;
+}
+.class-6 {
+	color: #FFF569;
+}
+.class-7 {
+	color: #0070DE;
+}
+.class-8 {
+	color: #9482C9;
+}
+.class-9 {
+	color: #C79C6E;
+}
