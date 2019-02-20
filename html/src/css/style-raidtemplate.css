@@ -54,8 +54,8 @@ html, body {
 .player .player-name {
 	display: inline-block;
 	vertical-align: top;
-	width: 118px;
-	padding-left: 5px;
+	width: 120px;
+	margin-right: 5px;
 	text-align: left;
 	white-space: nowrap;
 	overflow: hidden;
@@ -163,7 +163,7 @@ html, body {
 	overflow-x: hidden;
 	text-align: center;
 }
-.character-bay.signed-up {
+.character-bay.signed-up, .character-bay.missing {
 	height: 436px;
 }
 .character-bay .player {
@@ -171,7 +171,6 @@ html, body {
 }
 .character-bay .player .player-name {
 	width: 77px;
-	padding-left: 2px;
 }
 .character-bay .player .player-class {
 	display: none;
@@ -186,6 +185,59 @@ html, body {
 .character-bay.called-out .player {
 	color: #808080 !important;
 }
+
+.player.rank-1 .player-name:before {
+	content: '(G)';
+	font-size: 8px;
+	vertical-align: top;
+	padding: 2px;
+	color: #009999;
+}
+.player.rank-2 .player-name:before {
+	content: '(L)';
+	font-size: 8px;
+	vertical-align: top;
+	padding: 2px;
+	color: #009900;
+}
+.player.rank-3 .player-name:before {
+	content: '(R)';
+	font-size: 8px;
+	vertical-align: top;
+	padding: 2px;
+	color: #00cc00;
+}
+.player.rank-4 .player-name:before {
+	content: '(S)';
+	font-size: 8px;
+	vertical-align: top;
+	padding: 2px;
+	color: #004d99;
+}
+.player.rank-5 .player-name:before {
+	content: '(M)';
+	font-size: 8px;
+	vertical-align: top;
+	padding: 2px;
+	color: #0073e6;
+}
+.player.rank-6 .player-name:before {
+	content: '(T)';
+	font-size: 8px;
+	vertical-align: top;
+	padding: 2px;
+	color: #bf72f3;
+}
+.player.rank-7 .player-name:before {
+	content: '(R)';
+	font-size: 8px;
+	vertical-align: top;
+	padding: 2px;
+	color: #a335ee;
+}
+
+
+
 .class-1 {
 	color: #FF7D0A;
 }

@@ -15,7 +15,7 @@
 	$raid_template = mysqli_fetch_array($result);
 	
 	// get raid template slots
-	$stmt->prepare("SELECT t1.`id`, t1.`slot_id`, t1.`type_id`, t2.`description` as type_description, t1.`character_id`, t3.`name` as character_name, t3.`class` as character_class, t4.`name` as character_class_name 
+	$stmt->prepare("SELECT t1.`id`, t1.`slot_id`, t1.`type_id`, t2.`description` as type_description, t1.`character_id`, t3.`name` as character_name, t3.`class` as character_class, t4.`name` as character_class_name, t5.`rank` 
 					FROM `raid_template_slots` t1 
 						INNER JOIN `raid_template_slot_types` t2 
 							ON t2.`id` = t1.`type_id` 
@@ -23,6 +23,8 @@
 							ON t3.`id` = t1.`character_id` 
 						LEFT JOIN `classes` t4 
 							ON t4.`id` = t3.`class` 
+						LEFT JOIN `users` t5 
+							ON t5.`id` = t3.`user_id` 
 					WHERE t1.`raid_template_id` = ? ORDER BY `slot_id` ASC");
 	$stmt->bind_param("i", $_GET['id']);
 	$stmt->execute();

@@ -60,6 +60,30 @@
 				});
 			});
 			
+			$('.character-bay.missing').each(function(){
+				let _this = $(this);
+				let _eventID = $(this).data('eventid');
+				let _raidTemplateID = $(this).data('raidtemplateid');		
+				_this.html('');
+				
+				$.ajax({
+					url: '/src/ajax/raid_template_missing_non_social_characters.php', 
+					type: 'POST', 
+					data: {
+						'event_id' : _eventID,
+						'raid_template_id' : _raidTemplateID
+					},
+					'success': function(e) {
+						_this.append(e);
+						_this.children('.player').draggable({
+							containment: '#content',
+							helper: 'clone'
+						});
+						_this.append('<div class="player-placeholder"></div>');
+					}
+				});
+			});
+			
 			$('.character-bay.called-out').each(function(){
 				let _this = $(this);
 				let _eventID = $(this).data('eventid');
@@ -84,20 +108,18 @@
 				});
 			});
 			
-			$('.character-bay.missing-rank').each(function(){
+			$('.character-bay.socials').each(function(){
 				let _this = $(this);
 				let _eventID = $(this).data('eventid');
-				let _raidTemplateID = $(this).data('raidtemplateid');
-				let _rankID = $(this).data('rankid');				
+				let _raidTemplateID = $(this).data('raidtemplateid');		
 				_this.html('');
 				
 				$.ajax({
-					url: '/src/ajax/raid_template_missing_rank_characters.php', 
+					url: '/src/ajax/raid_template_missing_social_characters.php', 
 					type: 'POST', 
 					data: {
 						'event_id' : _eventID,
-						'raid_template_id' : _raidTemplateID,
-						'rank_id' : _rankID
+						'raid_template_id' : _raidTemplateID
 					},
 					'success': function(e) {
 						_this.append(e);
@@ -124,6 +146,7 @@
 					let _id = $(ui.draggable).data('characterid');
 					let _name = $(ui.draggable).data('name');
 					let _class = $(ui.draggable).data('class');
+					let _rank = $(ui.draggable).data('rank');
 					let _className = $(ui.draggable).data('classname');
 					let _slotName = $(this).attr('id');
 					let _slot = $(this).data('slotid');
@@ -138,7 +161,7 @@
 						'success': function(e){
 							if (e == "0") {
 								$(ui.draggable).remove();
-								_html = '<div id="player_' + _id + '" class="player class-' + _class + '" data-characterid="' + _id + '" data-name="' + _name + '" data-class="' + _class + '" data-classname="' + _className + '"><span class="player-name">' + _name + '</span><span class="player-class">' + _className + '</span></div>';
+								_html = '<div id="player_' + _id + '" class="player class-' + _class + ' rank-' + _rank + '" data-characterid="' + _id + '" data-name="' + _name + '" data-class="' + _class + '" data-classname="' + _className + '" data-rank="' + _rank + '"><span class="player-name">' + _name + '</span><span class="player-class">' + _className + '</span></div>';
 								$('#' + _slotName).html('');
 								$('#' + _slotName).append(_html);
 								$('div#player_' + _id).draggable({
@@ -231,7 +254,7 @@
 						echo "	<div id='g" . $group . "_p" . $player . "' class='slot-dropper' data-slotid='" . $slot['id'] . "'>";
 						
 						if ($slot['character_id'] != "") {
-							echo "<div id='player_" . $slot['character_id'] . "' class='player class-" . $slot['character_class'] . "' data-characterid='" . $slot['character_id'] . "' data-name='" . $slot['character_name'] . "' data-class='" . $slot['character_class'] . "' data-classname='" . $slot['character_class_name'] . "'>";
+							echo "<div id='player_" . $slot['character_id'] . "' class='player class-" . $slot['character_class'] . " rank-" . $slot['rank'] . "' data-characterid='" . $slot['character_id'] . "' data-name='" . $slot['character_name'] . "' data-class='" . $slot['character_class'] . "' data-classname='" . $slot['character_class_name'] . "'>";
 							echo "<span class='player-name'>" . $slot['character_name'] . "</span>";
 							echo "<span class='player-class'>" . $slot['character_class_name'] . "</span>";
 							echo "</div>";
@@ -254,32 +277,18 @@
 			</div>
 			<div class="character-bays">
 				<div class="character-bay-container">
-					<h2>Missing Raiders</h2>
-					<div class="character-bay missing-rank" data-eventid="<?php echo $event['id']; ?>" data-raidtemplateid="<?php echo $raid_template['id']; ?>" data-rankid="7"></div>
-				</div>
-				<div class="character-bay-container">
-					<h2>Missing Trial Raiders</h2>
-					<div class="character-bay missing-rank" data-eventid="<?php echo $event['id']; ?>" data-raidtemplateid="<?php echo $raid_template['id']; ?>" data-rankid="6"></div>
+					<h2>Missing</h2>
+					<div class="character-bay missing" data-eventid="<?php echo $event['id']; ?>" data-raidtemplateid="<?php echo $raid_template['id']; ?>"></div>
 				</div>
 			</div>
 			<div class="character-bays">
-				<div class="character-bay-container">
-					<h2>Missing Members</h2>
-					<div class="character-bay missing-rank" data-eventid="<?php echo $event['id']; ?>" data-raidtemplateid="<?php echo $raid_template['id']; ?>" data-rankid="5"></div>
-				</div>
-				<div class="character-bay-container">
-					<h2>Missing Recruits</h2>
-					<div class="character-bay missing-rank" data-eventid="<?php echo $event['id']; ?>" data-raidtemplateid="<?php echo $raid_template['id']; ?>" data-rankid="3"></div>
-				</div>
-			</div>
-			<div class="character-bays">
-				<div class="character-bay-container">
-					<h2>Missing Socials</h2>
-					<div class="character-bay missing-rank" data-eventid="<?php echo $event['id']; ?>" data-raidtemplateid="<?php echo $raid_template['id']; ?>" data-rankid="4"></div>
-				</div>
 				<div class="character-bay-container">
 					<h2>Called Out</h2>
 					<div class="character-bay called-out" data-eventid="<?php echo $event['id']; ?>" data-raidtemplateid="<?php echo $raid_template['id']; ?>"></div>
+				</div>
+				<div class="character-bay-container">
+					<h2>Socials</h2>
+					<div class="character-bay socials" data-eventid="<?php echo $event['id']; ?>" data-raidtemplateid="<?php echo $raid_template['id']; ?>"></div>
 				</div>
 			</div>
 		</div>

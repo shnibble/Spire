@@ -8,7 +8,7 @@
 	$error = false;
 	
 	// get POST variables
-	if (!isset($_POST['event_id']) || !isset($_POST['rank_id']) || !isset($_POST['raid_template_id'])) {
+	if (!isset($_POST['event_id']) || !isset($_POST['raid_template_id'])) {
 		// ERROR: missing variable
 		$error = true;
 		$error_id = 110;
@@ -16,7 +16,7 @@
 	
 	// get characters
 	if (!$error) {
-		$stmt->prepare("SELECT t1.`id`, t1.`name`, t1.`class`, t2.`name` as class_name 
+		$stmt->prepare("SELECT t1.`id`, t1.`name`, t1.`class`, t2.`name` as class_name, t3.`rank` 
 						FROM `characters` t1 
 							INNER JOIN `classes` t2 
 								ON t2.`id` = t1.`class` 
@@ -25,11 +25,11 @@
 						WHERE t1.`enabled` = TRUE 
 						AND t1.`main` = TRUE 
 						AND t3.`active` = TRUE 
-						AND t3.`rank` = ? 
-						AND t1.`id` NOT IN (SELECT `character_id` FROM `event_signups` WHERE `event_id` = ?) 
+						AND t3.`rank` = 4 
+						AND t3.`id` NOT IN (SELECT `user_id` FROM `event_signups` WHERE `event_id` = ?) 
 						AND t1.`id` NOT IN (SELECT `character_id` FROM `raid_template_slots` WHERE `character_id` IS NOT NULL AND `raid_template_id` = ?)
 						ORDER BY t1.`class`, t1.`name`");
-		if (!$stmt->bind_param("iii", $_POST['rank_id'], $_POST['event_id'], $_POST['raid_template_id'])) {
+		if (!$stmt->bind_param("ii", $_POST['event_id'], $_POST['raid_template_id'])) {
 			// ERROR: failed to bind parameters
 			$error = true;
 			$error_id = 109;
@@ -68,7 +68,7 @@
 				$counter = 0;
 				$class = $new_class;
 			} ?>
-			<div id="player_<?php echo $player['id']; ?>" class="player class-<?php echo $player['class']; ?>" data-characterid="<?php echo $player['id']; ?>" data-name="<?php echo $player['name']; ?>" data-class="<?php echo $player['class']; ?>" data-classname="<?php echo $player['class_name']; ?>">
+			<div id="player_<?php echo $player['id']; ?>" class="player class-<?php echo $player['class']; ?> rank-<?php echo $player['rank']; ?>" data-characterid="<?php echo $player['id']; ?>" data-name="<?php echo $player['name']; ?>" data-class="<?php echo $player['class']; ?>" data-classname="<?php echo $player['class_name']; ?>" data-rank="<?php echo $player['rank']; ?>">
 				<span class="player-name"><?php echo $player['name']; ?></span>
 				<span class="player-class"><?php echo $player['class_name']; ?></span>
 			</div>
