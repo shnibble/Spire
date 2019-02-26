@@ -8,7 +8,7 @@
 	$error = false;
 	
 	// get POST variables
-	if (!isset($_POST['event_id']) || !isset($_POST['raid_template_id'])) {
+	if (!isset($_POST['event_id']) || !isset($_POST['raid_roster_id'])) {
 		// ERROR: missing variable
 		$error = true;
 		$error_id = 110;
@@ -23,10 +23,13 @@
 							INNER JOIN `users` t3 
 								ON t3.`id` = t1.`user_id` 
 						WHERE t1.`enabled` = TRUE 
-						AND t1.`id` IN (SELECT `character_id` FROM `event_signups` WHERE `event_id` = ? AND `type` = 1) 
-						AND t1.`id` NOT IN (SELECT `character_id` FROM `raid_template_slots` WHERE `character_id` IS NOT NULL AND `raid_template_id` = ?)
+						AND t1.`main` = TRUE 
+						AND t3.`active` = TRUE 
+						AND t3.`rank` IN (3, 5, 6, 7) 
+						AND t3.`id` NOT IN (SELECT `user_id` FROM `event_signups` WHERE `event_id` = ?) 
+						AND t1.`id` NOT IN (SELECT `character_id` FROM `raid_roster_slots` WHERE `character_id` IS NOT NULL AND `raid_roster_id` = ?)
 						ORDER BY t1.`class`, t1.`name`");
-		if (!$stmt->bind_param("ii", $_POST['event_id'], $_POST['raid_template_id'])) {
+		if (!$stmt->bind_param("ii", $_POST['event_id'], $_POST['raid_roster_id'])) {
 			// ERROR: failed to bind parameters
 			$error = true;
 			$error_id = 109;

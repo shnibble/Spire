@@ -4,21 +4,25 @@
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/stmt_init.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/verify_user_token.php";
-	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/security_1.php";
 	
 	$error = false;
 	
 	// get POST variables
-	if (!isset($_POST['raid_template_id'])) {
+	if (!isset($_POST['slot_id']) || !isset($_POST['raid_roster_id'])) {
 		// ERROR: missing variable
 		$error = true;
 		$error_id = 110;
 	}
 	
-	// delete raid template slots
-	if (!$error) {
-		$stmt->prepare("DELETE FROM `raid_template_slots` WHERE `raid_template_id` = ?");
-		if (!$stmt->bind_param("i", $_POST['raid_template_id'])) {
+	// get optional variables
+	if (!isset($_POST['character_id']) || $_POST['character_id'] == "" || $_POST['character_id'] == 0) {
+		$_POST['character_id'] = null;
+	}
+	
+	// remove character from previous slot
+	if (!$error && !is_null($_POST['character_id'])) {
+		$stmt->prepare("UPDATE `raid_roster_slots` set `character_id` = NULL WHERE `raid_roster_id` = ? AND `character_id` = ?");
+		if (!$stmt->bind_param("ii", $_POST['raid_roster_id'], $_POST['character_id'])) {
 			// ERROR: failed to bind parameters
 			$error = true;
 			$error_id = 109;
@@ -29,10 +33,10 @@
 		}
 	}
 	
-	// delete raid template
+	// update slot character
 	if (!$error) {
-		$stmt->prepare("DELETE FROM `raid_templates` WHERE `id` = ?");
-		if (!$stmt->bind_param("i", $_POST['raid_template_id'])) {
+		$stmt->prepare("UPDATE `raid_roster_slots` set `character_id` = ? WHERE `id` = ?");
+		if (!$stmt->bind_param("ii", $_POST['character_id'], $_POST['slot_id'])) {
 			// ERROR: failed to bind parameters
 			$error = true;
 			$error_id = 109;

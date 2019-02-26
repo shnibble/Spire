@@ -16,8 +16,9 @@
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/event_callouts.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/event_attendance.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/event_types.php";
-	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/event_raid_templates.php";
-	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/raid_templates.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/raid_roster_templates.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/event_raid_rosters_confirmed.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/event_raid_rosters_unconfirmed.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/users.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/stmt_close.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/db_close.php";
@@ -142,28 +143,46 @@
 							</table>
 						</div>
 					</article>
-					<?php if ($user['security'] >= 1 || $event['leader_id'] == $_SESSION['user_id']) { ?>
 					<article>
 						<div class="header">
-							<h3>Raid Templates</h3>
+							<h3>Raid Rosters</h3>
 						</div>
 						<div class="body">
-							<span><b>Add Template:</b></span>
-							<select class="standard-select" id="add-template-type" style="display: inline-block; max-width: 200px;">
-								<?php while ($rt = mysqli_fetch_array($raid_templates)) { ?>
-								<option value="<?php echo $rt['id']; ?>"><?php echo $rt['name']; ?></option>
+							<div class="raid-roster-link-container">
+								<h4>Confirmed Rosters</h4>
+								<?php if (mysqli_num_rows($event_raid_rosters_confirmed) == 0) { ?>
+									<p><i>None</i></p>
+								<?php } else { 
+									while ($errc = mysqli_fetch_array($event_raid_rosters_confirmed)) { ?>
+										<a href="/eventRaidRoster.php?id=<?php echo $errc['id']; ?>" class="raid-roster-link"><?php echo $errc['template_name']; ?></a>
+									<?php } ?>
 								<?php } ?>
-							</select>
-							<input type="button" id="add-template-btn" class="standard-button" data-eventid="<?php echo $_GET['id']; ?>" value="ADD" style="display: inline-block; width: 80px;"></input>
-							<br>
-							<br>
-							<span><b>Current Templates:</b></span>
-							<?php while ($ert = mysqli_fetch_array($event_raid_templates)) { ?>
-							<a href="/eventRaidTemplate.php?id=<?php echo $ert['id']; ?>"><?php echo $ert['template_name']; ?></a>
+							</div>
+							<?php if ($user['security'] >= 1 || $event['leader_id'] == $_SESSION['user_id']) { ?>
+							<div id="unconfirmed-raid-rosters" class="raid-roster-link-container">
+								<h4>Unconfirmed Rosters</h4>
+								<p><i>Only Moderators and event Raid Leader can view</i></p> 
+								<?php while ($erru = mysqli_fetch_array($event_raid_rosters_unconfirmed)) { ?>
+									<a href="/eventRaidRoster.php?id=<?php echo $erru['id']; ?>" class="raid-roster-link"><?php echo $erru['template_name']; ?></a>
+								<?php } ?>
+							</div>
 							<?php } ?>
+
+							<?php if ($user['security'] >= 2 || $event['leader_id'] == $_SESSION['user_id']) { ?>
+							<div class="raid-roster-link-container">
+								<h4>Add New Roster Template</h4>
+								<p><i>Only Admins and event Raid Leader can view</i></p> 
+								<select class="standard-select" id="add-template-type" style="display: inline-block; max-width: 200px;">
+									<?php while ($rrt = mysqli_fetch_array($raid_roster_templates)) { ?>
+									<option value="<?php echo $rrt['id']; ?>"><?php echo $rrt['name']; ?></option>
+									<?php } ?>
+								</select>
+								<input type="button" id="add-template-btn" class="standard-button" data-eventid="<?php echo $_GET['id']; ?>" value="ADD" style="display: inline-block; width: 80px;"></input>
+							</div>
+							<?php } ?>
+
 						</div>
 					</article>
-					<?php } ?>
 					<article>
 						<div class="header">
 							<h3>Sign Ups</h3>
@@ -577,12 +596,24 @@
 				}
 			});
 			
-			// start new raid template
+			// add raid roster template
 			$('#add-template-btn').click(function(){
 				let template_id = $('#add-template-type').val();
 				let event_id = $(this).data('eventid');
-				if (confirm('Are you sure you want to start a new raid template?')) {
-					window.location = "/newRaidTemplate.php?template_id=" + template_id + "&event_id=" + event_id;
+				if (confirm('Are you sure you want to add a new raid roster to this event?')) {
+					$.ajax({
+						url: "/src/ajax/add_event_raid_roster.php",
+						type: "POST",
+						data: { 'raid_roster_template_id' : template_id, 'event_id' : event_id }, 
+						success: function(d) {
+							if (d == 0) {
+								alert("Oops! Something went wrong. Roster template was not added.");
+							} else {
+								$('#unconfirmed-raid-rosters').append(d);
+							}
+						}
+					});
+					
 				}
 			});
 		</script>

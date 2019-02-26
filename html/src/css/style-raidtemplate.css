@@ -20,6 +20,10 @@ html, body {
 	text-align: center;
 }
 
+#delete-raid-roster-btn {
+	color: #cc0000;
+}
+
 #character-bay-dump {
 	max-width: 408px;
 	height: 50px;
@@ -183,7 +187,7 @@ html, body {
 	height: 0px;
 	background: red;
 }
-.character-bay.called-out .player {
+.player.called-out {
 	color: #808080 !important;
 }
 

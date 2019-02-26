@@ -1680,6 +1680,19 @@ article .occasions-container table tr.past td {
 .event-signup-table .late, .attendance-table .late {
 	color: red;
 }
+.raid-roster-link-container {
+	margin: 5px;
+	padding: 5px;
+}
+.raid-roster-link {
+	display: inline-block;
+	padding: 5px;
+	color: #ffe099;
+	transition: color .25s;
+}
+.raid-roster-link:hover {
+	color: #ffcd55;
+}
 .signup-detail-container {
 	margin: auto;
 	max-width: 660px;

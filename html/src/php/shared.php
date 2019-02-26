@@ -3,7 +3,7 @@
 	$pageName = explode(".", basename($_SERVER['PHP_SELF']))[0];
 	
 	// start session
-	$lifetime = 3600; // set timout to 1 hour
+	$lifetime = 10800; // set timout to 3 hours
 	session_start();
 	setcookie(session_name(), session_id(), time()+$lifetime, "/");
 	

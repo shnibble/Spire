@@ -8,7 +8,7 @@
 	$error = false;
 	
 	// get POST variables
-	if (!isset($_POST['event_id']) || !isset($_POST['raid_template_id'])) {
+	if (!isset($_POST['event_id']) || !isset($_POST['raid_roster_id'])) {
 		// ERROR: missing variable
 		$error = true;
 		$error_id = 110;
@@ -27,9 +27,9 @@
 						AND t3.`active` = TRUE 
 						AND t3.`rank` = 4 
 						AND t3.`id` NOT IN (SELECT `user_id` FROM `event_signups` WHERE `event_id` = ?) 
-						AND t1.`id` NOT IN (SELECT `character_id` FROM `raid_template_slots` WHERE `character_id` IS NOT NULL AND `raid_template_id` = ?)
+						AND t1.`id` NOT IN (SELECT `character_id` FROM `raid_roster_slots` WHERE `character_id` IS NOT NULL AND `raid_roster_id` = ?)
 						ORDER BY t1.`class`, t1.`name`");
-		if (!$stmt->bind_param("ii", $_POST['event_id'], $_POST['raid_template_id'])) {
+		if (!$stmt->bind_param("ii", $_POST['event_id'], $_POST['raid_roster_id'])) {
 			// ERROR: failed to bind parameters
 			$error = true;
 			$error_id = 109;
