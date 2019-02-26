@@ -8,6 +8,7 @@
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/stmt_init.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/server_config.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/security_1.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/verify_user_token.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/raid_template.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/raid_template_event_signups.php";
@@ -22,10 +23,10 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Spire Loot Log</title>
+		<title>Spire Raid Template</title>
 		<link href="https://fonts.googleapis.com/css?family=Karla" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-		<link rel="stylesheet" href="/src/css/style-raidtemplate.css"></link>
+		<link rel="stylesheet" href="/src/css/style-raidtemplate.css?v=6413"></link>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 		<script src="/src/js/timeout.js"></script>
@@ -143,6 +144,7 @@
 		  
 			$('.slot-dropper').droppable({
 				drop: function (event, ui) {
+					let _templateID = $('#raid-template-id').val();
 					let _id = $(ui.draggable).data('characterid');
 					let _name = $(ui.draggable).data('name');
 					let _class = $(ui.draggable).data('class');
@@ -155,6 +157,7 @@
 						url: '/src/php/update_raid_slot_character.php',
 						type: 'POST',
 						data: {
+							'template_id' : _templateID,
 							'character_id' : _id,
 							'slot_id' : _slot
 						},
@@ -254,7 +257,7 @@
 						echo "	<div id='g" . $group . "_p" . $player . "' class='slot-dropper' data-slotid='" . $slot['id'] . "'>";
 						
 						if ($slot['character_id'] != "") {
-							echo "<div id='player_" . $slot['character_id'] . "' class='player class-" . $slot['character_class'] . " rank-" . $slot['rank'] . "' data-characterid='" . $slot['character_id'] . "' data-name='" . $slot['character_name'] . "' data-class='" . $slot['character_class'] . "' data-classname='" . $slot['character_class_name'] . "'>";
+							echo "<div id='player_" . $slot['character_id'] . "' class='player class-" . $slot['character_class'] . " rank-" . $slot['rank'] . "' data-characterid='" . $slot['character_id'] . "' data-name='" . $slot['character_name'] . "' data-class='" . $slot['character_class'] . "' data-classname='" . $slot['character_class_name'] . "' data-rank='" . $slot['rank'] . "'>";
 							echo "<span class='player-name'>" . $slot['character_name'] . "</span>";
 							echo "<span class='player-class'>" . $slot['character_class_name'] . "</span>";
 							echo "</div>";

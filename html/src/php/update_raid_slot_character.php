@@ -8,7 +8,7 @@
 	$error = false;
 	
 	// get POST variables
-	if (!isset($_POST['slot_id'])) {
+	if (!isset($_POST['slot_id']) || !isset($_POST['template_id'])) {
 		// ERROR: missing variable
 		$error = true;
 		$error_id = 110;
@@ -20,9 +20,9 @@
 	}
 	
 	// remove character from previous slot
-	if (!$error) {
-		$stmt->prepare("UPDATE `raid_template_slots` set `character_id` = NULL WHERE `character_id` = ?");
-		if (!$stmt->bind_param("i", $_POST['character_id'])) {
+	if (!$error && !is_null($_POST['character_id'])) {
+		$stmt->prepare("UPDATE `raid_template_slots` set `character_id` = NULL WHERE `raid_template_id` = ? AND `character_id` = ?");
+		if (!$stmt->bind_param("ii", $_POST['template_id'], $_POST['character_id'])) {
 			// ERROR: failed to bind parameters
 			$error = true;
 			$error_id = 109;

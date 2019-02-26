@@ -142,7 +142,7 @@
 							</table>
 						</div>
 					</article>
-					<?php if ($user['security'] > 1 || $event['leader_id'] == $_SESSION['user_id']) { ?>
+					<?php if ($user['security'] >= 1 || $event['leader_id'] == $_SESSION['user_id']) { ?>
 					<article>
 						<div class="header">
 							<h3>Raid Templates</h3>
