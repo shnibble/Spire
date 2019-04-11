@@ -1,10 +1,18 @@
+<?php
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/shared.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/db_connect.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/stmt_init.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/check_login_token.php";
+	if (checkLoginToken($stmt)) { header("Location: /home"); exit; }
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/db_close.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
 		<title>Spire</title>
 		<link href="https://fonts.googleapis.com/css?family=Karla" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-		<link rel="stylesheet" href="/src/css/style-splash.css"></link>
+		<link rel="stylesheet" href="/src/css/style-splash.css">
 		<link rel="icon" href="/favicon.ico?v=2" />
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
@@ -18,15 +26,16 @@
 			
 			<div class="container">
 				<form method="POST" id="login-form" action ="/src/php/login.php"></form>
+				<input type="hidden" form="login-form" name="return-url" value="<?php if (isset($_GET['url'])) echo $_GET['url']; ?>">
 				<div class="row">
-					<input type="text" id="login-username" form="login-form" name="login-username" placeholder="Username"></input>
+					<input type="text" id="login-username" form="login-form" name="login-username" placeholder="Username">
 				</div>
 				<div class="row">
-					<input type="password" id="login-password" form="login-form" name="login-password" placeholder="Password"></input>
+					<input type="password" id="login-password" form="login-form" name="login-password" placeholder="Password">
 					<div class="tooltip">Forgot your username or password? Contact an Admin in Spire's Discord server for assistance.</div>
 				</div>
 				<div class="row">
-					<input type="submit" class="button" id="login-submit" form="login-form" value="LOGIN"></input>
+					<input type="submit" class="button" id="login-submit" form="login-form" value="LOGIN">
 				</div>
 			</div>
 			
@@ -35,16 +44,16 @@
 				<form method="POST" id="register-form" action="/src/php/register_new_user.php"></form>
 				<h3>Account</h3>
 				<div class="row">
-					<input type="text" id="register-username" form="register-form" name="register-username" placeholder="Username"></input>
+					<input type="text" id="register-username" form="register-form" name="register-username" placeholder="Username">
 					<div class="tooltip">What you login with and what others see your name displayed as throughout the site. This does not need to be your character's name but should be something everyone will recognize.</div>
 				</div>
 				<div class="row">
-					<input type="password" id="register-password-1" form="register-form" name="register-password-1" placeholder="Password"></input>
-					<input type="password" id="register-password-2" form="register-form" name="register-password-2" placeholder="Repeat Password"></input>
+					<input type="password" id="register-password-1" form="register-form" name="register-password-1" placeholder="Password">
+					<input type="password" id="register-password-2" form="register-form" name="register-password-2" placeholder="Repeat Password">
 				</div>
 				<h3>Character</h3>
 				<div class="row">
-					<input type="text" id="register-character" form="register-form" name="register-character" placeholder="Character Name"></input>
+					<input type="text" id="register-character" form="register-form" name="register-character" placeholder="Character Name">
 					<div class="tooltip">Your main character's name, <b>spelled exactly as it is in-game</b>. This is important to spell properly to match against attendance and loot records.</div>
 				</div>
 				<div class="row">
@@ -72,7 +81,7 @@
 					<div class="tooltip">Your main character's primary role (you can change this later and when signing up case-by-case).</div>
 				</div>
 				<div class="row">
-					<input type="submit" class="button" id="register-submit" form="register-form" value="REGISTER"></input>
+					<input type="submit" class="button" id="register-submit" form="register-form" value="REGISTER">
 				</div>
 			</div>
 		</div>

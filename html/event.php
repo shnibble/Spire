@@ -3,6 +3,8 @@
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/db_connect.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/stmt_init.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/server_config.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/check_login_token.php";
+	if (!checkLoginToken($stmt)) { header("Location: /?url=" . $_SERVER['REQUEST_URI']); exit; }
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user_event_signup.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user_characters.php";

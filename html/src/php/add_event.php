@@ -72,7 +72,22 @@
 		$stmt->bind_param("is", $_SESSION['user_id'], $logDescription);
 		$stmt->execute();
 	}
-	
+
+	// notify discord
+	if (!$error) {
+		$eventName = $_POST['event_title'];
+		$eventDate = $date->format('l, Y-m-d H:i');
+		$id = $last_id;
+		
+		$curl = curl_init("https://discordapp.com/api/webhooks/542862212843438090/M2YDKq0CWCi840l8Oyi89Y7HDAcEuGUuoWcT-5IysztjIA62PKIlryKmCQ0SnTcHMota");
+		curl_setopt($curl, CURLOPT_POST, 1);
+			$last_id = $conn->insert_id;
+		curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array("content" => "#$id added and ready for signups: **$eventName** on $eventDate (server time).")));
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+		curl_exec($curl);
+	}
+
 	$stmt->close();
 	$conn->close();
 	

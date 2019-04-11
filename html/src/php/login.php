@@ -53,7 +53,7 @@
 		
 		// generate and store session token and log lastLogin
 		if (!$error) {
-			$token = random_bytes(16);
+			$token = random_bytes(32);
 			$stmt->prepare("UPDATE `users` SET `token` = ?, `last_login` = NOW() WHERE `id` = ?");
 			$stmt->bind_param("si", $token, $user['id']);
 			if (!($stmt->execute())) {
@@ -78,13 +78,25 @@
 		if (!$error) {
 			session_start();
 			$_SESSION['user_id'] = $user['id'];
-			$_SESSION['user_name'] = $user['username'];
 			$_SESSION['token'] = $token;
-			header("Location: /home");
-			exit;
+
+			$lifetime = 604800; // set token cookie to expire in 1 week
+			setcookie('login_token', $token, time()+$lifetime, "/");
+			
+			// return to original url if provided else go to home page
+			if (isset($_POST['return-url']) && $_POST['return-url'] != "") {
+				header("Location: " . $_POST['return-url']);
+				exit;
+			} else {
+				header("Location: /home");
+				exit;
+			}
+
 		} else {
+
 			header("Location: /error.php?id=" . $error_id);
 			exit;
+
 		}
 	}
 ?>

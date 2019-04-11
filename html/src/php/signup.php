@@ -100,7 +100,13 @@
 		
 		$curl = curl_init("https://discordapp.com/api/webhooks/542862212843438090/M2YDKq0CWCi840l8Oyi89Y7HDAcEuGUuoWcT-5IysztjIA62PKIlryKmCQ0SnTcHMota");
 		curl_setopt($curl, CURLOPT_POST, 1);
-		curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array("content" => "$username __signed up__ for $eventName ($event_id) with $characterName ($characterRole). Note: $note")));
+		
+		if ($note == "") {
+			curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array("content" => "$username __signed up__ for #$event_id: $eventName with $characterName ($characterRole).")));
+		} else {
+			curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array("content" => "$username __signed up__ for #$event_id: $eventName with $characterName ($characterRole). *Note: $note*")));
+		}
+		
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
 		curl_exec($curl);

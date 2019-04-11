@@ -7,8 +7,9 @@
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/db_connect.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/stmt_init.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/server_config.php";
+	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/check_login_token.php";
+	if (!checkLoginToken($stmt)) { header("Location: /?url=" . $_SERVER['REQUEST_URI']); exit; }
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/user.php";
-	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/verify_user_token.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/event_raid_roster.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/event_raid_roster_signups.php";
 	require $_SERVER['DOCUMENT_ROOT'] . "/src/php/stmt_close.php";
@@ -32,13 +33,13 @@
 		<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 		<link rel="stylesheet" href="/src/css/style-raidtemplate.css?v=6413"></link>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 		<script src="/src/js/timeout.js"></script>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 		<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
 
-	<?php if ($user['security'] >= 2 || $event['leader_id'] == $_SESSION['user_id']) { ?>
+	<?php if ($user['security'] >= 1 || $event['leader_id'] == $_SESSION['user_id']) { ?>
 		<script>
 			function loadClassBays() {
 				$('.character-bay.signed-up').each(function(){
@@ -340,7 +341,7 @@
 
 		<div id="content">
 
-			<?php if ($user['security'] >= 2 || $event['leader_id'] == $_SESSION['user_id']) { ?>
+			<?php if ($user['security'] >= 1 || $event['leader_id'] == $_SESSION['user_id']) { ?>
 			<div id="character-bay-dump">
 				<span>DROP HERE TO RETURN PLAYER TO ROSTER</span>
 			</div>
