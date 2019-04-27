@@ -53,7 +53,8 @@
 		
 		// generate and store session token and log lastLogin
 		if (!$error) {
-			$token = random_bytes(32);
+			// added base64 encoding because there's less chance of having transport/storage issues than raw binary text
+			$token = base64_encode(random_bytes(32));
 			$stmt->prepare("UPDATE `users` SET `token` = ?, `last_login` = NOW() WHERE `id` = ?");
 			$stmt->bind_param("si", $token, $user['id']);
 			if (!($stmt->execute())) {
