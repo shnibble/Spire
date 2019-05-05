@@ -118,11 +118,12 @@
 		}
 		
 		// post new registration notification to discord admins
-		// admin role id if wanting to use in notification: <@&448608682079682560>
+		// admin role id if wanting to use in notification: <@&448608682079682560> (NO LONGER IN USE)
+		// officer role id if wanting to use in notification: <@&509133816565071893>
 		if (!$error) {
 			$curl = curl_init("https://discordapp.com/api/webhooks/548538771784597544/dLSSze0vs_iG0wT-yN2SOWjKu9xlD5OXz2aOjw1FukVxXlCY2X7yeN2LzXU7TiiMtLyN");
 			curl_setopt($curl, CURLOPT_POST, 1);
-			curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array("content" => "<@&448608682079682560> **$username** has registered a website account and needs to be promoted.")));
+			curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array("content" => "<@&509133816565071893> **$username** has registered a website account and needs to be promoted.")));
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
 			curl_exec($curl);
