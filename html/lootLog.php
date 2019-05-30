@@ -161,6 +161,23 @@
 				$(this).parent('td').parent('tr').addClass("editing");
 			});
 			
+			$('#items-table').delegate('.input-trigger.item', 'change', function(){
+				let defaultType = $(this).children('option:selected').data('type');
+				let priority = $(this).children('option:selected').data('priority');
+				let comment = $(this).children('option:selected').data('comment');
+				let typeField = $(this).parent().siblings().children('.input-trigger.type')
+				let priorityField = $(this).parent().siblings().children('.priority')
+				let commentField = $(this).parent().siblings().children('.comment')
+				
+				if (defaultType > 0) {
+					typeField.val(defaultType);
+				} else {
+					typeField.val(1);
+				}
+				priorityField.text(priority);
+				commentField.text(comment);
+			});
+			
 			$('#items-table').on('change', '.input-trigger', function(){
 				let row = $(this).parent('td').parent('tr');
 				
@@ -289,23 +306,6 @@
 					e.preventDefault();
 					alert("Please enter a loot date.");
 				}
-			});
-			
-			$('#items-table').delegate('.input-trigger.item', 'change', function(){
-				let defaultType = $(this).children('option:selected').data('type');
-				let priority = $(this).children('option:selected').data('priority');
-				let comment = $(this).children('option:selected').data('comment');
-				let typeField = $(this).parent().siblings().children('.input-trigger.type')
-				let priorityField = $(this).parent().siblings().children('.priority')
-				let commentField = $(this).parent().siblings().children('.comment')
-				
-				if (defaultType > 0) {
-					typeField.val(defaultType);
-				} else {
-					typeField.val(1);
-				}
-				priorityField.text(priority);
-				commentField.text(comment);
 			});
 		</script>
 	</body>
